@@ -54,7 +54,7 @@
       end
     end
   end
-  def crawl_job
+  def crawl_job_relationships
     for n in 1..10
       page_access = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
       get_link = page_access.css('a.job_link').map{ |link| link['href'] }
@@ -62,307 +62,64 @@
         if link.include?('\u2013')
           link.gsub!('\u2013','–') 
         end
-      pagecompany = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
-      get_row = pagecompany.search('div.bg-blue div.row')
+    page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
+    get_row = page_job.search('div.bg-blue div.row')
       if get_row != ""
-        length_page      = get_row.css('li p').children.length
-        location_length  = get_row.search('div.map a').children.length
-        title            = pagecompany.search('div.job-desc p').text
-        get_name_company = pagecompany.search('div.job-desc a.job-company-name').text.strip
-        description      = pagecompany.search('div.detail-row')
-        industry = get_row.css('li a').children.text.split(' ').join(' ')
+        get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip
         company_table    = Company.find_by(name: "#{get_name_company}")
-        if length_page.to_i == 11 || length_page.to_i == 9 || length_page.to_i == 13
-            if location_length == 3
-              date = get_row.css('p').children[(location_length)-1].text
-              salary = get_row.css('p').children[(length_page.to_i)-2].text.split(' ').join(' ')
-              experience = get_row.css('p').children[(length_page.to_i)-1].text.split(' ').join(' ')
-              level = get_row.css('p').children[(length_page.to_i)].text.split(' ').join(' ')
-              expiration_date = get_row.css('p').children[(length_page.to_i)+1].text.split(' ').join(' ')
-              if company_table != nil
-                job = Job.create!(title: title,
-                  description: description,
-                  level: level,
-                  salary: salary,
-                  experience: experience,
-                  expiration_date: expiration_date,
-                  company_id: company_table.id)
-              end
-            elsif location_length == 2
-              date = get_row.css('p').children[(location_length)-1].text          
-              salary = get_row.css('p').children[(length_page.to_i)-3].text.split(' ').join(' ')
-              experience = get_row.css('p').children[(length_page.to_i)-2].text.split(' ').join(' ')
-              level = get_row.css('p').children[(length_page.to_i)-1].text.split(' ').join(' ')
-              expiration_date = get_row.css('p').children[(length_page.to_i)].text.split(' ').join(' ')
-              if company_table != nil
-                job = Job.create!(title: title,
-                  description: description,
-                  level: level,
-                  salary: salary,
-                  experience: experience,
-                  expiration_date: expiration_date,
-                  company_id: company_table.id)
-              end
-            end
-
-          elsif length_page.to_i == 10 || length_page.to_i == 12 || length_page.to_i == 8
-            if location_length == 3
-              date = get_row.css('p').children[(location_length)-1].text
-              salary = get_row.css('p').children[(length_page.to_i)-1].text.split(' ').join(' ')
-              level = get_row.css('p').children[(length_page.to_i)].text.split(' ').join(' ')
-              expiration_date = get_row.css('p').children[(length_page.to_i)+1].text.split(' ').join(' ')
-              if company_table != nil
-                job = Job.create!(title: title,
-                  description: description,
-                  level: level,
-                  salary: salary,
-                  experience: experience,
-                  expiration_date: expiration_date,
-                  company_id: company_table.id)
-              end
-            elsif location_length == 2
-              date = get_row.css('p').children[(location_length)-1].text
-              salary = get_row.css('p').children[(length_page.to_i)-2].text.split(' ').join(' ')
-              level = get_row.css('p').children[(length_page.to_i)-1].text.split(' ').join(' ')
-              expiration_date = get_row.css('p').children[(length_page.to_i)].text.split(' ').join(' ')
-              if company_table != nil
-                job = Job.create!(title: title,
-                  description: description,
-                  level: level,
-                  salary: salary,
-                  experience: experience,
-                  expiration_date: expiration_date,
-                  company_id: company_table.id)
-              end
+        title_job        = page_job.search('div.job-desc p').text
+        description      = page_job.search('div.detail-row')
+        arr_column = get_row.css('div.has-background').map{ |data| data.text.split(' ').join(' ') }
+        arr_column.each_with_index do | val, key |
+          if company_table != nil
+            if val.include?('Ngày cập nhật')
+              arr_data = val.gsub('Ngày cập nhật ','').split(' ')
+              date = arr_data.first
+            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == true
+              arr_sub = ((((val.gsub('Lương ','')).gsub(' Kinh nghiệm ', '*')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
+              salary = arr_sub[0]
+              experience = arr_sub[1]
+              level =arr_sub[2]
+              expiration_date = arr_sub[3]
+              job = Job.create!(title: title_job,
+                                level: level,
+                                salary: salary,
+                                experience: experience,
+                                expiration_date: expiration_date,
+                                description: description,
+                                company_id: company_table.id)
+            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == false
+              arr_sub = (((val.gsub('Lương ','')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
+              salary = arr_sub[0]
+              level =arr_sub[1]
+              expiration_date = arr_sub[2]
+              job = Job.create!(title: title_job,
+                                level: level,
+                                salary: salary,
+                                experience: 'Không có',
+                                expiration_date: expiration_date,
+                                description: description,
+                                company_id: company_table.id)
             end
           end
         end
-      end  
-    end
-  end
-  def crawl_city_job
-    for n in 1..10
-      page_access = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
-      get_link = page_access.css('a.job_link').map{ |link| link['href'] }
-      get_link.each do |link|
-        if link.include?('\u2013')
-          link.gsub!('\u2013','–') 
-        end
-      pagecompany = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
-      get_row = pagecompany.search('div.bg-blue div.row')
-      if get_row != ""
-        begin
-        length_page      = get_row.css('li p').children.length
-        location_length  = get_row.search('div.map a').children.length
-        title            = pagecompany.search('div.job-desc p').text.strip
-        get_name_company = pagecompany.search('div.job-desc a.job-company-name').text.strip
-        exp_exist        = get_row.css('div.has-background li strong').text.include?('Kinh nghiệm')
-        company_table    = Company.find_by(name: "#{get_name_company}")
-        job_table        = Job.find_by(title: "#{title}", company_id: "#{company_table.id}")
-        if length_page.to_i == 11 || length_page.to_i == 9 || length_page.to_i == 13 && exp_exist == true && company_table.id != nil
-            if location_length == 3
-              location    = get_row.search('div.map a').children[0].text.strip
-              location1   = get_row.search('div.map a').children[1].text.strip
-              city_table  = City.find_by(name: "#{location}")
-              city_table1 = City.find_by(name: "#{location1}")
-              if city_table != nil && job_table != nil
-                city_job_relationship = CityJob.create!(job_id: job_table.id,
-                  city_id: city_table.id)
-              elsif city_table1 != nil && job_table != nil
-                city_job_relationship = CityJob.create!(job_id: job_table.id,
-                  city_id: city_table1.id)
-              end
-            elsif location_length == 2
-              location    = get_row.search('div.map a').children.text.strip
-              city_table  = City.find_by(name: "#{location}")
-              if city_table != nil && job_table != nil
-                city_job_relationship = CityJob.create!(job_id: job_table.id,
-                  city_id: city_table.id)
-              end
+          job_table = Job.find_by(title: "#{title_job}")
+          if job_table != nil      
+            location_rel     = get_row.css('div.map p a').children.map{ |location| location.text.strip }
+            location_rel.each do |loc|
+              puts "#{job_table.id} - #{loc}"
+              city_table     = City.find_by(name: "#{loc}")
+              city_jobs      = CityJob.create!(job_id: job_table.id, city_id: city_table.id)
             end
-
-          elsif length_page.to_i == 10 || length_page.to_i == 12 || length_page.to_i == 8 && exp_exist == false && company_table.id != nil
-            if location_length == 3
-              location    = get_row.search('div.map a').children[0].text.strip
-              location1   = get_row.search('div.map a').children[1].text.strip
-              city_table  = City.find_by(name: "#{location}")
-              city_table1 = City.find_by(name: "#{location1}")
-              if city_table != nil && job_table != nil
-                city_job_relationship = CityJob.create!(job_id: job_table.id,
-                  city_id: city_table.id)
-              elsif city_table1 != nil && job_table != nil
-                city_job_relationship = CityJob.create!(job_id: job_table.id,
-                  city_id: city_table1.id)
-              end
-            elsif location_length == 2
-              location    = get_row.search('div.map a').children.text.strip
-              city_table  = City.find_by(name: "#{location}")
-              if city_table != nil && job_table != nil
-                city_job_relationship = CityJob.create!(job_id: job_table.id,
-                  city_id: city_table.id)
-              end
-            end
-          end
-        rescue StandardError => e
-                  puts e
-      end 
-        end
-      end  
-    end
-  end
-  def crawl_industry_job
-    for n in 1..10
-      page_access = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
-      get_link = page_access.css('a.job_link').map{ |link| link['href'] }
-      get_link.each do |link|
-        if link.include?('\u2013')
-          link.gsub!('\u2013','–') 
-        end
-      pagecompany = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
-      get_row = pagecompany.search('div.bg-blue div.row')
-      if get_row != ""
-        begin
-        length_page      = get_row.css('li p').children.length
-        location_length  = get_row.search('div.map a').children.length
-        title            = pagecompany.search('div.job-desc p').text
-        exp_exist        = get_row.css('div.has-background li strong').text.include?('Kinh nghiệm')
-        industry_length  = get_row.css('li a').children.length
-        get_name_company = pagecompany.search('div.job-desc a.job-company-name').text.strip
-        company_table    = Company.find_by(name: "#{get_name_company}")
-        job_table        = Job.find_by(title: "#{title}", company_id: "#{company_table.id}")
-        if company_table.id != nil && job_table.id != nil
-          if length_page.to_i == 11 || length_page.to_i == 9 || length_page.to_i == 13 && exp_exist == true 
-            if location_length == 3
-              if industry_length == 3
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry1 = get_row.css('li a').children[1].text.split(' ').join(' ')
-                find_ind1  = Industry.find_by(name: "#{industry1}")
-                industry2 = get_row.css('li a').children[2].text.split(' ').join(' ')
-                find_ind2  = Industry.find_by(name: "#{industry2}")
-                if find_ind != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind.id}")
-                elsif find_ind1 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind1.id}")
-                elsif find_ind2 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind2.id}")
-                end
-              elsif industry_length == 2
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry1 = get_row.css('li a').children[1].text.split(' ').join(' ')
-                find_ind1  = Industry.find_by(name: "#{industry1}")
-                if find_ind != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: find_ind.id)
-                elsif find_ind1 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind1.id}")
-                end
-              elsif industry_length == 1
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: find_ind.id)
-              end
-            elsif location_length == 2
-              if industry_length == 3
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry1 = get_row.css('li a').children[1].text.split(' ').join(' ')
-                find_ind1  = Industry.find_by(name: "#{industry1}")
-                industry2 = get_row.css('li a').children[2].text.split(' ').join(' ')
-                find_ind2  = Industry.find_by(name: "#{industry2}")
-                if find_ind != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: find_ind.id)
-                elsif find_ind1 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind1.id}")
-                elsif find_ind2 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind2.id}")
-                end
-              elsif industry_length == 2
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry1 = get_row.css('li a').children[1].text.split(' ').join(' ')
-                find_ind1  = Industry.find_by(name: "#{industry1}")
-                if find_ind != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: find_ind.id)
-                elsif find_ind1 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind1.id}")
-                end
-              elsif industry_length == 1
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: find_ind.id)
-              end
-            end
-
-        elsif length_page.to_i == 10 || length_page.to_i == 12 || length_page.to_i == 8 && exp_exist == false
-            if location_length == 3
-              if industry_length == 3
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry1 = get_row.css('li a').children[1].text.split(' ').join(' ')
-                find_ind1  = Industry.find_by(name: "#{industry1}")
-                industry2 = get_row.css('li a').children[2].text.split(' ').join(' ')
-                find_ind2  = Industry.find_by(name: "#{industry2}")
-                if find_ind != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind.id}")
-                elsif find_ind1 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind1.id}")
-                elsif find_ind2 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind2.id}")
-                end
-              elsif industry_length == 2
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry1 = get_row.css('li a').children[1].text.split(' ').join(' ')
-                find_ind1  = Industry.find_by(name: "#{industry1}")
-                if find_ind != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind.id}")
-                elsif find_ind1 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind1.id}")
-                end
-              elsif industry_length == 1
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind.id}")
-              end
-            elsif location_length == 2
-             if industry_length == 3
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry1 = get_row.css('li a').children[1].text.split(' ').join(' ')
-                find_ind1  = Industry.find_by(name: "#{industry1}")
-                industry2 = get_row.css('li a').children[2].text.split(' ').join(' ')
-                find_ind2  = Industry.find_by(name: "#{industry2}")
-                if find_ind != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind.id}")
-                elsif find_ind1 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind1.id}")
-                elsif find_ind2 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind2.id}")
-                end
-              elsif industry_length == 2
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry1 = get_row.css('li a').children[1].text.split(' ').join(' ')
-                find_ind1  = Industry.find_by(name: "#{industry1}")
-                if find_ind != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind.id}")
-                elsif find_ind1 != nil
-                  industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind1.id}")
-                end
-              elsif industry_length == 1
-                industry  = get_row.css('li a').children[0].text.split(' ').join(' ')
-                find_ind  = Industry.find_by(name: "#{industry}")
-                industry_job_relationship = IndustryJob.create!(job_id: "#{job_table.id}", industry_id: "#{find_ind.id}")
-              end
-                end
-              end
+            industry_rel     = get_row.css('li a').children.map{ |industry| industry.text.strip }
+            industry_rel.each do |ind|
+              puts "#{job_table.id} - #{ind}"
+              industry_table = Industry.find_by(name: "#{ind}")
+              industry_jobs  = IndustryJob.create!(job_id: job_table.id, industry_id: industry_table.id)
             end
           end
         end
-        rescue StandardError => e
-                  puts e
-      end  
+      end
     end
   end
   def get_file_csv
