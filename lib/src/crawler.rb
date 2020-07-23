@@ -37,10 +37,10 @@
           company_page = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
           if company_page.search('p.name').text != nil
             begin
-              name_company = company_page.search('p.name').text
-              address_company = company_page.css('div.content p').children[1].text
+              name_company         = company_page.search('p.name').text
+              address_company      = company_page.css('div.content p').children[1].text
               introduction_company = company_page.css('div.main-about-us').text
-              get_name_company = Company.find_by(name: "#{name_company}")
+              get_name_company     = Company.find_by(name: "#{name_company}")
               if get_name_company == nil
               company = Company.create!(name: name_company,
                 address: address_company,
