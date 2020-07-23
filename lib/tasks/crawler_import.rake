@@ -1,15 +1,23 @@
 require 'src/crawler.rb'
 require 'net/ftp'
-crawl = Crawler.new
+require 'csv'
+require 'zip'
+action = Crawler.new
 namespace :import do
   desc "crawler data"
   task crawler: :environment do
-    crawl.crawl_city
-    crawl.crawl_industry
-    crawl.crawl_company
-    crawl.crawl_job_relationships
+    action.crawl_city
+    action.crawl_industry
+    action.crawl_company
+    action.crawl_job_relationships
   end
+  desc "get file CSV from server"
   task csv_get: :environment do
-    crawl.get_file_csv
+    action.get_file_csv
+    action.extract_zip('./jobs.zip','.')
+  end
+  desc "Import data from CSV"
+  task data_csv: :environment do
+    action.import_file_csv
   end
 end

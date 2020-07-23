@@ -77,9 +77,9 @@
               date = arr_data.first
             elsif val.include?('Lương') && val.include?('Kinh nghiệm') == true
               arr_sub = ((((val.gsub('Lương ','')).gsub(' Kinh nghiệm ', '*')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
-              salary = arr_sub[0]
-              experience = arr_sub[1]
-              level =arr_sub[2]
+              salary          = arr_sub[0]
+              experience      = arr_sub[1]
+              level           = arr_sub[2]
               expiration_date = arr_sub[3]
               job = Job.create!(title: title_job,
                                 level: level,
@@ -89,9 +89,9 @@
                                 description: description,
                                 company_id: company_table.id)
             elsif val.include?('Lương') && val.include?('Kinh nghiệm') == false
-              arr_sub = (((val.gsub('Lương ','')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
-              salary = arr_sub[0]
-              level =arr_sub[1]
+              arr_sub         = (((val.gsub('Lương ','')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
+              salary          = arr_sub[0]
+              level           = arr_sub[1]
               expiration_date = arr_sub[2]
               job = Job.create!(title: title_job,
                                 level: level,
@@ -122,11 +122,71 @@
       end
     end
   end
+
   def get_file_csv
     Net::FTP.open('192.168.1.156', 'training', 'training') do |ftp|
       files = ftp.list
       puts "list out files in root directory:"
       puts files
+      ftp.getbinaryfile('jobs.zip')
+    end
+  end
+
+  def extract_zip(file, destination)
+    FileUtils.mkdir_p(destination)
+    Zip::File.open(file) do |zip_file|
+      zip_file.each do |f|
+        fpath = File.join(destination, f.name)
+        zip_file.extract(f, fpath) unless File.exist?(fpath)
+      end
+    end
+  end
+
+  def import_file_csv
+    file = "jobs.csv"
+    CSV.foreach(file, headers: true) do |row|
+      begin
+      company_name         = row[5].strip
+      company_address      = row[2]
+      company_introduction = row[0]
+      company_table        = Company.find_by(name: "#{company_name}")
+      if company_table == nil  
+        company_table = Company.create!(name: company_name,
+                                        address: company_address,
+                                        introduction: company_introduction)
+      end
+      title_job            = row[9].strip
+      description_job      = row[7]
+      level                = row[8]
+      salary               = row[11]
+      if company_table != nil
+        job_table = Job.create!(title: title_job,
+                                description: description_job,
+                                level: level,
+                                salary: salary,
+                                company_id: company_table.id)
+      end
+      industry             = row[1].strip
+      industry_find        = Industry.find_by(name: industry)
+      if industry_find == nil
+        industry_table     = Industry.create!(name: industry)
+        industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
+      elsif industry_find != nil
+        industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
+      end
+      puts "========================================="
+      puts job_table.id, title_job, industry, salary
+      location_data        = row[16].strip
+      location             = (location_data.gsub('["','')).gsub('"]','').strip
+      location_find        = City.find_by(name: location)
+      if location_find != nil
+        city_job_table     = CityJob.create!(job_id: job_table.id, city_id: location_find.id)
+      end
+      puts "Location: #{location}"
+
+      rescue StandardError => e
+            puts e
+      end
     end
   end
 end
