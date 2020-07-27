@@ -6,17 +6,16 @@ class Crontab
       if link.include?('\u2019')
         link.gsub!('\u2019',"'")
       end
-      if link == 'javascript:void(0);'
-        next
+      next if link == 'javascript:void(0);'     
       elsif link != 'https://careerbuilder.vn/vi/nha-tuyen-dung/hr-vietnam\xE2\x80\x99s-ess-client.35A4EFBA.html'
-        company_page = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
-        if company_page.search('p.name').text != nil
+        company_page = Nokogiri::HTML(URI.open(URI.parse(CGI.escape(link))))
+        if !(company_page.search('p.name').text).nil?
           begin
             name_company         = company_page.search('p.name').text
             address_company      = company_page.css('div.content p').children[1].text
             introduction_company = company_page.css('div.main-about-us').text
-            get_name_company     = Company.find_by(name: "#{name_company}")
-            if get_name_company == nil
+            get_name_company     = Company.find_by(name: name_company)
+            if get_name_company.nil?
             company = Company.create!(name: name_company,
               address: address_company,
               introduction: introduction_company)
@@ -35,17 +34,17 @@ class Crontab
         if link.include?('\u2013')
           link.gsub!('\u2013','–') 
         end
-    page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
+    page_job = Nokogiri::HTML(URI.open(URI.parse(CGI.escape(link))))
     get_row = page_job.search('div.bg-blue div.row')
       if get_row != ""
         get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip
-        company_table    = Company.find_by(name: "#{get_name_company}")
+        company_table    = Company.find_by(name: get_name_company)
         title_job        = page_job.search('div.job-desc p').text
         description      = page_job.search('div.detail-row')
         arr_column = get_row.css('div.has-background').map{ |data| data.text.split(' ').join(' ') }
-        job_table = Job.find_by(title: "#{title_job}")
+        job_table = Job.find_by(title: title_job)
         arr_column.each_with_index do | val, key |
-          if company_table != nil
+          if !company_table.nil?
             if val.include?('Ngày cập nhật')
               arr_data = val.gsub('Ngày cập nhật ','').split(' ')
               date = arr_data.first
