@@ -1,8 +1,10 @@
 require 'src/crawler.rb'
+require 'src/crontab.rb'
 require 'net/ftp'
 require 'csv'
 require 'zip'
 action = Crawler.new
+crontab = Crontab.new
 namespace :import do
   desc "crawler data"
   task crawler: :environment do
@@ -19,5 +21,16 @@ namespace :import do
   desc "Import data from CSV"
   task data_csv: :environment do
     action.import_file_csv
+  end
+  desc "Crontab"
+
+  task auto: :environment do
+    crontab.find_company
+    crontab.find_job
+    action.logger
+  end
+
+  task log: :environment do
+    action.logger
   end
 end

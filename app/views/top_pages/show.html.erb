@@ -1,0 +1,13 @@
+<% provide(:title, 'All jobs') %>
+<% @job.each do |job| %>
+	<ul>	
+		<div class="title"><strong><%= (@company.find_by(id: job.company_id)).name %></strong></div>
+		<%= job.title %>
+		<div class="salary"><em class="fa fa-usd"></em>Lương: <%= job.salary %></div>
+		<div><em class="mdi mdi-map-marker"></em>
+			<% job.cities.each do |location| %>
+				<%= location.name %>
+			<% end %>
+		</div>
+	</ul>
+<% end %>

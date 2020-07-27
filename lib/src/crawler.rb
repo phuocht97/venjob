@@ -75,7 +75,7 @@
             if val.include?('Ngày cập nhật')
               arr_data = val.gsub('Ngày cập nhật ','').split(' ')
               date = arr_data.first
-            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == true
+            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == true && Job.find_by(title: title_job, company_id: company_table.id) == nil
               arr_sub = ((((val.gsub('Lương ','')).gsub(' Kinh nghiệm ', '*')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
               salary          = arr_sub[0]
               experience      = arr_sub[1]
@@ -88,7 +88,7 @@
                                 expiration_date: expiration_date,
                                 description: description,
                                 company_id: company_table.id)
-            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == false
+            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == false && Job.find_by(title: title_job, company_id: company_table.id) == nil
               arr_sub         = (((val.gsub('Lương ','')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
               salary          = arr_sub[0]
               level           = arr_sub[1]
@@ -102,22 +102,22 @@
                                 company_id: company_table.id)
             end
           end
-        end
-          job_table = Job.find_by(title: "#{title_job}")
-          if job_table != nil      
+          job_table = Job.find_by(title: title_job)
+          if job_table != nil
             location_rel     = get_row.css('div.map p a').children.map{ |location| location.text.strip }
             location_rel.each do |loc|
-              puts "#{job_table.id} - #{loc}"
-              city_table     = City.find_by(name: "#{loc}")
-              city_jobs      = CityJob.create!(job_id: job_table.id, city_id: city_table.id)
+            city_table     = City.find_by(name: "#{loc}")
+            puts "Created City: #{job_table.id} - #{city_table.id}.#{loc}"
+            city_jobs      = CityJob.create!(job_id: job_table.id, city_id: city_table.id)
             end
             industry_rel     = get_row.css('li a').children.map{ |industry| industry.text.strip }
             industry_rel.each do |ind|
-              puts "#{job_table.id} - #{ind}"
-              industry_table = Industry.find_by(name: "#{ind}")
-              industry_jobs  = IndustryJob.create!(job_id: job_table.id, industry_id: industry_table.id)
+            industry_table = Industry.find_by(name: "#{ind}")
+            puts "Created Industry: #{job_table.id} - #{industry_table.id}.#{ind}"
+            industry_jobs  = IndustryJob.create!(job_id: job_table.id, industry_id: industry_table.id)
             end
           end
+        end
         end
       end
     end
@@ -126,7 +126,7 @@
   def get_file_csv
     Net::FTP.open('192.168.1.156', 'training', 'training') do |ftp|
       files = ftp.list
-      puts "list out files in root directory:"
+      puts "list files:"
       puts files
       ftp.getbinaryfile('jobs.zip')
     end
@@ -143,50 +143,59 @@
   end
 
   def import_file_csv
-    file = "jobs.csv"
+   file = "jobs.csv"
     CSV.foreach(file, headers: true) do |row|
       begin
-      company_name         = row[5].strip
-      company_address      = row[2]
-      company_introduction = row[0]
+      company_name         = row["company name"].strip
+      company_address      = row["company address"]
+      company_introduction = row["benefit"]
       company_table        = Company.find_by(name: "#{company_name}")
       if company_table == nil  
         company_table = Company.create!(name: company_name,
                                         address: company_address,
                                         introduction: company_introduction)
       end
-      title_job            = row[9].strip
-      description_job      = row[7]
-      level                = row[8]
-      salary               = row[11]
-      if company_table != nil
+      title_job            = row["name"].strip
+      description_job      = row["description"]
+      level                = row["level"]
+      salary               = row["salary"]
+      if company_table != nil && Job.find_by(title: title_job, level: level, salary: salary, company_id: company_table.id) == nil
         job_table = Job.create!(title: title_job,
                                 description: description_job,
                                 level: level,
                                 salary: salary,
                                 company_id: company_table.id)
       end
-      industry             = row[1].strip
+      industry             = row["category"].strip
       industry_find        = Industry.find_by(name: industry)
       if industry_find == nil
         industry_table     = Industry.create!(name: industry)
         industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
-      elsif industry_find != nil
+      else
         industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
       end
       puts "========================================="
       puts job_table.id, title_job, industry, salary
-      location_data        = row[16].strip
+      location_data        = row["work place"].strip
       location             = (location_data.gsub('["','')).gsub('"]','').strip
       location_find        = City.find_by(name: location)
-      if location_find != nil
+      if location_find == nil
+        city_table         = City.create!(name: location)
+        city_job_table     = CityJob.create!(job_id: job_table.id, city_id: location_find.id)
+      else
         city_job_table     = CityJob.create!(job_id: job_table.id, city_id: location_find.id)
       end
       puts "Location: #{location}"
-
       rescue StandardError => e
             puts e
       end
     end
+  end
+  def logger
+    # config.log_level = :info
+    Rails.logger = Logger.new(STDOUT)
+    Rails.logger = Logger.new "#{Rails.root}/log/#{Rails.env}.log"
+    Rails.logger.level = Logger::DEBUG
+    Rails.logger.datetime_format = "%Y-%m-%d %H:%M:%S"
   end
 end

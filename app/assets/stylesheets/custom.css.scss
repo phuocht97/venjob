@@ -1,12 +1,9 @@
 
 html {
   overflow-y: scroll;
+  padding: 0px;
+  margin: 0px;
 }
-
-body {
-  padding-top: 60px;
-}
-
 section {
   overflow: auto;
 }
@@ -48,7 +45,36 @@ p {
   font-size: 1.1em;
   line-height: 1.7em;
 }
-#logo{
-  height: 200px;
-  width: 100px;
+.footer-text{
+  height: 100px;
+  position: relative;
+}
+.float-right {
+    position: absolute;
+    bottom: 0;
+    right: 5%;  
+}
+.top-page{
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+.total-job{
+  position: absolute;
+  color: white;
+  top: 40%;
+  right: 30%;
+  font-size: 60px;
+}
+.banner-ground{
+  position: relative;
+  width: 100%;
+  height: 50vh;
+}
+.top-banner {
+  background-image: url('banner.jpg');
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
