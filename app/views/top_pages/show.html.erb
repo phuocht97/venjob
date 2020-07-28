@@ -1,13 +1,15 @@
 <% provide(:title, 'All jobs') %>
 <% @job.each do |job| %>
-	<ul>	
-		<div class="title"><strong><%= (@company.find_by(id: job.company_id)).name %></strong></div>
-		<%= job.title %>
-		<div class="salary"><i class="fas fa-dollar-sign"></i>Lương: <%= job.salary %></div>
-		<div><i class="fas fa-map-marker"></i>
-			<% job.cities.each do |location| %>
-				<%= location.name %>
-			<% end %>
-		</div>
-	</ul>
+	<% if !job.cities.blank? %>
+		<ul>	
+			<div class="title"><strong><%= (@company.find_by(id: job.company_id)).name %></strong></div>
+			<%= job.title %>
+			<div class="salary"><i class="fas fa-dollar-sign"></i>Lương: <%= job.salary %></div>
+			<div><i class="fas fa-map-marker"></i>
+				<% job.cities.each do |location| %>
+					<%= location.name %>
+				<% end %>
+			</div>
+		</ul>
+	<% end %>
 <% end %>
