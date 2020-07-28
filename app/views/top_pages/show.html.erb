@@ -3,8 +3,8 @@
 	<ul>	
 		<div class="title"><strong><%= (@company.find_by(id: job.company_id)).name %></strong></div>
 		<%= job.title %>
-		<div class="salary"><em class="fa fa-usd"></em>Lương: <%= job.salary %></div>
-		<div><em class="mdi mdi-map-marker"></em>
+		<div class="salary"><i class="fas fa-dollar-sign"></i>Lương: <%= job.salary %></div>
+		<div><i class="fas fa-map-marker"></i>
 			<% job.cities.each do |location| %>
 				<%= location.name %>
 			<% end %>

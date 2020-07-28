@@ -31,17 +31,16 @@
         if link.include?('\u2019')
           link.gsub!('\u2019',"'")
         end
-        if link == 'javascript:void(0);'
-          next
+        next if link == 'javascript:void(0);'   
         elsif link != 'https://careerbuilder.vn/vi/nha-tuyen-dung/hr-vietnam\xE2\x80\x99s-ess-client.35A4EFBA.html'
-          company_page = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
-          if company_page.search('p.name').text != nil
+          company_page = Nokogiri::HTML(URI.open(URI.parse(CGI.escape(link))))
+          if !(company_page.search('p.name').text).nil?
             begin
               name_company         = company_page.search('p.name').text
               address_company      = company_page.css('div.content p').children[1].text
               introduction_company = company_page.css('div.main-about-us').text
-              get_name_company     = Company.find_by(name: "#{name_company}")
-              if get_name_company == nil
+              get_name_company     = Company.find_by(name: name_company)
+              if get_name_company.nil?
               company = Company.create!(name: name_company,
                 address: address_company,
                 introduction: introduction_company)
@@ -62,7 +61,7 @@
         if link.include?('\u2013')
           link.gsub!('\u2013','–') 
         end
-    page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
+    page_job = Nokogiri::HTML(URI.open(URI.parse(CGI.escape(link))))
     get_row = page_job.search('div.bg-blue div.row')
       if get_row != ""
         get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip
@@ -71,7 +70,7 @@
         description      = page_job.search('div.detail-row')
         arr_column = get_row.css('div.has-background').map{ |data| data.text.split(' ').join(' ') }
         arr_column.each_with_index do | val, key |
-          if company_table != nil
+          if !company_table.nil?
             if val.include?('Ngày cập nhật')
               arr_data = val.gsub('Ngày cập nhật ','').split(' ')
               date = arr_data.first
@@ -103,7 +102,7 @@
             end
           end
           job_table = Job.find_by(title: title_job)
-          if job_table != nil
+          if !job_table.nil?
             location_rel     = get_row.css('div.map p a').children.map{ |location| location.text.strip }
             location_rel.each do |loc|
             city_table     = City.find_by(name: "#{loc}")

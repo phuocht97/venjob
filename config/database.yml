@@ -26,6 +26,6 @@ test:
 
 production:
   <<: *default
-  database: phuociadun
+  database: buildvenjob
   username: root
   password: 123456
