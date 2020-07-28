@@ -7,8 +7,8 @@ class Crontab
         link.gsub!('\u2019',"'")
       end
       next if link == 'javascript:void(0);'     
-      elsif link != 'https://careerbuilder.vn/vi/nha-tuyen-dung/hr-vietnam\xE2\x80\x99s-ess-client.35A4EFBA.html'
-        company_page = Nokogiri::HTML(URI.open(URI.parse(CGI.escape(link))))
+      if link != 'https://careerbuilder.vn/vi/nha-tuyen-dung/hr-vietnam\xE2\x80\x99s-ess-client.35A4EFBA.html'
+        company_page = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
         if !(company_page.search('p.name').text).nil?
           begin
             name_company         = company_page.search('p.name').text
@@ -34,7 +34,7 @@ class Crontab
         if link.include?('\u2013')
           link.gsub!('\u2013','–') 
         end
-    page_job = Nokogiri::HTML(URI.open(URI.parse(CGI.escape(link))))
+    page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
     get_row = page_job.search('div.bg-blue div.row')
       if get_row != ""
         get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip

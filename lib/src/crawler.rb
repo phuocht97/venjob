@@ -32,8 +32,8 @@
           link.gsub!('\u2019',"'")
         end
         next if link == 'javascript:void(0);'   
-        elsif link != 'https://careerbuilder.vn/vi/nha-tuyen-dung/hr-vietnam\xE2\x80\x99s-ess-client.35A4EFBA.html'
-          company_page = Nokogiri::HTML(URI.open(URI.parse(CGI.escape(link))))
+        if link != 'https://careerbuilder.vn/vi/nha-tuyen-dung/hr-vietnam\xE2\x80\x99s-ess-client.35A4EFBA.html'
+          company_page = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
           if !(company_page.search('p.name').text).nil?
             begin
               name_company         = company_page.search('p.name').text
@@ -61,8 +61,8 @@
         if link.include?('\u2013')
           link.gsub!('\u2013','–') 
         end
-    page_job = Nokogiri::HTML(URI.open(URI.parse(CGI.escape(link))))
-    get_row = page_job.search('div.bg-blue div.row')
+      page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
+      get_row = page_job.search('div.bg-blue div.row')
       if get_row != ""
         get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip
         company_table    = Company.find_by(name: "#{get_name_company}")
@@ -101,22 +101,28 @@
                                 company_id: company_table.id)
             end
           end
-          job_table = Job.find_by(title: title_job)
-          if !job_table.nil?
-            location_rel     = get_row.css('div.map p a').children.map{ |location| location.text.strip }
-            location_rel.each do |loc|
-            city_table     = City.find_by(name: "#{loc}")
-            puts "Created City: #{job_table.id} - #{city_table.id}.#{loc}"
-            city_jobs      = CityJob.create!(job_id: job_table.id, city_id: city_table.id)
-            end
-            industry_rel     = get_row.css('li a').children.map{ |industry| industry.text.strip }
-            industry_rel.each do |ind|
-            industry_table = Industry.find_by(name: "#{ind}")
-            puts "Created Industry: #{job_table.id} - #{industry_table.id}.#{ind}"
-            industry_jobs  = IndustryJob.create!(job_id: job_table.id, industry_id: industry_table.id)
+            if !company_table.nil?
+              job_table = Job.find_by(title: title_job)
+              if !job_table.nil?
+                location_rel     = get_row.css('div.map p a').children.map{ |location| location.text.strip }
+                location_rel.each do |loc|
+                city_table     = City.find_by(name: "#{loc}")
+                  if CityJob.find_by(job_id: job_table.id, city_id: city_table.id) == nil
+                    puts "Created City: #{job_table.id} - #{city_table.id}.#{loc}"
+                    city_jobs      = CityJob.create!(job_id: job_table.id, city_id: city_table.id)
+                  end
+                end
+                industry_rel     = get_row.css('li a').children.map{ |industry| industry.text.strip }
+                industry_rel.each do |ind|
+                industry_table = Industry.find_by(name: "#{ind}")
+                  if IndustryJob.find_by(job_id: job_table.id, industry_id: industry_table.id) == nil
+                    puts "Created Industry: #{job_table.id} - #{industry_table.id}.#{ind}"
+                    industry_jobs  = IndustryJob.create!(job_id: job_table.id, industry_id: industry_table.id)
+                  end
+                end
+              end
             end
           end
-        end
         end
       end
     end
