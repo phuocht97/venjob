@@ -1,4 +1,8 @@
 class Crontab
+  def initialize(logger)
+    @mylogger = logger
+  end
+  
   def find_company
     company_info = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-1-vi.html"))
     company_link = company_info.css('div.caption a.company-name').map { |link| link['href'] }
@@ -18,7 +22,7 @@ class Crontab
                                         introduction: introduction_company)
             end
           rescue StandardError => e
-            puts e
+            @mylogger.error "#{e.message}"
           end
         end
       end
@@ -31,63 +35,48 @@ class Crontab
       page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
       get_row = page_job.search('div.bg-blue div.row')
       if get_row != ""
+        begin
         get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip
-        company_table    = Company.find_by(name: get_name_company)
-        title_job        = page_job.search('div.job-desc p').text
-        description      = page_job.search('div.detail-row')
-        arr_column = get_row.css('div.has-background').map { |data| data.text.split(' ').join(' ') }
-        job_table = Job.find_by(title: title_job)
-        arr_column.each do |val|
-          unless company_table.nil?
-            job_check = Job.find_by(title: title_job, company_id: company_table.id)
-            if val.include?('Ngày cập nhật')
-              arr_data = val.gsub('Ngày cập nhật ', '').split(' ')
-              date_update = arr_data.first
-            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == true && job_check.nil?
-              arr_sub = val.gsub('Lương ', '').gsub(' Kinh nghiệm ', '*').gsub(' Cấp bậc ', '*').gsub(' Hết hạn nộp ', '*').split('*')
-              salary = arr_sub[0]
-              experience = arr_sub[1]
-              level = arr_sub[2]
-              expiration_date = arr_sub[3]
+        company_table = Company.find_by(name: get_name_company)
+        title_job = page_job.search('div.job-desc p').text
+        description = page_job.search('div.detail-row')
+          next if company_table.nil?
+            job_check = Job.find_by(title: title_job, company_id: company_table.id) 
+            salary = get_row.at_xpath('//li[./strong/i[contains(@class, "fa fa-usd")]]/p').text.strip
+            experience = get_row.at_xpath('//li[./strong/i[contains(@class, "fa fa-briefcase")]]/p').text.strip
+            level = get_row.at_xpath('//li[./strong/i[contains(@class, "mdi mdi-account")]]/p').text.strip
+            expiration_date = get_row.at_xpath('//li[./strong/i[contains(@class, "mdi mdi-calendar-check")]]/p').text.strip
+            if job_check.nil?
               job = Job.create!(title: title_job,
                                 level: level,
                                 salary: salary,
                                 experience: experience,
                                 expiration_date: expiration_date,
                                 description: description,
-                                company_id: company_table.id)
-            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == false && job_check.nil?
-              arr_sub = val.gsub('Lương ', '').gsub(' Cấp bậc ', '*').gsub(' Hết hạn nộp ', '*').split('*')
-              salary = arr_sub[0]
-              level = arr_sub[1]
-              expiration_date = arr_sub[2]
-              job = Job.create!(title: title_job,
-                                level: level,
-                                salary: salary,
-                                experience: 'Không có',
-                                expiration_date: expiration_date,
-                                description: description,
-                                company_id: company_table.id)
+                                company_id: company_table.id)         
+            end
+          find_job = Job.find_by(title: title_job, company_id: company_table.id)
+          puts find_job.title
+          unless find_job.nil?
+            location_rel = get_row.css('div.map p a').children.map { |location| location.text.strip }
+            location_rel.each do |loc|
+              city_table = City.find_by(name: loc)
+              if CityJob.find_by(job_id: find_job.id, city_id: city_table.id).nil?
+                puts "Created City: #{find_job.id} - #{city_table.id}.#{loc}"
+                city_jobs = CityJob.create!(job_id: find_job.id, city_id: city_table.id)
+              end
+            end
+            industry_rel = get_row.css('li a').children.map { |industry| industry.text.strip }
+            industry_rel.each do |ind|
+              industry_table = Industry.find_by(name: ind)
+              if IndustryJob.find_by(job_id: find_job.id, industry_id: industry_table.id).nil?
+                puts "Created Industry: #{find_job.id} - #{industry_table.id}.#{ind}"
+                industry_jobs = IndustryJob.create!(job_id: find_job.id, industry_id: industry_table.id)
+              end
             end
           end
-        end
-        if !job_table.nil? && !company_table.nil?
-          location_rel = get_row.css('div.map p a').children.map { |location| location.text.strip }
-          location_rel.each do |loc|
-            city_table = City.find_by(name: loc)
-            if CityJob.find_by(job_id: job_table.id, city_id: city_table.id).nil?
-              puts "Created City #{city_table.id} => #{loc}"
-              city_jobs = CityJob.create!(job_id: job_table.id, city_id: city_table.id)
-            end
-          end
-          industry_rel = get_row.css('li a').children.map { |industry| industry.text.strip }
-          industry_rel.each do |ind|
-            industry_table = Industry.find_by(name: ind)
-            if IndustryJob.find_by(job_id: job_table.id, industry_id: industry_table.id).nil?
-              puts "Created Industry #{job_table.id} - #{industry_table.id} => #{ind}"
-              industry_jobs = IndustryJob.create!(job_id: job_table.id, industry_id: industry_table.id)
-            end
-          end
+        rescue StandardError => e
+          @mylogger.error "#{e.message}"
         end
       end
     end
