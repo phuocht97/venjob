@@ -24,6 +24,6 @@ namespace :import do
     crontab.find_job
     action.get_file_csv
     action.extract_zip('./jobs.zip', 'lib/csv')
-    action.import_file_csv('lib/csv')
+    action.import_file_csv('lib/csv/jobs.csv')
   end
 end
