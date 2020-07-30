@@ -1,15 +1,8 @@
 <% @jobs_of_cities.each do |city, count_job| %>
-		<% @index += 1 %>
-		<% if @index % 3 == 0 %>
-			<td class="row-table">
-				<div class="city-name"><strong><%= City.find(city).name %></strong></div>
-				<div class="count-job"><%= count_job %></div>
-			</td>
-		</tr>
-		<% else %>
-			<td class="row-table">
-				<div class="city-name"><strong><%= City.find(city).name %></strong></div>
-				<div class="count-job"><%= count_job %></div>
-			</td>
-		<% end %>
+	<div class="col-4">
+		<div class="row-table">
+			<div class="city-name"><strong><%= City.find(city).name %></strong></div>
+			<div class="count-job"><%= count_job %></div>
+		</div>
+	</div>	
 <% end %>

@@ -34,17 +34,17 @@ class Crontab
       get_row = page_job.search('div.bg-blue div.row')
       if get_row.present?
         begin
-        get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip
-        company_table = Company.find_by(name: get_name_company)
-        title_job = page_job.search('div.job-desc p').text
-        description = page_job.search('div.detail-row')
+          get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip
+          company_table = Company.find_by(name: get_name_company)
+          title_job = page_job.search('div.job-desc p').text
+          description = page_job.search('div.detail-row')
           next if company_table.nil?
             job_check = Job.find_by(title: title_job, company_id: company_table.id) 
             salary = get_row.at_xpath('//li[./strong/i[contains(@class, "fa fa-usd")]]/p').text.strip
             experience = get_row.at_xpath('//li[./strong/i[contains(@class, "fa fa-briefcase")]]/p').text.strip
             level = get_row.at_xpath('//li[./strong/i[contains(@class, "mdi mdi-account")]]/p').text.strip
             expiration_date = get_row.at_xpath('//li[./strong/i[contains(@class, "mdi mdi-calendar-check")]]/p').text.strip
-            if job_check.blank?
+            if job_check.nil?
               job = Job.create!(title: title_job,
                                 level: level,
                                 salary: salary,
@@ -76,7 +76,8 @@ class Crontab
             end
           end
         rescue StandardError => e
-          @mylogger.error "#{e.message}"
+          # @mylogger.error "#{e.message}"
+          puts e
         end
       end
     end

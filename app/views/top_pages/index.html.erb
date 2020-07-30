@@ -6,12 +6,12 @@
 </div>
 <div class="container">
 	<div class="job-list"><%= render 'layouts/show_jobs' %></div>
-	<div>
-		<div class="city-banner">City</div>	
-	</div>
-	<table class="city-list"><%= render 'layouts/show_cities' %></table>
-	<div class="city-banner">Industry</div>
-	<table class="industry-list"><%= render 'layouts/show_industries' %></table>
 </div>
-
-
+<div class="city-banner">City</div>	
+<div class="container">
+	<div class="row"><%= render 'layouts/show_cities' %></div>
+</div>
+<div class="industry-banner">Industry</div>
+<div class="container">
+	<div class="row"><%= render 'layouts/show_industries' %></div>
+</div>

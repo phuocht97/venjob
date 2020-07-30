@@ -60,8 +60,8 @@ class Crawler
   end
 
   def crawl_job_relationships
-    (1..10).each do |n|
-      page_access = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
+    # (1..10).each do |n|
+      page_access = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-1-vi.html"))
       get_link = page_access.css('a.job_link').map { |link| link['href'] }
       get_link.each do |link|
         page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
@@ -114,7 +114,7 @@ class Crawler
           end
         end
       end
-    end
+    # end
   end
 
   def get_file_csv

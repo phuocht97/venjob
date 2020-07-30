@@ -30,6 +30,8 @@
   height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
+  font-style: italic;
+  font-family: Bookman, URW Bookman L, serif;
 }
 .salary{
   color: green;
@@ -45,14 +47,26 @@
   top: 20%;
   right: 5%;
 }
-
 .row-table{
   color: black;
-  padding: 50px;
-  margin: 30px;
+  padding: 15px;
+  margin: 15px; 
   text-align: center;
-  border: 2px solid red;
+  border: 1px solid red;
 }
-table{
-  width: 100%; 
+.city-banner{
+  background: linear-gradient(to top, #33ccff 0%, #006600 100%);
+  font-size: 38px;
+  text-align: center;
+  color: white;
+  font-style: italic;
+  font-family: Bookman, URW Bookman L, serif;
+}
+.industry-banner{
+  background: linear-gradient(to top, #33ccff 0%, #006666 100%);
+  font-size: 38px;
+  text-align: center;
+  color: white;
+  font-style: italic;
+  font-family: Bookman, URW Bookman L, serif;
 }
