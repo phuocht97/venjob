@@ -158,25 +158,30 @@ class Crawler
                                   company_id: company_table.id)
           puts job_table.id
         end
+        next if company_table.nil?
+        find_job = Job.find_by(title: title_job, company_id: company_table.id)
         industry = row["category"]
         industry_find = Industry.find_by(name: industry)
-        if industry_find.nil?
-          industry_table = Industry.create!(name: industry)
-          industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
-        else
-          industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
-        end
+          if industry_find.nil? && find_job.present?
+            industry_table = Industry.create!(name: industry)
+            industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
+          else
+            unless IndustryJob.exists?(job_id: find_job.id, industry_id: industry_find.id)
+            industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
+            end
+          end
         puts job_table.id, title_job, industry, salary
         location_data = row["work place"]
         location = location_data.gsub('["', '').gsub('"]', '')
         location_find = City.find_by(name: location)
-        if location_find.nil?
-          city_table = City.create!(name: location)
-          city_job_table = CityJob.create!(job_id: job_table.id, city_id: location_find.id)
-        else
-          city_job_table = CityJob.create!(job_id: job_table.id, city_id: location_find.id)
-        end
-        puts "Location: #{location}"
+          if location_find.nil?
+            city_table = City.create!(name: location)
+            city_job_table = CityJob.create!(job_id: job_table.id, city_id: location_find.id)
+          else
+            unless CityJob.exists?(job_id: find_job.id, city_id: location_find.id)
+            city_job_table = CityJob.create!(job_id: job_table.id, city_id: location_find.id)
+            end
+          end
       rescue StandardError => e
         @mylogger.error "#{e.message}"
       end

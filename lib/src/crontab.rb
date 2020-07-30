@@ -60,7 +60,7 @@ class Crontab
             location_rel.each do |loc|
               city_table = City.find_by(name: loc)
               next if city_table.nil?
-              unless CityJob.exists?(job_id: find_job.id, city_id: city_table.id).nil?
+              unless CityJob.exists?(job_id: find_job.id, city_id: city_table.id)
                 puts "Created City: #{find_job.id} - #{city_table.id}.#{loc}"
                 city_jobs = CityJob.create!(job_id: find_job.id, city_id: city_table.id)
               end

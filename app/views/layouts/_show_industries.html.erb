@@ -1,0 +1,15 @@
+<% @jobs_of_industries.each do |industry, count_job| %>
+		<% @index += 1 %>
+		<% if @index % 3 == 0 %>
+			<td class="row-table">
+				<div class="industry-name"><strong><%= Industry.find(industry).name %></strong></div>
+				<div class="count-job"><%= count_job %></div>
+			</td>
+		</tr>
+		<% else %>
+			<td class="row-table">
+				<div class="industry-name"><strong><%= Industry.find(industry).name %></strong></div>
+				<div class="count-job"><%= count_job %></div>
+			</td>
+		<% end %>
+<% end %>
