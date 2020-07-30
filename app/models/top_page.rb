@@ -1,2 +1,0 @@
-class TopPage < ApplicationRecord
-end

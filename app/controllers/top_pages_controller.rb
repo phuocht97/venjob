@@ -1,9 +1,8 @@
 class TopPagesController < ApplicationController
   def index
-    @total = Job.ids
-  end
-  def show
-    @job = Job.all.order(created_at: :desc)
-    @company = Company.all
+    @total_jobs = Job.ids
+    @jobs = Job.limit(5).order(created_at: :desc)
+    @companies = Company.all
+    @total_cities = CityJob.all.group('city_id').count
   end
 end

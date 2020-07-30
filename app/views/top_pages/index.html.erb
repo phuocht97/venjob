@@ -1,8 +1,11 @@
 <% provide(:title, 'Venjob') %>
 <div class="banner-ground">
 	<div class="top-banner">	
-		<div class="total-job">total: <%= @total.count %> Jobs</div>
+		<div class="total-job">total: <%= @total_jobs.count %> Jobs</div>
 	</div>	
 </div>
-<div><%#= render 'top_pages/show' %></div>
+<div class="container">
+	<div class="job-list"><%= render 'layouts/show_jobs' %></div>
+</div>
+
 
