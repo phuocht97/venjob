@@ -52,7 +52,6 @@
   padding: 15px;
   margin: 15px; 
   text-align: center;
-  border: 1px solid red;
 }
 .city-banner{
   background: linear-gradient(to top, #33ccff 0%, #006600 100%);
@@ -69,4 +68,7 @@
   color: white;
   font-style: italic;
   font-family: Bookman, URW Bookman L, serif;
+}
+.search-bar{
+  size: 50;
 }
