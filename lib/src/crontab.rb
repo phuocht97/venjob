@@ -1,5 +1,4 @@
 class Crontab
-  attr_accessor
   def initialize(logger)
     @mylogger = logger
   end
@@ -82,7 +81,6 @@ class Crontab
           if job_check == false
             create_job(title_job, level, salary, experience, expiration_date, description, company_table.id)
           end
-          next if job_check == false
           job_find = Job.find_by(title: title_job, company_id: company_table.id)
           create_city_rel(get_row, job_find)
           create_industry_rel(get_row, job_find)
