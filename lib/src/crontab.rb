@@ -39,7 +39,6 @@ class Crontab
 
   def create_city_rel(get_row, job_find)
     location_rel = get_row.css('div.map p a').children.map { |location| location.text.strip }
-    puts job_find
     location_rel.each do |loc|
       city_table = City.find_by(name: loc)
       next if city_table.nil?
@@ -52,7 +51,6 @@ class Crontab
 
   def create_industry_rel(get_row, job_find)
     industry_rel = get_row.css('li a').children.map { |industry| industry.text.strip }
-    puts job_find
     industry_rel.each do |ind|
       industry_table = Industry.find_by(name: ind)
       next if industry_table.nil?
@@ -81,7 +79,7 @@ class Crontab
           company_table = Company.find_by(name: get_name_company)
           next if company_table.nil?
           job_check = Job.exists?(title: title_job, company_id: company_table.id)
-          unless job_check == false
+          if job_check == false
             create_job(title_job, level, salary, experience, expiration_date, description, company_table.id)
           end
           next if job_check == false

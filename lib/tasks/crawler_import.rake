@@ -25,4 +25,9 @@ namespace :import do
     action.extract_zip('./jobs.zip', 'lib/csv')
     action.import_file_csv(Rails.root.join('lib', 'csv', 'jobs.csv'))
   end
+  task find_job: :environment do
+    crontab = Crontab.new(logger)
+    crontab.find_company(url)
+    crontab.find_job(url)
+  end
 end

@@ -1,7 +1,7 @@
 <% provide(:title, 'Venjob') %>
 <div class="banner-ground">
 	<div class="top-banner">	
-		<div class="total-job">total: <%= @total_jobs.count %> Jobs</div>
+		<div class="total-job">Having <%= @total_jobs.count %> jobs for you!</div>
 	</div>	
 </div>
 <div class="container">
@@ -12,8 +12,16 @@
 <div class="city-banner">City</div>	
 <div class="container">
 	<div class="row"><%= render 'layouts/show_cities' %></div>
+	<div class="all-industry">
+		<div class="row-table border border-dark rounded">All Cities</div>
+	</div>
 </div>
+
 <div class="industry-banner">Industry</div>
 <div class="container">
 	<div class="row"><%= render 'layouts/show_industries' %></div>
+	<div class="all-industry">
+		<div class="row-table border border-dark rounded">All Industries</div>
+	</div>
 </div>
+
