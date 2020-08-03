@@ -4,8 +4,9 @@ require 'zip'
 
 class Crawler
   
-  def initialize(logger)
+  def initialize(logger, url)
     @mylogger = logger
+    @url = url
     @NAME_DOMAIN = '192.168.1.156'
     @USERNAME_FTP = 'training'
     @PASSWORD_FTP = 'training'
@@ -14,10 +15,12 @@ class Crawler
   def crawl_city_industry
     crawl_city
     crawl_industry
+    crawl_company
+    crawl_job_relationships
   end
 
   def crawl_city
-    page = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-vi.html"))
+    page = Nokogiri::HTML(URI.open(@url))
     get_name = page.search('select#location')
     data_city = get_name.search('option').map(&:text).map(&:strip)
     
@@ -33,7 +36,7 @@ class Crawler
   end
 
   def crawl_industry
-    page = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-vi.html"))
+    page = Nokogiri::HTML(URI.open(@url))
     get_name = page.search('select#industry')
     data_industry = get_name.search('option').map { |p| p.text.strip }
 
@@ -69,8 +72,8 @@ class Crawler
   end
 
   def crawl_job_relationships
-    # (1..10).each do |n|
-      page_access = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-1-vi.html"))
+    (1..10).each do |n|
+      page_access = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
       get_link = page_access.css('a.job_link').map { |link| link['href'] }
       get_link.each do |link|
         page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
@@ -123,7 +126,7 @@ class Crawler
           end
         end
       end
-    # end
+    end
   end
 
   def get_file_csv

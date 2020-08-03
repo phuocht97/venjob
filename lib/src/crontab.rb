@@ -36,21 +36,19 @@ class InforJob
   end
 
   def create_city_rel(row, info_job)
-    location_rel = row.css('div.map p a').children.map(&:text).map(&:strip)
-    location_rel.each do |loc|
-      city_table = City.find_by(name: loc)
-      puts "Created City: #{info_job.id} - #{city_table.id}.#{loc}"
-      CityJob.find_or_create_by!(job_id: info_job.id, city_id: city_table.id)
-    end
+    location_rel = row.css('div.map p a').children.map { |name_city| name_city.text.strip }
+    city_table = City.where(name: location_rel)
+
+    puts "#{info_job.cities << city_table}"
+    info_job.cities << city_table
   end
 
   def create_industry_rel(row, info_job)
-    industry_rel = row.css('li a').children.map(&:text).map(&:strip)
-    industry_rel.each do |ind|
-      industry_table = Industry.find_by(name: ind)
-      puts "Created Industry: #{info_job.id} - #{industry_table.id}.#{ind}"
-      IndustryJob.find_or_create_by!(job_id: info_job.id, industry_id: industry_table.id)
-    end
+    industry_rel = row.css('li a').children.map { |name_industry| name_industry.text.strip }
+    industry_table = Industry.where(name: industry_rel)
+
+    puts "#{info_job.industries << industry_table}"
+    info_job.industries << industry_table
   end
 
   def create_job(title, link_page, row, company_table)

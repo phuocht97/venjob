@@ -4,7 +4,7 @@ require 'src/crontab.rb'
 namespace :import do
   desc 'crawler data'
   task crawler: :environment do
-    action = Crawler.new(logger)
+    action = Crawler.new(logger, url)
     action.crawl_city_industry
   end
   desc 'Crontab'
