@@ -5,9 +5,9 @@ require 'zip'
 class CSVImporter
   def initialize(logger)
     @logger = logger
-    @NAME_DOMAIN = '192.168.1.156'
-    @USERNAME_FTP = 'training'
-    @PASSWORD_FTP = 'training'
+    NAME_DOMAIN = '192.168.1.156'.freeze
+    USERNAME_FTP = 'training'.freeze
+    PASSWORD_FTP = 'training'.freeze
     @extracting_directory = Rails.root.join('lib', 'csv')
     @zip_directory = Rails.root.join('jobs.zip')
     @importer = Rails.root.join('lib', 'csv', 'jobs.csv')
