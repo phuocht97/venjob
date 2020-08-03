@@ -1,3 +1,7 @@
+require 'net/ftp'
+require 'csv'
+require 'zip'
+
 class Crawler
   
   def initialize(logger)
@@ -5,6 +9,11 @@ class Crawler
     @NAME_DOMAIN = '192.168.1.156'
     @USERNAME_FTP = 'training'
     @PASSWORD_FTP = 'training'
+  end
+
+  def crawl_city_industry
+    crawl_city
+    crawl_industry
   end
 
   def crawl_city
