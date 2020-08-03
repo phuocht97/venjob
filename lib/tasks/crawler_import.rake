@@ -21,6 +21,6 @@ namespace :import do
   end
 
   def url
-    'https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-1-vi.html'
+    'https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-1-vi.html'.freeze
   end
 end

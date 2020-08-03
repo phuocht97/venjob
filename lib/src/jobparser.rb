@@ -17,7 +17,7 @@ class JobParser
       next if link == 'javascript:void(0);'
         page = Nokogiri::HTML(URI.open(URI.escape(link)))
         name = page.search('p.name')&.text
-      return if name.blank?
+      next if name.blank?
 
       address = page.css('div.content p').children[1]&.text
       introduction = page.css('div.main-about-us').text
@@ -85,6 +85,6 @@ class JobParser
         @logger.error e.message
       end
     end
-    
+
   end
 end

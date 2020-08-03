@@ -1,5 +1,7 @@
 class TopPagesController < ApplicationController
   def index
+    @cities = City.all
+    @industries = Industry.all
     @total_jobs = Job.count
     @jobs = Job.limit(5).order(created_at: :desc)
     @jobs_of_cities = CityJob.top_city

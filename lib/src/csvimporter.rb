@@ -60,7 +60,6 @@ class CSVimporter
         industry_name = row["category"]
         industries_relationship = Industry.where(name: industry_name)
         if industries_relationship.blank?
-          industry = Industry.create!(name: industry_name)
           industries_relationship = Industry.where(name: industry)
           job.industries << industries_relationship
         else
@@ -71,7 +70,6 @@ class CSVimporter
         location = location_data.gsub('["', '').gsub('"]', '')
         location_relationship = City.where(name: location)
           if location_relationship.blank?
-            city = City.create!(name: location)
             location_relationship = City.where(name: city)
             job.cities << location_relationship
           else

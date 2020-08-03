@@ -81,7 +81,7 @@ class Crawler
         next if link == 'javascript:void(0);'
           page = Nokogiri::HTML(URI.open(URI.escape(link)))
           name = page.search('p.name')&.text
-        return if name.blank?
+        next if name.blank?
 
         address = page.css('div.content p').children[1]&.text
         introduction = page.css('div.main-about-us').text
@@ -99,8 +99,8 @@ class Crawler
   def crawl_job
     (1..10).each do |n|
       info = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
-      link = info.css('a.job_link').map { |link| link['href'] }
-      link.each do |link|
+      links = info.css('a.job_link').map { |link| link['href'] }
+      links.each do |link|
         link_page = Nokogiri::HTML(URI.open(URI.escape(link)))
         row = link_page.search('div.bg-blue div.row')
         next if row.blank?
