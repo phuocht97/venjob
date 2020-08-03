@@ -7,18 +7,21 @@
 
 <div class="container">
 	<div class="search-bar"><%= render 'layouts/search_bar' %></div>
-	<br>
 	<div class="job-list"><%= render 'layouts/show_jobs' %></div>
 
 	<div class="city-banner rounded">City</div>	
 		<div class="row"><%= render 'layouts/show_cities' %></div>
 			<div class="all-city">
-				<div class="row-table border border-dark rounded"><strong>All Cities</strong></div>
+				<%= link_to '#' do %>
+					<div class="row-table border border-dark rounded all-cities"><strong>All Cities</strong></div>
+				<% end %>
 			</div>
 	<div class="industry-banner rounded">Industry</div>
 		<div class="row"><%= render 'layouts/show_industries' %></div>
 			<div class="all-industry">
-				<div class="row-table border border-dark rounded"><strong>All Industries</strong></div>
+				<%= link_to '#' do %>
+					<div class="row-table border border-dark rounded all-industries"><strong>All Industries</strong></div>
+				<% end %>
 			</div>
 </div>
 

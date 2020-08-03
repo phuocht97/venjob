@@ -2,7 +2,7 @@ require 'net/ftp'
 require 'csv'
 require 'zip'
 
-class CSVimporter
+class CSVImporter
   def initialize(logger)
     @logger = logger
     @NAME_DOMAIN = '192.168.1.156'
@@ -59,22 +59,15 @@ class CSVimporter
 
         industry_name = row["category"]
         industries_relationship = Industry.where(name: industry_name)
-        if industries_relationship.blank?
-          industries_relationship = Industry.where(name: industry)
-          job.industries << industries_relationship
-        else
-          job.industries << industries_relationship
-        end
+        next if industries_relationship.blank?
+        job.industries << industries_relationship
 
         location_data = row["work place"]
         location = location_data.gsub('["', '').gsub('"]', '')
         location_relationship = City.where(name: location)
-          if location_relationship.blank?
-            location_relationship = City.where(name: city)
-            job.cities << location_relationship
-          else
-            job.cities << location_relationship
-          end
+        next if location_relationship.blank?
+        job.cities << location_relationship
+
       rescue StandardError => e
         @logger.error e.message
       end

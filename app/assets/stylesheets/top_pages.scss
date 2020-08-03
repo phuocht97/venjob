@@ -78,14 +78,35 @@
   background-image: linear-gradient(160deg, black, #8c8686);
   color: white;
 }
-.city-list:hover{
+.city-list:hover, .industry-list:hover{
   background-color: black;
-  .city-name, .count-job{
-    text-decoration: none;
+  .city-name, .count-job, .industry-name{
     color: white;
   }
 }
-.city-name, .count-job{
+.city-list, .industry-list{
+  &:hover {
+    a {
+      text-decoration: none;
+    }
+  }
+}
+.city-name, .count-job, .industry-name{
   text-decoration: none;
   color: black;
+}
+.search-bar{
+  padding: 20px;
+}
+.all-city:hover, .all-industry:hover{
+  .all-cities, .all-industries{
+    color: blue;
+  }
+}
+.all-city, .all-industry{
+  &:hover{
+    a {
+      text-decoration: none;
+    }
+  }
 }

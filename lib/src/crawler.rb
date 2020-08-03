@@ -20,11 +20,11 @@ class Crawler
     
     data_city.each do |name_city|
       if City.find_by(id: 70)
-       city = City.create!(name: name_city,
-        location: 0)
+        city = City.create!(name: name_city,
+                            location: 0)
       else
         city = City.create!(name: name_city,
-        location: 1)
+                            location: 1)
       end
     end
   end
