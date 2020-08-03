@@ -1,10 +1,10 @@
 <% @jobs_of_industries.each do |industry| %>
-	<div class="col-4">
-		<div class="row-table border border-dark rounded industry-list">
-			<%= link_to '#' do %>
-				<div class="industry-name"><strong><%= industry.name %></strong></div>
-				<div class="count-job"><%= industry.jobs.count %></div>
-			<% end %>
-		</div>
-	</div>
+  <div class="col-4">
+    <div class="row-table border border-dark rounded industry-list">
+      <%= link_to '#' do %>
+        <div class="industry-name"><strong><%= industry.name %></strong></div>
+        <div class="count-job"><%= industry.jobs.count %></div>
+      <% end %>
+    </div>
+  </div>
 <% end %>
