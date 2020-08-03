@@ -1,10 +1,7 @@
-require 'net/ftp'
-require 'csv'
-require 'zip'
-class InforJob
+class JobParser
 
   def initialize(logger, url)
-    @mylogger = logger
+    @logger = logger
     @url = url
   end
 
@@ -18,56 +15,53 @@ class InforJob
     links = info.css('div.caption a.company-name').map { |link| link['href'] }
     links.each do |link|
       next if link == 'javascript:void(0);'
-      page = Nokogiri::HTML(URI.open(URI.escape(link)))
-      name = page.search('p.name')&.text
+        page = Nokogiri::HTML(URI.open(URI.escape(link)))
+        name = page.search('p.name')&.text
       return if name.blank?
 
       address = page.css('div.content p').children[1]&.text
       introduction = page.css('div.main-about-us').text
       begin
-        puts name
         Company.find_or_create_by!(name: name,
                                    address: address,
                                    introduction: introduction)
       rescue StandardError => e
-        @mylogger.error e.message
+        @logger.error e.message
       end
     end
   end
 
-  def create_city_rel(row, info_job)
-    location_rel = row.css('div.map p a').children.map { |name_city| name_city.text.strip }
-    city_table = City.where(name: location_rel)
+  def city_relationship(row, job)
+    location_relationship = row.css('div.map p a').children.map { |name_city| name_city.text.strip }
+    cities_relationship = City.where(name: location_relationship)
 
-    puts "#{info_job.cities << city_table}"
-    info_job.cities << city_table
+    job.cities << cities_relationship
   end
 
-  def create_industry_rel(row, info_job)
-    industry_rel = row.css('li a').children.map { |name_industry| name_industry.text.strip }
-    industry_table = Industry.where(name: industry_rel)
+  def industry_relationship(row, job)
+    industry_relationship = row.css('li a').children.map { |name_industry| name_industry.text.strip }
+    industries_relationship = Industry.where(name: industry_relationship)
 
-    puts "#{info_job.industries << industry_table}"
-    info_job.industries << industry_table
+    job.industries << industries_relationship
   end
 
-  def create_job(title, link_page, row, company_table)
+  def create_job(title, link_page, row, company)
     description = link_page.search('div.detail-row').to_s
     salary = row.at_xpath('//li[./strong/i[contains(@class, "fa fa-usd")]]/p').text.strip
     experience = row.at_xpath('//li[./strong/i[contains(@class, "fa fa-briefcase")]]/p')&.text&.strip
     level = row.at_xpath('//li[./strong/i[contains(@class, "mdi mdi-account")]]/p').text.strip
     expiration_date = row.at_xpath('//li[./strong/i[contains(@class, "mdi mdi-calendar-check")]]/p').text.strip
 
-    info_job = Job.find_or_create_by!(title: title,
-                                      level: level,
-                                      salary: salary,
-                                      experience: experience,
-                                      expiration_date: expiration_date,
-                                      description: description,
-                                      company_id: company_table.id)
+    job = Job.find_or_create_by!(title: title,
+                                 level: level,
+                                 salary: salary,
+                                 experience: experience,
+                                 expiration_date: expiration_date,
+                                 description: description,
+                                 company_id: company.id)
 
-    create_city_rel(row, info_job)
-    create_industry_rel(row, info_job)
+    city_relationship(row, job)
+    industry_relationship(row, job)
   end
 
   def find_job
@@ -79,19 +73,18 @@ class InforJob
       next if row.blank?
 
       begin
-        name_company = link_page.search('div.job-desc a.job-company-name').text.strip
-        company_table = Company.find_by(name: name_company)
-        next if company_table.blank?
+        company_name = link_page.search('div.job-desc a.job-company-name').text.strip
+        company = Company.find_by(name: company_name)
+        next if company.blank?
 
         title = link_page.search('div.job-desc p').text.strip
         next if title.blank?
-        create_job(title, link_page, row, company_table)
+        create_job(title, link_page, row, company)
 
       rescue StandardError => e
-        puts e
-        # @mylogger.error e.message
+        @logger.error e.message
       end
-
     end
+    
   end
 end

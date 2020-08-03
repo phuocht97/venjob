@@ -78,6 +78,14 @@
   background-image: linear-gradient(160deg, black, #8c8686);
   color: white;
 }
-.city-name{
-  
+.city-list:hover{
+  background-color: black;
+  .city-name, .count-job{
+    text-decoration: none;
+    color: white;
+  }
+}
+.city-name, .count-job{
+  text-decoration: none;
+  color: black;
 }

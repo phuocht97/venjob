@@ -1,5 +1,6 @@
 require 'src/crawler.rb'
-require 'src/crontab.rb'
+require 'src/jobparser.rb'
+require 'src/csvimporter.rb'
 
 namespace :import do
   desc 'crawler data'
@@ -9,12 +10,10 @@ namespace :import do
   end
   desc 'Crontab'
   task auto: :environment do
-    action = Crawler.new(logger)
-    crontab = InforJob.new(logger, url)
+    crontab = JobParser.new(logger, url)
+    csvimporter = CSVimporter.new(logger)
     crontab.crawl_all
-    action.get_file_csv
-    action.extract_zip('./jobs.zip', 'lib/csv')
-    action.import_file_csv(Rails.root.join('lib', 'csv', 'jobs.csv'))
+    csvimporter.import
   end
 
   def logger

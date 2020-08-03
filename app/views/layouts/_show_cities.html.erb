@@ -1,8 +1,10 @@
 <% @jobs_of_cities.each do |city, count_job| %>
 	<div class="col-4">
-		<div class="row-table border border-dark rounded">
-			<div><strong><%= link_to "#{City.find(city).name}", '#', class: "city-name" %></strong></div>
-			<div class="count-job"><%= count_job %></div>
+		<div class="row-table border border-dark rounded city-list">
+			<%= link_to '#' do%>
+				<div class="city-name"><strong><%= City.find(city).name %></strong></div>
+				<div class="count-job"><%= count_job %></div>
+			<% end %>	
 		</div>
-	</div>	
+	</div>
 <% end %>

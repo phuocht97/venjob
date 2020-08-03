@@ -1,27 +1,26 @@
 <% provide(:title, 'Venjob') %>
 <div class="banner-ground">
 	<div class="top-banner">	
-		<div class="total-job">Having <%= @total_jobs.count %> jobs for you!</div>
+		<div class="total-job">Having <%= @total_jobs %> jobs for you!</div>
 	</div>	
 </div>
+<div class="search-bar"><%= render 'layouts/search_bar' %></div>
+<br>
 <div class="container">
-	<div class="search-bar"><%= render 'layouts/search_bar' %></div>
-	<br>
 	<div class="job-list"><%= render 'layouts/show_jobs' %></div>
-</div>
-<div class="city-banner">City</div>	
-<div class="container">
-	<div class="row"><%= render 'layouts/show_cities' %></div>
-	<div class="all-industry">
-		<div class="row-table border border-dark rounded">All Cities</div>
-	</div>
+
+	<div class="city-banner rounded">City</div>	
+		<div class="row"><%= render 'layouts/show_cities' %></div>
+			<div class="all-city">
+				<div class="row-table border border-dark rounded"><strong>All Cities</strong></div>
+			</div>
+	<div class="industry-banner rounded">Industry</div>
+		<div class="row"><%= render 'layouts/show_industries' %></div>
+			<div class="all-industry">
+				<div class="row-table border border-dark rounded"><strong>All Industries</strong></div>
+			</div>
 </div>
 
-<div class="industry-banner">Industry</div>
-<div class="container">
-	<div class="row"><%= render 'layouts/show_industries' %></div>
-	<div class="all-industry">
-		<div class="row-table border border-dark rounded">All Industries</div>
-	</div>
-</div>
+
+
 
