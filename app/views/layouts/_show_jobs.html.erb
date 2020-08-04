@@ -1,7 +1,7 @@
 <% @jobs.each do |job| %>
   <% if job.cities.present? %>
     <div class="border border-dark rounded">
-      <div class="job-details"> 
+      <div class="job-details">
         <div class="title"><strong><%= job.title %></strong></div>
         <div><%= job.company_name %></div>
         <div class="salary">Salary: <%= job.salary %></div>
