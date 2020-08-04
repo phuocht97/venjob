@@ -1,23 +1,25 @@
 require 'src/crawler.rb'
-require 'net/ftp'
-require 'csv'
-require 'zip'
-action = Crawler.new
+require 'src/job_parser.rb'
+require 'src/csv_importer.rb'
+
 namespace :import do
-  desc "crawler data"
+  desc 'crawler data'
   task crawler: :environment do
-    action.crawl_city
-    action.crawl_industry
-    action.crawl_company
-    action.crawl_job_relationships
+    action = Crawler.new(logger, url).crawl_city_industry
   end
-  desc "get file CSV from server"
-  task csv_get: :environment do
-    action.get_file_csv
-    action.extract_zip('./jobs.zip','.')
+  desc 'Crontab'
+  task auto: :environment do
+    crontab = JobParser.new(logger, url)
+    csv_importer = CSVImporter.new(logger)
+    crontab.crawl_all
+    csv_importer.import
   end
-  desc "Import data from CSV"
-  task data_csv: :environment do
-    action.import_file_csv
+
+  def logger
+    Logger.new(Rails.root.join('log','crawling.log'))
+  end
+
+  def url
+    'https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-1-vi.html'.freeze
   end
 end

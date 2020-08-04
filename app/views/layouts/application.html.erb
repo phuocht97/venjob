@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Venjob</title>
+    <title><%= full_title(yield(:title)) %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -12,23 +12,8 @@
      <%= javascript_include_tag 'bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
-    <header class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="collapse navbar-collapse">
-        <div class="container">
-          <%= link_to image_tag("logo_venjob.png", alt: "Logo", id: "logo_venjob", width: 120, left: 0), '#'%>
-          <nav>
-            <ul class="navbar-nav mr-auto">
-              <li><%= link_to "Login",    '#' %></li>
-              <li><%= link_to "Register",    '#' %></li>
-              <li><%= link_to "Favorite",    '#' %></li>
-              <li><%= link_to "History", '#' %></li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </header>
-    <div class="container">
+    <%= render "layouts/header" %>
       <%= yield %>
-    </div>
+    <%= render "layouts/footer" %>
   </body>
 </html>

@@ -1,192 +1,124 @@
- class Crawler
+
+class Crawler
+  
+  def initialize(logger, url)
+    @logger = logger
+    @url = url
+  end
+
+  def crawl_city_industry
+    crawl_city
+    crawl_industry
+    crawl_company
+    crawl_job
+  end
+
   def crawl_city
-    page = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-vi.html"))
+    page = Nokogiri::HTML(URI.open(@url))
     get_name = page.search('select#location')
     data_city = get_name.search('option').map(&:text).map(&:strip)
     
     data_city.each do |name_city|
       if City.find_by(id: 70)
-       city = City.create!(name: name_city,
-        location: 0)
+        city = City.create!(name: name_city,
+                            location: 0)
       else
         city = City.create!(name: name_city,
-        location: 1)
+                            location: 1)
       end
     end
   end
+
   def crawl_industry
-    page = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-vi.html"))
+    page = Nokogiri::HTML(URI.open(@url))
     get_name = page.search('select#industry')
-    data_industry = get_name.search('option').map{ |p| p.text.strip }
+    data_industry = get_name.search('option').map { |p| p.text.strip }
 
     data_industry.each do |name_industry|
        industry = Industry.create!(name: name_industry)
     end
   end
+
+
+  def city_relationship(row, job)
+    location_relationship = row.css('div.map p a').children.map { |name_city| name_city.text.strip }
+    cities_relationship = City.where(name: location_relationship)
+
+    job.cities << cities_relationship
+  end
+
+  def industry_relationship(row, job)
+    industry_relationship = row.css('li a').children.map { |name_industry| name_industry.text.strip }
+    industries_relationship = Industry.where(name: industry_relationship)
+
+    job.industries << industries_relationship
+  end
+
+  def create_job(title, link_page, row, company)
+    description = link_page.search('div.detail-row').to_s
+    salary = row.at_xpath('//li[./strong/i[contains(@class, "fa fa-usd")]]/p').text.strip
+    experience = row.at_xpath('//li[./strong/i[contains(@class, "fa fa-briefcase")]]/p')&.text&.strip
+    level = row.at_xpath('//li[./strong/i[contains(@class, "mdi mdi-account")]]/p').text.strip
+    expiration_date = row.at_xpath('//li[./strong/i[contains(@class, "mdi mdi-calendar-check")]]/p').text.strip
+
+    job = Job.find_or_create_by!(title: title,
+                                 level: level,
+                                 salary: salary,
+                                 experience: experience,
+                                 expiration_date: expiration_date,
+                                 description: description,
+                                 company_id: company.id)
+
+    city_relationship(row, job)
+    industry_relationship(row, job)
+  end
+
   def crawl_company
-    for n in 1..10
-      company_info = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
-      company_link = company_info.css('div.caption a.company-name').map{ |link| link['href'] }
-      company_link.each do |link|  
-        if link.include?('\u2019')
-          link.gsub!('\u2019',"'")
-        end
-        if link == 'javascript:void(0);'
-          next
-        elsif link != 'https://careerbuilder.vn/vi/nha-tuyen-dung/hr-vietnam\xE2\x80\x99s-ess-client.35A4EFBA.html'
-          company_page = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
-          if company_page.search('p.name').text != nil
-            begin
-              name_company         = company_page.search('p.name').text
-              address_company      = company_page.css('div.content p').children[1].text
-              introduction_company = company_page.css('div.main-about-us').text
-              get_name_company     = Company.find_by(name: "#{name_company}")
-              if get_name_company == nil
-              company = Company.create!(name: name_company,
-                address: address_company,
-                introduction: introduction_company)
-              end
-              rescue StandardError => e
-                puts e
-            end
-          end
-        end
-      end
-    end
-  end
-  def crawl_job_relationships
-    for n in 1..10
-      page_access = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
-      get_link = page_access.css('a.job_link').map{ |link| link['href'] }
-      get_link.each do |link|
-        if link.include?('\u2013')
-          link.gsub!('\u2013','–') 
-        end
-    page_job = Nokogiri::HTML(URI.open(URI.parse(URI.escape(link))))
-    get_row = page_job.search('div.bg-blue div.row')
-      if get_row != ""
-        get_name_company = page_job.search('div.job-desc a.job-company-name').text.strip
-        company_table    = Company.find_by(name: "#{get_name_company}")
-        title_job        = page_job.search('div.job-desc p').text
-        description      = page_job.search('div.detail-row')
-        arr_column = get_row.css('div.has-background').map{ |data| data.text.split(' ').join(' ') }
-        arr_column.each_with_index do | val, key |
-          if company_table != nil
-            if val.include?('Ngày cập nhật')
-              arr_data = val.gsub('Ngày cập nhật ','').split(' ')
-              date = arr_data.first
-            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == true
-              arr_sub = ((((val.gsub('Lương ','')).gsub(' Kinh nghiệm ', '*')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
-              salary          = arr_sub[0]
-              experience      = arr_sub[1]
-              level           = arr_sub[2]
-              expiration_date = arr_sub[3]
-              job = Job.create!(title: title_job,
-                                level: level,
-                                salary: salary,
-                                experience: experience,
-                                expiration_date: expiration_date,
-                                description: description,
-                                company_id: company_table.id)
-            elsif val.include?('Lương') && val.include?('Kinh nghiệm') == false
-              arr_sub         = (((val.gsub('Lương ','')).gsub(' Cấp bậc ', '*')).gsub(' Hết hạn nộp ', '*')).split('*')
-              salary          = arr_sub[0]
-              level           = arr_sub[1]
-              expiration_date = arr_sub[2]
-              job = Job.create!(title: title_job,
-                                level: level,
-                                salary: salary,
-                                experience: 'Không có',
-                                expiration_date: expiration_date,
-                                description: description,
-                                company_id: company_table.id)
-            end
-          end
-        end
-          job_table = Job.find_by(title: "#{title_job}")
-          if job_table != nil      
-            location_rel     = get_row.css('div.map p a').children.map{ |location| location.text.strip }
-            location_rel.each do |loc|
-              puts "#{job_table.id} - #{loc}"
-              city_table     = City.find_by(name: "#{loc}")
-              city_jobs      = CityJob.create!(job_id: job_table.id, city_id: city_table.id)
-            end
-            industry_rel     = get_row.css('li a').children.map{ |industry| industry.text.strip }
-            industry_rel.each do |ind|
-              puts "#{job_table.id} - #{ind}"
-              industry_table = Industry.find_by(name: "#{ind}")
-              industry_jobs  = IndustryJob.create!(job_id: job_table.id, industry_id: industry_table.id)
-            end
-          end
+    (1..10).each do |n|
+      info = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
+      links = info.css('div.caption a.company-name').map { |link| link['href'] }
+      links.each do |link|
+        next if link == 'javascript:void(0);'
+          page = Nokogiri::HTML(URI.open(URI.escape(link)))
+          name = page.search('p.name')&.text
+        next if name.blank?
+
+        address = page.css('div.content p').children[1]&.text
+        introduction = page.css('div.main-about-us').text
+        begin
+          Company.find_or_create_by!(name: name,
+                                     address: address,
+                                     introduction: introduction)
+        rescue StandardError => e
+          @logger.error e.message
         end
       end
     end
   end
 
-  def get_file_csv
-    Net::FTP.open('192.168.1.156', 'training', 'training') do |ftp|
-      files = ftp.list
-      puts "list out files in root directory:"
-      puts files
-      ftp.getbinaryfile('jobs.zip')
+  def crawl_job
+    (1..10).each do |n|
+      info = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
+      links = info.css('a.job_link').map { |link| link['href'] }
+      links.each do |link|
+        link_page = Nokogiri::HTML(URI.open(URI.escape(link)))
+        row = link_page.search('div.bg-blue div.row')
+        next if row.blank?
+
+        begin
+          company_name = link_page.search('div.job-desc a.job-company-name').text.strip
+          company = Company.find_by(name: company_name)
+          next if company.blank?
+
+          title = link_page.search('div.job-desc p').text.strip
+          next if title.blank?
+          create_job(title, link_page, row, company)
+
+        rescue StandardError => e
+          @logger.error e.message
+        end
+      end
     end
   end
 
-  def extract_zip(file, destination)
-    FileUtils.mkdir_p(destination)
-    Zip::File.open(file) do |zip_file|
-      zip_file.each do |f|
-        fpath = File.join(destination, f.name)
-        zip_file.extract(f, fpath) unless File.exist?(fpath)
-      end
-    end
-  end
-
-  def import_file_csv
-    file = "jobs.csv"
-    CSV.foreach(file, headers: true) do |row|
-      begin
-      company_name         = row[5].strip
-      company_address      = row[2]
-      company_introduction = row[0]
-      company_table        = Company.find_by(name: "#{company_name}")
-      if company_table == nil  
-        company_table = Company.create!(name: company_name,
-                                        address: company_address,
-                                        introduction: company_introduction)
-      end
-      title_job            = row[9].strip
-      description_job      = row[7]
-      level                = row[8]
-      salary               = row[11]
-      if company_table != nil
-        job_table = Job.create!(title: title_job,
-                                description: description_job,
-                                level: level,
-                                salary: salary,
-                                company_id: company_table.id)
-      end
-      industry             = row[1].strip
-      industry_find        = Industry.find_by(name: industry)
-      if industry_find == nil
-        industry_table     = Industry.create!(name: industry)
-        industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
-      elsif industry_find != nil
-        industry_job_table = IndustryJob.create!(job_id: job_table.id, industry_id: industry_find.id)
-      end
-      puts "========================================="
-      puts job_table.id, title_job, industry, salary
-      location_data        = row[16].strip
-      location             = (location_data.gsub('["','')).gsub('"]','').strip
-      location_find        = City.find_by(name: location)
-      if location_find != nil
-        city_job_table     = CityJob.create!(job_id: job_table.id, city_id: location_find.id)
-      end
-      puts "Location: #{location}"
-
-      rescue StandardError => e
-            puts e
-      end
-    end
-  end
 end

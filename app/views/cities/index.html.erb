@@ -1,0 +1,26 @@
+<% provide(:title, 'All Cities') %>
+<div class="container">
+  <div class="all-cities">
+    <div class="city-banner rounded">City list</div>
+    <div class="row">
+      <div class="col-6">
+        <div class="row-table border border-dark rounded viet-nam">Việt Nam</div>
+      </div>
+      <div class="col-6">
+        <div class="row-table border border-dark rounded international">International</div>
+      </div>
+    </div>
+  </div>
+  <div class="city-banner rounded vietnam-area">Việt Nam</div>
+  <div class="city-vietnam">
+    <div class="row">
+      <%= render 'cities/cities_vietnam' %>
+    </div>
+  </div>
+  <div class="city-banner rounded international-area">International</div>
+  <div class="city-international">
+    <div class="row">
+      <%= render 'cities/cities_international' %>
+    </div>
+  </div>
+</div>

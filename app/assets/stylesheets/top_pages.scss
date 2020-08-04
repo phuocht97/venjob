@@ -1,0 +1,112 @@
+// Place all the styles related to the Top_pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.float-right {
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+}
+.top-page{
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+.total-job{
+  position: absolute;
+  color: white;
+  top: 40%;
+  right: 30%;
+  font-size: 60px;
+}
+.banner-ground{
+  position: relative;
+  width: 100%;
+  height: 50vh;
+}
+.top-banner {
+  background-image: url('banner.jpg');
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-style: italic;
+  font-family: Bookman, URW Bookman L, serif;
+}
+.salary{
+  color: green;
+}
+.job-details{
+  position: relative;
+  padding: 15px;
+  margin: 10px;
+}
+
+#button-follow{
+  position: absolute;
+  top: 20%;
+  right: 5%;
+}
+.row-table{
+  color: black;
+  padding: 15px;
+  margin: 15px;
+  text-align: center;
+}
+.city-banner{
+  background: linear-gradient(to top, #33ccff 0%, #006600 100%);
+  font-size: 38px;
+  text-align: center;
+  color: white;
+  font-style: italic;
+  font-family: Bookman, URW Bookman L, serif;
+}
+.industry-banner{
+  background: linear-gradient(to top, #33ccff 0%, #006666 100%);
+  font-size: 38px;
+  text-align: center;
+  color: white;
+  font-style: italic;
+  font-family: Bookman, URW Bookman L, serif;
+}
+.search-bar{
+  size: 50;
+}
+.custom_footer {
+  width: 100%;
+  height: 150px;
+  background-image: linear-gradient(160deg, black, #8c8686);
+  color: white;
+}
+.city-list:hover, .industry-list:hover{
+  background-color: black;
+  .city-name, .count-job, .industry-name{
+    color: white;
+  }
+}
+.city-list, .industry-list{
+  &:hover {
+    a {
+      text-decoration: none;
+    }
+  }
+}
+.city-name, .count-job, .industry-name{
+  text-decoration: none;
+  color: black;
+}
+.search-bar{
+  padding: 20px;
+}
+.all-city:hover, .all-industry:hover{
+  .all-cities, .all-industries{
+    color: blue;
+  }
+}
+.all-city, .all-industry{
+  &:hover{
+    a {
+      text-decoration: none;
+    }
+  }
+}

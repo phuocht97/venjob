@@ -1,0 +1,14 @@
+<% @cities_international.each do |city| %>
+  <div class="col-3 remove-decoration">
+    <%= link_to '#' do %>
+      <div class="border border-dark rounded city-name">
+        <div>
+          <strong><%= city.name %></strong>
+        </div>
+        <div>
+          <%= city.jobs.count %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
