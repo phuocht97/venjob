@@ -10,6 +10,10 @@
             <%= city.name %>
           <% end %>
         </div>
+        <div class="introduction">
+          <%= job_description(job.description) %>
+          <%= link_to 'Read more..', '#'%>
+        </div>
         <button type="button" class="btn btn-primary" id="button-follow">♥ Follow</button>
       </div>
     </div>

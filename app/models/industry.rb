@@ -5,4 +5,8 @@ class Industry < ApplicationRecord
   def self.top_industry
     joins(:jobs).group(:industry_id).order('count(job_id) DESC').limit(9)
   end
+
+  def self.all_industry
+    joins(:jobs).group(:industry_id).order('count(job_id) DESC')
+  end
 end

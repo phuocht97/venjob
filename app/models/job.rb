@@ -16,7 +16,7 @@ class Job < ApplicationRecord
   has_many :users, through: :histories
 
   def company_name
-    @company_name ||= company&.name
+    company&.name
   end
 end
 

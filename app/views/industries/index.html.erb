@@ -1,1 +1,22 @@
-asdasasd
+<% provide(:title, 'All Industries') %>
+<div class="container">
+  <div class="all-industries">
+    <div class="industry-banner rounded">Industry List</div>
+    <div class="row">
+      <% @industries.each do |industry| %>
+        <div class="col-3 remove-decoration">
+          <%= link_to '#' do %>
+            <div class="border border-dark rounded industry-details">
+              <div>
+                <strong><%= industry.name %></strong>
+              </div>
+              <div>
+                <%= industry.jobs.count %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
