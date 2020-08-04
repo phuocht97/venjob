@@ -1,0 +1,10 @@
+<% provide(:title, 'Jobs') %>
+<div class="container">
+  <div class="row total-jobs">
+    <div class="col-4">Total: <%= @total_job %> jobs</div>
+    <div class="col-4">Result for: ... jobs</div>
+  </div>
+  <div class="job-list">
+    <%= render partial: "all_jobs", collection: @jobs_list, as: :job %>
+  </div>
+</div>

@@ -1,14 +1,12 @@
-<% @cities_vietnam.each do |city| %>
-  <div class="col-3 remove-decoration">
-    <%= link_to '#' do %>
-      <div class="border border-dark rounded international-name">
-        <div>
-          <strong><%= city.name %></strong>
-        </div>
-        <div>
-          <%= city.jobs.count %>
-        </div>
+<div class="col-3 remove-decoration">
+  <%= link_to '#' do %>
+    <div class="border border-dark rounded international-name">
+      <div>
+        <strong><%= city.name %></strong>
       </div>
-    <% end %>
-  </div>
-<% end %>
+      <div>
+        <%= city.jobs.count %>
+      </div>
+    </div>
+  <% end %>
+</div>

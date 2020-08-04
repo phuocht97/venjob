@@ -40,6 +40,7 @@ class CSVImporter
       begin
         company_name = row["company name"]
         next if company_name.blank?
+
         company_address = row["company address"]
         company_introduction = row["benefit"]
         company = Company.find_or_create_by!(name: company_name,
@@ -48,6 +49,7 @@ class CSVImporter
 
         title_job = row["name"]
         next if title_job.blank?
+
         description_job = "#{row["description"]} #{row["requirement"]}"
         level = row["level"]
         salary = row["salary"]
@@ -56,17 +58,21 @@ class CSVImporter
                                      level: level,
                                      salary: salary,
                                      company_id: company.id)
+        next if job.blank?
 
         industry_name = row["category"]
-        industries_relationship = Industry.where(name: industry_name)
+        industries_relationship = Industry.find_by(name: industry_name)
         next if industries_relationship.blank?
-        job.industries << industries_relationship
+        industry_relationship = find_or_create_by!(job_id: job.id,
+                                                   industry_id: industries_relationship.id)
+
 
         location_data = row["work place"]
         location = location_data.gsub('["', '').gsub('"]', '')
-        location_relationship = City.where(name: location)
+        location_relationship = City.find_by(name: location)
         next if location_relationship.blank?
-        job.cities << location_relationship
+        city_relationship = find_or_create_by!(job_id: job.id,
+                                               industry_id: location_relationship.id)
 
       rescue StandardError => e
         @logger.error e.message

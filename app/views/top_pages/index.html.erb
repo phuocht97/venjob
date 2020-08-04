@@ -6,22 +6,30 @@
 </div>
 
 <div class="container">
-  <div class="search-bar"><%= render 'layouts/search_bar' %></div>
-  <div class="job-list"><%= render 'layouts/show_jobs' %></div>
+  <div class="search-bar">
+    <%= render 'layouts/search_bar' %>
+  </div>
+  <div class="job-list">
+    <%= render partial: "layouts/show_jobs", collection: @jobs, as: :job %>
+  </div>
 
   <div class="city-banner rounded">City</div>
-  <div class="row"><%= render 'layouts/show_cities' %></div>
+  <div class="row">
+    <%= render partial: "layouts/show_cities", collection: @jobs_of_cities, as: :city %>
+  </div>
   <div class="all-city">
-    <%= link_to '#' do %>
+    <%= link_to cities_path do %>
       <div class="row-table border border-dark rounded all-cities">
         <strong>All Cities</strong>
       </div>
     <% end %>
   </div>
   <div class="industry-banner rounded">Industry</div>
-  <div class="row"><%= render 'layouts/show_industries' %></div>
+  <div class="row">
+    <%= render partial: "layouts/show_industries", collection: @jobs_of_industries, as: :industry %>
+  </div>
   <div class="all-industry">
-    <%= link_to '#' do %>
+    <%= link_to industries_path do %>
       <div class="row-table border border-dark rounded all-industries">
         <strong>All Industries</strong>
       </div>

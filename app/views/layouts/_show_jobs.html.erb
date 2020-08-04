@@ -1,22 +1,22 @@
-<% @jobs.each do |job| %>
-  <% if job.cities.present? %>
-    <div class="border border-dark rounded">
-      <div class="job-details">
-        <div class="title"><strong><%= job.title %></strong></div>
-        <div><%= job.company_name %></div>
-        <div class="salary">Salary: <%= job.salary %></div>
-        <div>▼
-          <% job.cities.each do |city| %>
-            <%= city.name %>
-          <% end %>
-        </div>
-        <div class="introduction">
-          <%= job_description(job.description) %>
+<% if job.cities.present? %>
+  <div class="border border-dark rounded">
+    <div class="job-details">
+      <div class="title"><strong><%= job.title %></strong></div>
+      <div><%= job.company_name %></div>
+      <div class="salary">Salary: <%= job.salary %></div>
+      <div>▼
+        <% job.cities.each do |city| %>
+          <%= city.name %>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="col-10 introduction">
+          <%= job_description(job.description) %><br>
           <%= link_to 'Read more..', '#'%>
         </div>
-        <button type="button" class="btn btn-primary" id="button-follow">♥ Follow</button>
       </div>
+      <button type="button" class="btn btn-primary" id="button-follow">♥ Follow</button>
     </div>
-    <br>
-  <% end %>
+  </div>
+  <br>
 <% end %>
