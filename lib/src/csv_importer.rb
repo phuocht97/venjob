@@ -6,14 +6,14 @@ class CSVImporter
   def initialize(logger)
     @logger = logger
     NAME_DOMAIN = '192.168.1.156'.freeze
-    USERNAME_FTP = 'training'.freeze
-    PASSWORD_FTP = 'training'.freeze
+    FTP_USERNAME = 'training'.freeze
+    FTP_PASSWORD = 'training'.freeze
     @extracting_directory = Rails.root.join('lib', 'csv')
     @zip_directory = Rails.root.join('jobs.zip')
     @importer = Rails.root.join('lib', 'csv', 'jobs.csv')
   end
 
-  def import 
+  def import
     get_file_csv
     extract_zip
     import_file_csv
