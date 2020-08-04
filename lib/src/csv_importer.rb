@@ -3,11 +3,12 @@ require 'csv'
 require 'zip'
 
 class CSVImporter
+  NAME_DOMAIN = '192.168.1.156'.freeze
+  FTP_USERNAME = 'training'.freeze
+  FTP_PASSWORD = 'training'.freeze
+
   def initialize(logger)
     @logger = logger
-    NAME_DOMAIN = '192.168.1.156'.freeze
-    FTP_USERNAME = 'training'.freeze
-    FTP_PASSWORD = 'training'.freeze
     @extracting_directory = Rails.root.join('lib', 'csv')
     @zip_directory = Rails.root.join('jobs.zip')
     @importer = Rails.root.join('lib', 'csv', 'jobs.csv')
