@@ -69,7 +69,6 @@ class CSVImporter
           job.industries << industries_relationship
           job.cities << location_relationship
         end
-
       rescue StandardError => e
         @logger.error e.message
       end
