@@ -1,6 +1,6 @@
 
 class Crawler
-  
+
   def initialize(logger, url)
     @logger = logger
     @url = url
@@ -17,7 +17,7 @@ class Crawler
     page = Nokogiri::HTML(URI.open(@url))
     get_name = page.search('select#location')
     data_city = get_name.search('option').map(&:text).map(&:strip)
-    
+
     data_city.each do |name_city|
       if City.find_by(id: 70)
         city = City.create!(name: name_city,
@@ -78,17 +78,17 @@ class Crawler
       info = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
       links = info.css('div.caption a.company-name').map { |link| link['href'] }
       links.each do |link|
-        next if link == 'javascript:void(0);'
-          page = Nokogiri::HTML(URI.open(URI.escape(link)))
-          name = page.search('p.name')&.text
-        next if name.blank?
-
-        address = page.css('div.content p').children[1]&.text
-        introduction = page.css('div.main-about-us').text
         begin
+          next if link == 'javascript:void(0);'
+            page = Nokogiri::HTML(URI.open(URI.escape(link)))
+            name = page.search('p.name')&.text
+          next if name.blank?
+
+          address = page.css('div.content p').children[1]&.text
+          introduction = page.css('div.main-about-us').text
           Company.find_or_create_by!(name: name,
-                                     address: address,
-                                     introduction: introduction)
+                                       address: address,
+                                       introduction: introduction)
         rescue StandardError => e
           @logger.error e.message
         end

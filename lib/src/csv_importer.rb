@@ -54,21 +54,31 @@ class CSVImporter
         level = row["level"]
         salary = row["salary"]
 
+        job = Job.find_or_create_by!(title: title_job,
+                               description: description_job,
+                               level: level,
+                               salary: salary,
+                               company_id: company_id)
+
         industry_name = row["category"]
         industries_relationship = Industry.where(name: industry_name)
+        next if industries_relationship.blank?
+
+        industry_job_relationship = IndustryJob.where(job_id: job.id, industry_id: industries_relationship.ids)
+        next if industry_job_relationship.present?
+
+        job.industries << industries_relationship
 
         location_data = row["work place"]
         location = location_data.gsub('["', '').gsub('"]', '')
         location_relationship = City.where(name: location)
+        next if location_relationship.blank?
 
-        Job.find_or_create_by!(title: title_job,
-                               description: description_job,
-                               level: level,
-                               salary: salary,
-                               company_id: company_id) do |job|
-          job.industries << industries_relationship
-          job.cities << location_relationship
-        end
+        location_job_relationship = CityJob.where(job_id: job.id ,city_id: location_relationship.ids)
+        next if location_job_relationship.present?
+
+        job.cities << location_relationship
+
       rescue StandardError => e
         @logger.error e.message
       end
