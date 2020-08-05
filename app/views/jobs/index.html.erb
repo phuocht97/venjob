@@ -10,10 +10,9 @@
   <div class="paginate-jobs">
     <%= paginate @jobs_list, left: 3, right: 3 %>
   </div>
+  <%= render "jobs/pagination" %>
   <div class="job-list">
     <%= render partial: "job", collection: @jobs_list, as: :job %>
   </div>
-  <div class="paginate-jobs">
-    <%= paginate @jobs_list, left: 3, right: 3 %>
-  </div>
+  <%= render "jobs/pagination" %>
 </div>
