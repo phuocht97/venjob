@@ -7,7 +7,13 @@
     <div class="col-4"><strong>Total: <%= @total_job %> jobs</strong></div>
     <div class="col-4"><strong>Result for: ... jobs</strong></div>
   </div>
+  <div class="paginate-jobs">
+    <%= paginate @jobs_list, left: 3, right: 3 %>
+  </div>
   <div class="job-list">
     <%= render partial: "job", collection: @jobs_list, as: :job %>
+  </div>
+  <div class="paginate-jobs">
+    <%= paginate @jobs_list, left: 3, right: 3 %>
   </div>
 </div>

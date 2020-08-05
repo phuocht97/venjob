@@ -53,7 +53,6 @@ class CSVImporter
         description_job = "#{row["description"]} #{row["requirement"]}"
         level = row["level"]
         salary = row["salary"]
-
         job = Job.find_or_create_by!(title: title_job,
                                      description: description_job,
                                      level: level,
