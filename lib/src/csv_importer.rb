@@ -20,7 +20,7 @@ class CSVImporter
   end
 
   def get_file_csv
-    Net::FTP.open(NAME_DOMAIN, USERNAME_FTP, PASSWORD_FTP) do |ftp|
+    Net::FTP.open(NAME_DOMAIN, FTP_USERNAME, FTP_PASSWORD) do |ftp|
       ftp.getbinaryfile('jobs.zip')
     end
   end
