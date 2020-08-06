@@ -8,6 +8,8 @@ class CreateJobs < ActiveRecord::Migration[5.2]
       t.string :experience
       t.string :expiration_date
       t.bigint :company_id
+      t.string :converted_name
+
       t.timestamps
     end
   end

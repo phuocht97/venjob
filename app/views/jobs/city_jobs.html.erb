@@ -3,9 +3,8 @@
   <div class="search-bar">
     <%= render 'layouts/search_bar' %>
   </div>
-  <div class="row total-jobs">
-    <div class="col-4">Total: <%= @total_job %> jobs</div>
-    <div class="col-4">Result for: <%= @result_for_job %> jobs</div>
+  <div class="total-jobs">
+    <div class="total">Total: <strong><%= @result_for_job %></strong> jobs in <strong><%= @city.name %></strong></div>
   </div>
   <%= render "jobs/pagination" %>
   <div class="job-list">

@@ -3,6 +3,7 @@ class Crawler
 
   VIETNAM = 0
   FOREIGN = 1
+
   def initialize(logger, url)
     @logger = logger
     @url = url
@@ -74,7 +75,6 @@ class Crawler
                                  expiration_date: expiration_date,
                                  description: description,
                                  company_id: company.id)
-
     city_relationship(row, job)
     industry_relationship(row, job)
   end

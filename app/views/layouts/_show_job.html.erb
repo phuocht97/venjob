@@ -5,9 +5,7 @@
       <div><%= job.company_name %></div>
       <div class="salary">💲 Salary: <%= job.salary %></div>
       <div>▼
-        <% job.cities.each do |city| %>
-          <%= city.name %>
-        <% end %>
+        <%= job.cities.map(&:name).join(' | ') %>
       </div>
       <div class="row">
         <div class="col-10 introduction">

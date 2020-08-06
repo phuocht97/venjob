@@ -1,6 +1,6 @@
 <div class="col-4">
   <div class="row-table border border-dark rounded industry-list">
-    <%= link_to industry_jobs_path(industry.id) do %>
+    <%= link_to industry_jobs_path(converted_name: industry.converted_name) do %>
       <div class="industry-name"><strong><%= industry.name %></strong></div>
       <div class="count-job"><%= industry.jobs.count %></div>
     <% end %>

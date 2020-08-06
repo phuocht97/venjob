@@ -1,4 +1,5 @@
 class City < ApplicationRecord
+  before_save :convert_city
   has_many :city_jobs
   has_many :jobs, through: :city_jobs
 

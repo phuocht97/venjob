@@ -1,5 +1,5 @@
 <div class="col-3 remove-decoration">
-  <%= link_to industry_jobs_path(industry.id) do %>
+  <%= link_to industry_jobs_path(converted_name: industry.converted_name) do %>
     <div class="border border-dark rounded industry-details">
       <div>
         <strong><%= industry.name %></strong>

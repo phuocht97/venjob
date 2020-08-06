@@ -3,12 +3,10 @@
     <div class="job-details">
       <div class="title"><strong><%= job.title %></strong></div>
         <div class="row">
-          <div class="col-6">▼
-            <% job.cities.each do |city| %>
-              <%= city.name %>
-            <% end %>
+          <div class="col-5">▼
+            <%= job.cities.map(&:name).join(' | ') %>
           </div>
-          <div class="col-4 salary">💲 Salary: <%= job.salary %></div>
+          <div class="col-5 salary">💲 Salary: <%= job.salary %></div>
           <div class="col-10 introduction">
             <%= job_description(job.description) %><br>
             <%= link_to 'Read more..', '#'%>

@@ -1,4 +1,5 @@
 class Job < ApplicationRecord
+  before_save :convert_job
   belongs_to :company
   has_many :city_jobs
   has_many :cities, through: :city_jobs
@@ -17,6 +18,10 @@ class Job < ApplicationRecord
 
   scope :limit_job, -> { includes(:cities, :company).order(created_at: :desc).limit(5) }
   scope :all_job, -> { limit(20).order(created_at: :desc) }
+
+  def convert_job
+    self.converted_name = Convert.to_convert("#{title}")
+  end
 
   def company_name
     company&.name
