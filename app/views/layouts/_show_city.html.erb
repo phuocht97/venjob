@@ -1,6 +1,6 @@
 <div class="col-4">
   <div class="row-table border border-dark rounded city-list">
-    <%= link_to city_jobs_path(city.id) do %>
+    <%= link_to city_jobs_path(name: city.name) do %>
       <div class="city-name"><strong><%= city.name %></strong></div>
       <div class="count-job"><%= city.jobs.count %></div>
     <% end %>
