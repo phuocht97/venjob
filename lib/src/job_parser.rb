@@ -15,8 +15,9 @@ class JobParser
     links = info.css('div.caption a.company-name').map { |link| link['href'] }
     links.each do |link|
       next if link == 'javascript:void(0);'
-        page = Nokogiri::HTML(URI.open(URI.escape(link)))
-        name = page.search('p.name')&.text
+
+      page = Nokogiri::HTML(URI.open(URI.escape(link)))
+      name = page.search('p.name')&.text
       next if name.blank?
 
       address = page.css('div.content p').children[1]&.text
