@@ -10,12 +10,12 @@
     <%= render 'layouts/search_bar' %>
   </div>
   <div class="job-list">
-    <%= render partial: "layouts/show_jobs", collection: @jobs, as: :job %>
+    <%= render partial: "layouts/show_job", collection: @jobs, as: :job %>
   </div>
 
   <div class="city-banner rounded">City</div>
   <div class="row">
-    <%= render partial: "layouts/show_cities", collection: @jobs_of_cities, as: :city %>
+    <%= render partial: "layouts/show_city", collection: @jobs_of_cities, as: :city %>
   </div>
   <div class="all-city">
     <%= link_to cities_path do %>
@@ -26,7 +26,7 @@
   </div>
   <div class="industry-banner rounded">Industry</div>
   <div class="row">
-    <%= render partial: "layouts/show_industries", collection: @jobs_of_industries, as: :industry %>
+    <%= render partial: "layouts/show_industry", collection: @jobs_of_industries, as: :industry %>
   </div>
   <div class="all-industry">
     <%= link_to industries_path do %>
