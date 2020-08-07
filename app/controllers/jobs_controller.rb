@@ -2,7 +2,6 @@ class JobsController < ApplicationController
   before_action :use_variables
 
   def index
-
     @jobs_list = Job.all_job.page(params[:page]).per(20)
   end
 

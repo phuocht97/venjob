@@ -1,0 +1,12 @@
+<div class="col-3 remove-decoration">
+  <%= link_to city_jobs_path(converted_name: city.convert_name) do %>
+    <div class="border border-dark rounded international-name">
+      <div>
+        <strong><%= city.name %></strong>
+      </div>
+      <div>
+        <%= city.jobs.count %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -20,7 +20,7 @@ class Job < ApplicationRecord
   scope :all_job, -> { limit(20).order(created_at: :desc) }
 
   def convert_job
-    self.converted_name = Convert.to_convert("#{title}")
+    converted_name = Convert.to_convert("#{title}")
   end
 
   def company_name
