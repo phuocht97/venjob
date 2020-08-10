@@ -1,6 +1,8 @@
 
 class Crawler
 
+  VIETNAM = 0
+  FOREIGN = 1
   def initialize(logger, url)
     @logger = logger
     @url = url
@@ -20,11 +22,13 @@ class Crawler
 
     data_city.each do |name_city|
       if City.find_by(id: 70)
-        city = City.create!(name: name_city,
-                            location: 0)
+        city = City.find_or_create_by!(name: name_city) do
+          city.update!(location: VIETNAM)
+        end
       else
-        city = City.create!(name: name_city,
-                            location: 1)
+        city = City.find_or_create_by!(name: name_city) do
+          city.update!(location: FOREIGN)
+        end
       end
     end
   end
@@ -35,7 +39,7 @@ class Crawler
     data_industry = get_name.search('option').map { |p| p.text.strip }
 
     data_industry.each do |name_industry|
-       industry = Industry.create!(name: name_industry)
+       industry = Industry.find_or_create_by!(name: name_industry)
     end
   end
 
