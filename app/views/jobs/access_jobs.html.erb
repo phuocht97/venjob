@@ -3,7 +3,9 @@
     <div class="job-details-banner">
       <div class="job-info">
         <div><strong><%= @job_details.title %></strong></div>
-        <div><%= @job_details.company_name %></div>
+        <div>
+          <%= link_to @job_details.company_name, company_jobs_path(converted_name: @job_details.company.converted_name), class: 'company' %>
+        </div>
         <div class="breadcrumb">
           <%= link_to "TOP", root_path  %>&ensp;/&ensp;
           <% @job_details.cities.each do |city| %>
@@ -28,7 +30,10 @@
       <div class="row info border border-dark">
         <div class="col-6">
           <div class="city">
-            <strong>Location:</strong> <%= @job_details.cities.map(&:name).join(' | ') %>
+            <strong>Location:</strong>
+            <% @job_details.cities.each do |city| %>
+              <%= link_to '🎯' + city.name, city_jobs_path(converted_name: city.converted_name) %>
+            <% end %>
           </div>
           <div class="created-day">
             <strong>Created at</strong>: <%= @job_details.created_at.strftime('%d/%m/%Y') %>

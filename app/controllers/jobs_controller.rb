@@ -17,6 +17,12 @@ class JobsController < ApplicationController
     @result_for_job = @industry.jobs.count
   end
 
+  def company_jobs
+    @company = Company.find_by(converted_name: params[:converted_name])
+    @jobs_list = @company.jobs.all_job.page(params[:page]).per(20)
+    @result_for_job = @company.jobs.count
+  end
+
   def access_jobs
     @job_details = Job.find(params[:id])
   end

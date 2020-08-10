@@ -37,7 +37,7 @@
   text-align: center;
   color: white;
   background: rgb(2,0,36);
-  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(7,251,89,1) 28%, rgba(0,212,255,1) 100%);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(2,93,2,1) 52%, rgba(0,212,255,1) 100%);
 }
 .info {
   background-color: #cce6ff;
@@ -50,4 +50,8 @@
 .apply-btn, .favorite-btn {
   margin: 20px;
   padding: 20px;
+}
+.company:hover , .company{
+  text-decoration: none;
+  color: gray;
 }
