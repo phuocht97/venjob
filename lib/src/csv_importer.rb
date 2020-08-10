@@ -55,10 +55,10 @@ class CSVImporter
         salary = row["salary"]
 
         job = Job.find_or_create_by!(title: title_job,
-                               description: description_job,
-                               level: level,
-                               salary: salary,
-                               company_id: company_id)
+                                     description: description_job,
+                                     level: level,
+                                     salary: salary,
+                                     company_id: company_id)
 
         industry_name = row["category"]
         industries_relationship = Industry.where(name: industry_name)
