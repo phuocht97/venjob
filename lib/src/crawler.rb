@@ -45,9 +45,7 @@ class Crawler
     cities_relationship = City.where(name: location_relationship)
     city_job_relationship = CityJob.where(job_id: job.id ,city_id: cities_relationship.ids)
 
-    if city_job_relationship.blank?
-      job.cities << cities_relationship
-    end
+    job.cities << cities_relationship if city_job_relationship.blank?
   end
 
   def industry_relationship(row, job)
@@ -55,9 +53,7 @@ class Crawler
     industries_relationship = Industry.where(name: industry_relationship)
     industry_job_relationship = IndustryJob.where(job_id: job.id, industry_id: industries_relationship.ids)
 
-    if industry_job_relationship.blank?
-      job.industries << industries_relationship
-    end
+    job.industries << industries_relationship if industry_job_relationship.blank?
   end
 
   def create_job(title, link_page, row, company)
