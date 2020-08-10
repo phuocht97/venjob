@@ -15,8 +15,9 @@ class JobParser
     links = info.css('div.caption a.company-name').map { |link| link['href'] }
     links.each do |link|
       next if link == 'javascript:void(0);'
-        page = Nokogiri::HTML(URI.open(URI.escape(link)))
-        name = page.search('p.name')&.text
+
+      page = Nokogiri::HTML(URI.open(URI.escape(link)))
+      name = page.search('p.name')&.text
       next if name.blank?
 
       address = page.css('div.content p').children[1]&.text
@@ -34,15 +35,17 @@ class JobParser
   def city_relationship(row, job)
     location_relationship = row.css('div.map p a').children.map { |name_city| name_city.text.strip }
     cities_relationship = City.where(name: location_relationship)
+    city_job_relationship = CityJob.where(job_id: job.id ,city_id: cities_relationship.ids)
 
-    job.cities << cities_relationship
+    job.cities << cities_relationship if city_job_relationship.blank?
   end
 
   def industry_relationship(row, job)
     industry_relationship = row.css('li a').children.map { |name_industry| name_industry.text.strip }
     industries_relationship = Industry.where(name: industry_relationship)
+    industry_job_relationship = IndustryJob.where(job_id: job.id, industry_id: industries_relationship.ids)
 
-    job.industries << industries_relationship
+    job.industries << industries_relationship if industry_job_relationship.blank?
   end
 
   def create_job(title, link_page, row, company)
