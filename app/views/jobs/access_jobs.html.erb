@@ -1,3 +1,78 @@
 <div class="container">
-  <%= @job_details.title %>
+  <div class="details-banner">
+    <div class="job-details-banner">
+      <div class="job-info">
+        <div><strong><%= @job_details.title %></strong></div>
+        <div><%= @job_details.company_name %></div>
+        <div class="breadcrumb">
+          <%= link_to "TOP", root_path  %>&ensp;/&ensp;
+          <% @job_details.cities.each do |city| %>
+            <%= link_to '🎯' + city.name, city_jobs_path(converted_name: city.converted_name) %>
+          <% end %>&ensp;/&ensp;
+          <% @job_details.industries.each do |industry| %>
+            <%= link_to '👉' + industry.name, industry_jobs_path(converted_name: industry.converted_name) %>
+          <% end %>&ensp;/&ensp;
+          <%= @job_details.title.truncate_words(5) %>
+        </div>
+        <%= link_to '#' do %>
+          <div class="apply-job">
+            <strong>Apply Now</strong>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="details">
+    <div class="job-infomation">
+      <h1><%= @job_details.title %></h1>
+      <div class="row info border border-dark">
+        <div class="col-6">
+          <div class="city">
+            <strong>Location:</strong> <%= @job_details.cities.map(&:name).join(' | ') %>
+          </div>
+          <div class="created-day">
+            <strong>Created at</strong>: <%= @job_details.created_at.strftime('%d/%m/%Y') %>
+          </div>
+          <div class="industry">
+            <strong>Industry:</strong> <%= @job_details.industries.map(&:name).join(', ') %>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="salary-detail">
+            <strong>Salary:</strong> <%= @job_details.salary %>
+          </div>
+          <% if @job_details.experience.present? %>
+            <div class="experience">
+               <strong>Experience:</strong> <%= @job_details.experience %>
+            </div>
+          <% end %>
+          <div class="level">
+            <strong>Level:</strong> <%= @job_details.level %>
+          </div>
+          <div class="expiration-date">
+            <strong>Expiration date:</strong> <%= @job_details.expiration_date %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="job-description">
+      <%= @job_details.description.html_safe %>
+    </div>
+  </div>
+  <div class="row under-descrip">
+    <div class="col-6">
+      <%= link_to '#' do %>
+        <div class="btn btn-info btn-lg apply-btn">
+          <strong>Apply Now</strong>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-6">
+      <%= link_to '#' do %>
+        <div class="btn btn-danger btn-lg favorite-btn">
+          <strong>Favorite</strong>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
