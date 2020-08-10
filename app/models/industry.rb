@@ -7,10 +7,6 @@ class Industry < ApplicationRecord
   scope :all_industry, -> { joins(:jobs).group(:industry_id).order('count(job_id) DESC') }
 
   def convert_industry
-    converted_name = Convert.to_convert("#{name}")
-  end
-
-  def convert_name
-    converted_name = Convert.to_convert_name("#{name}")
+    self.converted_name = Convert.to_convert("#{name} #{rand(10000)}")
   end
 end

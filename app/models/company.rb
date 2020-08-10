@@ -3,6 +3,6 @@ class Company < ApplicationRecord
   has_many :jobs
 
   def convert_company
-    self.converted_name = Convert.to_convert("#{name}")
+    self.converted_name = Convert.to_convert("#{name} #{rand(10000)}")
   end
 end

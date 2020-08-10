@@ -1,17 +1,21 @@
 <% if job.cities.present? %>
   <div class="border border-dark rounded">
     <div class="job-details">
-      <div class="title"><strong><%= job.title %></strong></div>
-        <div class="row">
-          <div class="col-5">▼
-            <%= job.cities.map(&:name).join(' | ') %>
-          </div>
-          <div class="col-5 salary">💲 Salary: <%= job.salary %></div>
-          <div class="col-10 introduction">
-            <%= job_description(job.description) %><br>
-            <%= link_to 'Read more..', '#'%>
-          </div>
+      <div class="title">
+        <%= link_to job_detail_path(job.id) do %><strong>
+          <%= job.title %></strong>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="col-5">▼
+          <%= job.cities.map(&:name).join(' | ') %>
         </div>
+        <div class="col-5 salary">💲 Salary: <%= job.salary %></div>
+        <div class="col-10 introduction">
+          <%= job_description(job.description) %><br>
+          <%= link_to 'Read more..', '#'%>
+        </div>
+      </div>
       <button type="button" class="btn btn-success" id="button-follow">♥ Favorite</button>
     </div>
   </div>

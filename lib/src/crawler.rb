@@ -75,6 +75,7 @@ class Crawler
                                  expiration_date: expiration_date,
                                  description: description,
                                  company_id: company.id)
+
     city_relationship(row, job)
     industry_relationship(row, job)
   end

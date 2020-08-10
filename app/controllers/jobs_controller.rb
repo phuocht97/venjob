@@ -17,6 +17,10 @@ class JobsController < ApplicationController
     @result_for_job = @industry.jobs.count
   end
 
+  def access_jobs
+    @job_details = Job.find(params[:id])
+  end
+
   def use_variables
     @cities = City.all
     @industries = Industry.all
