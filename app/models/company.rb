@@ -1,8 +1,10 @@
 class Company < ApplicationRecord
-  before_save :convert_company
+  before_save :convert_attribute
   has_many :jobs
 
-  def convert_company
-    self.converted_name = Convert.to_convert("#{name} #{rand(10000)}")
+  private
+
+  def normalize_attribute
+    name
   end
 end

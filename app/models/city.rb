@@ -1,5 +1,5 @@
 class City < ApplicationRecord
-  before_save :convert_city
+  before_save :convert_attribute
   has_many :city_jobs
   has_many :jobs, through: :city_jobs
 
@@ -9,7 +9,9 @@ class City < ApplicationRecord
   scope :top_city, -> { joins(:jobs).group(:city_id).order('count(job_id) DESC').limit(9) }
   scope :location, ->(number) { joins(:jobs).group(:city_id).order('count(job_id) DESC').where(location: number) }
 
-  def convert_city
-    self.converted_name = Convert.to_convert("#{name} #{rand(10000)}")
+  private
+
+  def normalize_attribute
+    name
   end
 end

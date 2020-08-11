@@ -1,5 +1,5 @@
 class Job < ApplicationRecord
-  before_save :convert_job
+  before_save :convert_attribute
   belongs_to :company
   has_many :city_jobs
   has_many :cities, through: :city_jobs
@@ -16,15 +16,18 @@ class Job < ApplicationRecord
   has_many :histories
   has_many :users, through: :histories
 
-  scope :limit_job, -> { includes(:cities, :company).order(created_at: :desc).limit(5) }
-  scope :all_job, -> { limit(20).order(created_at: :desc) }
+  LIMIT_PAGE = 20
 
-  def convert_job
-    converted_name = Convert.to_convert("#{title} #{rand(10000)}")
-  end
+  scope :limit_job, -> { includes(:cities, :company).order(created_at: :desc).limit(5) }
 
   def company_name
     company&.name
+  end
+
+  private
+
+  def normalize_attribute
+    title
   end
 end
 

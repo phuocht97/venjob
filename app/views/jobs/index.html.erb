@@ -6,9 +6,6 @@
   <div class="row total-jobs">
     <div class="col-4"><strong>Total: <%= @total_job %> jobs</strong></div>
   </div>
-  <div class="paginate-jobs">
-    <%= paginate @jobs_list, left: 3, right: 3 %>
-  </div>
   <%= render "jobs/pagination" %>
   <div class="job-list">
     <%= render partial: "job", collection: @jobs_list, as: :job %>

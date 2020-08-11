@@ -1,30 +1,39 @@
 class JobsController < ApplicationController
+  before_action :set_job, only: [:show]
   before_action :use_variables
 
   def index
-    @jobs_list = Job.all_job.page(params[:page]).per(20)
+    @jobs_list = Job.all.page(params[:page]).per(Job::LIMIT_PAGE)
   end
 
   def city_jobs
     @city = City.find_by(converted_name: params[:converted_name])
-    @jobs_list = @city.jobs.all_job.page(params[:page]).per(20)
+    @jobs_list = @city.jobs.page(params[:page]).per(Job::LIMIT_PAGE)
     @result_for_job = @city.jobs.count
   end
 
   def industry_jobs
     @industry = Industry.find_by(converted_name: params[:converted_name])
-    @jobs_list = @industry.jobs.all_job.page(params[:page]).per(20)
+    @jobs_list = @industry.jobs.page(params[:page]).per(Job::LIMIT_PAGE)
     @result_for_job = @industry.jobs.count
   end
 
   def company_jobs
     @company = Company.find_by(converted_name: params[:converted_name])
-    @jobs_list = @company.jobs.all_job.page(params[:page]).per(20)
+    @jobs_list = @company.jobs.page(params[:page]).per(Job::LIMIT_PAGE)
     @result_for_job = @company.jobs.count
+
+    redirect_to jobs_path unless @company
   end
 
-  def detail
-    @job_details = Job.find(params[:id])
+  def show
+    redirect_to jobs_path unless @job
+  end
+
+  private
+
+  def set_job
+    @job ||= Job.find_by(params[:id])
   end
 
   def use_variables
@@ -33,3 +42,4 @@ class JobsController < ApplicationController
     @total_job = Job.count
   end
 end
+
