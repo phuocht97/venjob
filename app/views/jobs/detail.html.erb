@@ -8,9 +8,11 @@
         </div>
         <div class="breadcrumb">
           <%= link_to "TOP", root_path  %>&ensp;/&ensp;
-          <% @job_details.cities.each do |city| %>
-            <%= link_to city.name, city_jobs_path(converted_name: city.converted_name) , class: 'location' %>
-          <% end %>&ensp;/&ensp;
+          <div>
+            <% @job_details.cities.each do |city| %>
+              <%= link_to city.name, city_jobs_path(converted_name: city.converted_name) , class: 'location' %>
+            <% end %>&ensp;/&ensp;
+          </div>
           <% @job_details.industries.each do |industry| %>
             <%= link_to industry.name, industry_jobs_path(converted_name: industry.converted_name), class: 'industry' %>
           <% end %>&ensp;/&ensp;

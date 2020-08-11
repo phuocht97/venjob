@@ -55,20 +55,11 @@
   text-decoration: none;
   color: gray;
 }
-.industry::after {
+.industry::after, .location::after {
   margin: 5px;
   content: "|";
   color: black;
 }
-.industry:nth-last-child(1)::after {
-  content: "";
-}
-
-.location::after {
-  margin: 5px;
-  content: "|";
-  color: black;
-}
-.location:last-child::after {
+.industry:last-child::after, .location:last-child::after {
   content: "";
 }
