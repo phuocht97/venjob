@@ -12,6 +12,6 @@ class City < ApplicationRecord
   private
 
   def normalize_attribute
-    name
+    "#{name} #{rand(10000)}"
   end
 end

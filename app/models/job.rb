@@ -27,7 +27,7 @@ class Job < ApplicationRecord
   private
 
   def normalize_attribute
-    title
+    "#{title} #{rand(10000)}"
   end
 end
 
