@@ -1,0 +1,9 @@
+<% provide(:title, 'All Industries') %>
+<div class="container">
+  <div class="all-industries">
+    <div class="industry-banner rounded">Industry List</div>
+    <div class="row">
+      <%= render partial: "industry", collection: @industries, as: :industry %>
+    </div>
+  </div>
+</div>

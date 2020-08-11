@@ -1,0 +1,12 @@
+<div class="col-3 remove-decoration">
+  <%= link_to '#' do %>
+    <div class="border border-dark rounded industry-details">
+      <div>
+        <strong><%= industry.name %></strong>
+      </div>
+      <div>
+        <%= industry.jobs.count %>
+      </div>
+    </div>
+  <% end %>
+</div>

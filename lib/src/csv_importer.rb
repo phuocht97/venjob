@@ -6,7 +6,6 @@ class CSVImporter
   NAME_DOMAIN = '192.168.1.156'.freeze
   FTP_USERNAME = 'training'.freeze
   FTP_PASSWORD = 'training'.freeze
-
   def initialize(logger)
     @logger = logger
     @extracting_directory = Rails.root.join('lib', 'csv')
@@ -21,7 +20,7 @@ class CSVImporter
   end
 
   def get_file_csv
-    Net::FTP.open(NAME_DOMAIN, USERNAME_FTP, PASSWORD_FTP) do |ftp|
+    Net::FTP.open(NAME_DOMAIN, FTP_USERNAME, FTP_PASSWORD) do |ftp|
       ftp.getbinaryfile('jobs.zip')
     end
   end
@@ -41,6 +40,7 @@ class CSVImporter
       begin
         company_name = row["company name"]
         next if company_name.blank?
+
         company_address = row["company address"]
         company_introduction = row["benefit"]
         company = Company.find_or_create_by!(name: company_name,
@@ -49,24 +49,34 @@ class CSVImporter
 
         title_job = row["name"]
         next if title_job.blank?
+
         description_job = "#{row["description"]} #{row["requirement"]}"
         level = row["level"]
         salary = row["salary"]
+
         job = Job.find_or_create_by!(title: title_job,
                                      description: description_job,
                                      level: level,
                                      salary: salary,
-                                     company_id: company.id)
+                                     company_id: company_id)
 
         industry_name = row["category"]
         industries_relationship = Industry.where(name: industry_name)
         next if industries_relationship.blank?
+
+        industry_job_relationship = IndustryJob.where(job_id: job.id, industry_id: industries_relationship.ids)
+        next if industry_job_relationship.present?
+
         job.industries << industries_relationship
 
         location_data = row["work place"]
         location = location_data.gsub('["', '').gsub('"]', '')
         location_relationship = City.where(name: location)
         next if location_relationship.blank?
+
+        location_job_relationship = CityJob.where(job_id: job.id ,city_id: location_relationship.ids)
+        next if location_job_relationship.present?
+
         job.cities << location_relationship
 
       rescue StandardError => e

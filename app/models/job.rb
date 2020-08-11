@@ -15,8 +15,11 @@ class Job < ApplicationRecord
   has_many :histories
   has_many :users, through: :histories
 
+  scope :limit_job, -> { includes(:cities, :company).order(created_at: :desc).limit(5) }
+  scope :all_job, -> { limit(20).order(created_at: :desc) }
+
   def company_name
-    @company_name ||= company&.name
+    company&.name
   end
 end
 

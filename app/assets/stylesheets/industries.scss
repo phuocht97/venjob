@@ -1,4 +1,4 @@
-.city-banner{
+.industry-banner{
   background: linear-gradient(to top, #33ccff 0%, #006600 100%);
   font-size: 38px;
   text-align: center;
@@ -6,14 +6,14 @@
   font-style: italic;
   font-family: Bookman, URW Bookman L, serif;
 }
-.vn-name, .international-name{
+.industry-details {
+  margin: 20px;
+  padding: 15px;
+  text-align: center;
+}
+.industry-details {
   text-decoration: none;
   color: black;
-}
-.vn-name, .international-name {
-  margin: 10px;
-  padding: 10px;
-  text-align: center;
 }
 .remove-decoration {
   &:hover{
@@ -22,6 +22,4 @@
     }
   }
 }
-.viet-nam, .international {
-  cursor: pointer;
-}
+

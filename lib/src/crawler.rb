@@ -1,6 +1,8 @@
 
 class Crawler
-  
+
+  VIETNAM = 0
+  FOREIGN = 1
   def initialize(logger, url)
     @logger = logger
     @url = url
@@ -17,14 +19,16 @@ class Crawler
     page = Nokogiri::HTML(URI.open(@url))
     get_name = page.search('select#location')
     data_city = get_name.search('option').map(&:text).map(&:strip)
-    
+
     data_city.each do |name_city|
       if City.find_by(id: 70)
-        city = City.create!(name: name_city,
-                            location: 0)
+        city = City.find_or_create_by!(name: name_city) do
+          city.update!(location: VIETNAM)
+        end
       else
-        city = City.create!(name: name_city,
-                            location: 1)
+        city = City.find_or_create_by!(name: name_city) do
+          city.update!(location: FOREIGN)
+        end
       end
     end
   end
@@ -35,7 +39,7 @@ class Crawler
     data_industry = get_name.search('option').map { |p| p.text.strip }
 
     data_industry.each do |name_industry|
-       industry = Industry.create!(name: name_industry)
+       industry = Industry.find_or_create_by!(name: name_industry)
     end
   end
 
@@ -43,15 +47,17 @@ class Crawler
   def city_relationship(row, job)
     location_relationship = row.css('div.map p a').children.map { |name_city| name_city.text.strip }
     cities_relationship = City.where(name: location_relationship)
+    city_job_relationship = CityJob.where(job_id: job.id ,city_id: cities_relationship.ids)
 
-    job.cities << cities_relationship
+    job.cities << cities_relationship if city_job_relationship.blank?
   end
 
   def industry_relationship(row, job)
     industry_relationship = row.css('li a').children.map { |name_industry| name_industry.text.strip }
     industries_relationship = Industry.where(name: industry_relationship)
+    industry_job_relationship = IndustryJob.where(job_id: job.id, industry_id: industries_relationship.ids)
 
-    job.industries << industries_relationship
+    job.industries << industries_relationship if industry_job_relationship.blank?
   end
 
   def create_job(title, link_page, row, company)
@@ -78,17 +84,17 @@ class Crawler
       info = Nokogiri::HTML(URI.open("https://careerbuilder.vn/viec-lam/tat-ca-viec-lam-trang-#{n}-vi.html"))
       links = info.css('div.caption a.company-name').map { |link| link['href'] }
       links.each do |link|
-        next if link == 'javascript:void(0);'
+        begin
+          next if link == 'javascript:void(0);'
           page = Nokogiri::HTML(URI.open(URI.escape(link)))
           name = page.search('p.name')&.text
-        next if name.blank?
+          next if name.blank?
 
-        address = page.css('div.content p').children[1]&.text
-        introduction = page.css('div.main-about-us').text
-        begin
+          address = page.css('div.content p').children[1]&.text
+          introduction = page.css('div.main-about-us').text
           Company.find_or_create_by!(name: name,
-                                     address: address,
-                                     introduction: introduction)
+                                       address: address,
+                                       introduction: introduction)
         rescue StandardError => e
           @logger.error e.message
         end

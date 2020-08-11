@@ -2,11 +2,9 @@ class City < ApplicationRecord
   has_many :city_jobs
   has_many :jobs, through: :city_jobs
 
-  scope :all_city, -> { joins(:jobs).group(:city_id).order('count(job_id) DESC') }
-  scope :vietnam, -> { where('location = 1') }
-  scope :international, -> { where('location = 0') }
+  VIETNAM = 1
+  FOREIGN = 0
 
-  def self.top_city
-    joins(:jobs).group(:city_id).order('count(job_id) DESC').limit(9)
-  end
+  scope :top_city, -> { joins(:jobs).group(:city_id).order('count(job_id) DESC').limit(9) }
+  scope :location, ->(number) { joins(:jobs).group(:city_id).order('count(job_id) DESC').where(location: number) }
 end
