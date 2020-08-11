@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'jobs/industry/:converted_name', to: 'jobs#industry_jobs', as: :industry_jobs
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
-  get 'detail/:id', to: 'jobs#access_jobs', as: :job_detail
+  get 'detail/:id', to: 'jobs#detail', as: :job_detail
 
   resources :top_pages
   resources :industries

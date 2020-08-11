@@ -23,7 +23,7 @@ class JobsController < ApplicationController
     @result_for_job = @company.jobs.count
   end
 
-  def access_jobs
+  def detail
     @job_details = Job.find(params[:id])
   end
 

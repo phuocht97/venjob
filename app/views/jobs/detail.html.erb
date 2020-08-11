@@ -9,10 +9,10 @@
         <div class="breadcrumb">
           <%= link_to "TOP", root_path  %>&ensp;/&ensp;
           <% @job_details.cities.each do |city| %>
-            <%= link_to '🎯' + city.name, city_jobs_path(converted_name: city.converted_name) %>
+            <%= link_to city.name, city_jobs_path(converted_name: city.converted_name) , class: 'location' %>
           <% end %>&ensp;/&ensp;
           <% @job_details.industries.each do |industry| %>
-            <%= link_to '👉' + industry.name, industry_jobs_path(converted_name: industry.converted_name) %>
+            <%= link_to industry.name, industry_jobs_path(converted_name: industry.converted_name), class: 'industry' %>
           <% end %>&ensp;/&ensp;
           <%= @job_details.title.truncate_words(5) %>
         </div>
@@ -32,7 +32,7 @@
           <div class="city">
             <strong>Location:</strong>
             <% @job_details.cities.each do |city| %>
-              <%= link_to '🎯' + city.name, city_jobs_path(converted_name: city.converted_name) %>
+              <%= link_to city.name, city_jobs_path(converted_name: city.converted_name), class: 'location' %>
             <% end %>
           </div>
           <div class="created-day">
