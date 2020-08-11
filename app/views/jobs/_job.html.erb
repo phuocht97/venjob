@@ -10,7 +10,7 @@
         <div class="col-5">▼
           <%= job.cities.map(&:name).join(' | ') %>
         </div>
-        <div class="col-5 salary">💲 Salary: <%= job.salary %></div>
+        <div class="col-5 salary">Salary: <%= job.salary %></div>
         <div class="col-10 introduction">
           <%= job_description(job.description) %><br>
           <%= link_to 'Read more..', '#'%>
