@@ -1,17 +1,13 @@
 <% provide(:title, "Sign In") %>
 <div class="container">
-  <div class="flash-login rounded">
-    <% flash.each do |key, value| %>
-      <div class="alert alert-<%= key %>"><%= value %></div>
-    <% end %>
-  </div>
-  <h1 class="text-center">Login</h1>
+  <%= render 'layouts/flash' %>
+  <h1 class="text-center login-label">Login</h1>
   <div class="form-login">
     <div class="row form d-flex justify-content-center">
       <%= form_for(:session, url: sessions_path) do |f|  %>
         <div class="email-field">
           <div class="col-4-sm">
-            <%= f.label :email %>:
+            <%= f.label :email %>
           </div>
           <div class="col-8-sm">
             <%= f.text_field :email %>
@@ -19,7 +15,7 @@
         </div>
         <div class="password-field">
           <div class="col-4-sm">
-            <%= f.label :password %>:
+            <%= f.label :password %>
           </div>
           <div class="col-8-sm">
             <%= f.password_field :password %>
@@ -29,7 +25,7 @@
           <%= link_to 'Forgot password?', '#' %>
         </div>
 
-        <%= f.submit "Login", class: 'btn btn-outline-primary btn-lg login-btn' %>
+        <%= f.submit 'Login', class: 'btn btn-outline-primary btn-lg login-btn' %>
         <%= link_to 'Register', '#', class: 'btn btn-outline-info btn-lg regis-btn' %>
       <% end %>
     </div>

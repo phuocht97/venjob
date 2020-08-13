@@ -1,0 +1,38 @@
+<div class="container">
+  <%= render 'layouts/flash' %>
+  <h1 class="text-center my-page-label">My Page</h1>
+  <div class="form-login">
+    <div class="row form d-flex justify-content-center">
+      <%= form_for(@user) do |f|  %>
+        <div class="email-field">
+          <div class="col-4-sm">
+            <%= f.label :email %>:
+          </div>
+          <div class="col-8-sm">
+            <%= f.text_field :email, class: 'input-email' %>
+          </div>
+        </div>
+        <div class="name-field">
+          <div class="col-4-sm">
+            <%= f.label :name, 'Full Name' %>:
+          </div>
+          <div class="col-8-sm">
+            <%= f.text_field :name, class: 'input-name' %>
+          </div>
+        </div>
+        <div class="cv-field">
+          <div class="col-4-sm">
+            <%= f.label :cv_user, 'My CV' %>:
+          </div>
+          <div class="col-8-sm">
+            <%= link_to @user.cv_user.identifier, @user.cv_user.url, download: @user.cv_user.identifier %>
+          </div>
+        </div>
+
+        <%= link_to 'Update', my_page_info_path, class: 'btn btn-outline-primary btn-lg update-btn' %>
+        <%= link_to 'My Jobs', '#', class: 'btn btn-outline-info btn-lg my-jobs-btn' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
