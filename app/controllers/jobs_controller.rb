@@ -1,6 +1,6 @@
 class JobsController < ApplicationController
   before_action :set_job, only: [:show]
-  before_action :use_variables
+  before_action :general_variables
 
   def index
     @jobs_list = Job.all.page(params[:page]).per(Job::LIMIT_PAGE)
@@ -36,7 +36,7 @@ class JobsController < ApplicationController
     @job ||= Job.find_by(params[:id])
   end
 
-  def use_variables
+  def general_variables
     @cities = City.all
     @industries = Industry.all
     @total_job = Job.count
