@@ -1,5 +1,6 @@
 class City < ApplicationRecord
-  before_save :convert_attribute
+  before_save :set_converted_name
+
   has_many :city_jobs
   has_many :jobs, through: :city_jobs
 
@@ -11,7 +12,7 @@ class City < ApplicationRecord
 
   private
 
-  def normalize_attribute
-    "#{name} #{rand(10000)}"
+  def set_converted_name
+    converted_name = convert_attribute(name)
   end
 end
