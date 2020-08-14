@@ -27,14 +27,13 @@ class JobsController < ApplicationController
   end
 
   def show
-    @job = Job.find(params[:id])
     redirect_to jobs_path unless @job
   end
 
   private
 
   def set_job
-    @job ||= Job.find_by(params[:id])
+    @job ||= Job.find_by_id(params[:id])
   end
 
   def general_variables

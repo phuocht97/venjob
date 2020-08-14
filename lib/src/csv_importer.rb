@@ -39,7 +39,7 @@ class CSVImporter
   def import_file_csv
     CSV.foreach(@importer, headers: true) do |row|
       begin
-        company_name = row["company name"]
+        company_name = row["company name"].to_s
         next if company_name.blank?
 
         company_address = row["company address"]
@@ -48,7 +48,7 @@ class CSVImporter
                                              address: company_address,
                                              introduction: company_introduction)
 
-        title_job = row["name"]
+        title_job = row["name"].to_s
         next if title_job.blank?
 
         description_job = "#{row["description"]} #{row["requirement"]}"
