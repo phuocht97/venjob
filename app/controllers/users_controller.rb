@@ -1,19 +1,16 @@
 class UsersController < ApplicationController
   before_action :signed_in_user, only: [:update, :my_page, :my_info]
   def my_page
-    @user = current_user
   end
 
   def my_info
-    @user = current_user
   end
 
   def update
-    @user = current_user
-    if BCrypt::Password.new(@user.password_digest) != change_password[:oldpassword]
+    if BCrypt::Password.new(current_user.password_digest) != condition_update[:oldpassword]
       flash.now[:danger] = 'Old Password is mismatch'
     else
-      if @user.update_attributes(user_params)
+      if current_user.update_attributes(user_params)
         flash[:success] = 'Updated Successfully'
         redirect_to my_page_path
       else
@@ -34,10 +31,10 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :cv_user, :password)
+    params.require(:user).permit(:name, :email, :cv_user)
   end
 
-  def change_password
+  def condition_update
     params.require(:user).permit(:oldpassword)
   end
 end

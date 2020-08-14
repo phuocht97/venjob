@@ -3,10 +3,9 @@
   <div class="form-login">
     <div class="row form d-flex justify-content-center">
 
-      <%= form_for(@user, remote: true) do |f|  %>
+      <%= form_for(current_user, remote: true) do |f|  %>
 
         <div class="validation"></div>
-
         <div class="email-field">
           <div class="col-4-sm">
             <%= f.label :email %>
