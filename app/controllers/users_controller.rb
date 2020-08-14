@@ -1,15 +1,15 @@
 class UsersController < ApplicationController
   before_action :signed_in_user, only: [:update, :my_page, :my_info]
   def my_page
-    @user = User.find(current_user.id)
+    @user = current_user
   end
 
   def my_info
-    @user = User.find(current_user.id)
+    @user = current_user
   end
 
   def update
-    @user = User.find(current_user.id)
+    @user = current_user
     if BCrypt::Password.new(@user.password_digest) != change_password[:oldpassword]
       flash.now[:danger] = 'Old Password is mismatch'
     else

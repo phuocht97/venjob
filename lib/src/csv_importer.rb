@@ -58,7 +58,7 @@ class CSVImporter
                                      description: description_job,
                                      level: level,
                                      salary: salary,
-                                     company_id: company_id)
+                                     company_id: company.id)
 
         industry_name = row["category"]
         industries_relationship = Industry.where(name: industry_name)
