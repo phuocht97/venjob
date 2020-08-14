@@ -10,6 +10,6 @@ class Industry < ApplicationRecord
   private
 
   def set_converted_name
-    converted_name = convert_attribute(name)
+    self.converted_name = convert_attribute(name)
   end
 end

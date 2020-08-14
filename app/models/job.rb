@@ -32,7 +32,7 @@ class Job < ApplicationRecord
   private
 
   def set_converted_name
-    converted_name = convert_attribute(title)
+    self.converted_name = convert_attribute(title)
   end
 end
 
