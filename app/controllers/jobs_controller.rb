@@ -27,6 +27,7 @@ class JobsController < ApplicationController
   end
 
   def show
+    @job = Job.find(params[:id])
     redirect_to jobs_path unless @job
   end
 

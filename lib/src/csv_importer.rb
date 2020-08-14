@@ -58,7 +58,7 @@ class CSVImporter
                                      description: description_job,
                                      level: level,
                                      salary: salary,
-                                     company_id: company_id)
+                                     company_id: company.id)
 
         job = Job.find_or_create_by!(title: title_job,
                                      description: description_job,
