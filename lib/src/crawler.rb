@@ -3,6 +3,7 @@ class Crawler
 
   VIETNAM = 0
   FOREIGN = 1
+
   def initialize(logger, url)
     @logger = logger
     @url = url

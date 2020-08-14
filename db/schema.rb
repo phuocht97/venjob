@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_23_071239) do
+ActiveRecord::Schema.define(version: 2020_07_15_035356) do
 
   create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.boolean "location"
+    t.string "converted_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -30,6 +31,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_071239) do
     t.string "name"
     t.text "address"
     t.text "introduction"
+    t.string "converted_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -50,6 +52,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_071239) do
 
   create_table "industries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
+    t.string "converted_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -79,6 +82,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_071239) do
     t.string "experience"
     t.string "expiration_date"
     t.bigint "company_id"
+    t.string "converted_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

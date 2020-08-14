@@ -110,3 +110,26 @@
     }
   }
 }
+.result-for {
+  background-color: #99ff99;
+  border: 2px solid green;
+  border-radius: 12px;
+  text-align: center;
+}
+.total {
+  background-color: #b3ecff;
+  border: 2px solid #006080;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 20px;
+  font-family: Bookman, URW Bookman L, serif;
+}
+.job-details .title a {
+  color: black;
+  text-decoration: none;
+}
+.job-details .title a:hover {
+  color: #e6b800;
+  transition: 1s;
+  text-decoration: none;
+}
