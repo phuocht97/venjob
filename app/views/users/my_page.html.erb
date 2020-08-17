@@ -25,7 +25,13 @@
             <%= f.label :cv_user, 'My CV' %>
           </div>
           <div class="col-8-sm">
-            <%= link_to current_user.cv_user.identifier, current_user.cv_user.url, download: current_user.cv_user.identifier %>
+            <% if current_user.cv_user.present? %>
+              <%= link_to current_user.cv_user.identifier, current_user.cv_user.url, download: current_user.cv_user.identifier %>
+            <% else %>
+              <div class="cv-none">
+                Your CV doesn't have at present!
+              </div>
+            <% end %>
           </div>
         </div>
 

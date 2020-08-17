@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   end
 
   def update
+    user_params[:password] = current_user.password_digest if user_params[:password].nil?
     if BCrypt::Password.new(current_user.password_digest) != condition_update[:oldpassword]
       flash.now[:danger] = 'Old Password is mismatch'
     else
@@ -31,7 +32,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :cv_user)
+    params.require(:user).permit(:name, :email, :cv_user, :password)
   end
 
   def condition_update

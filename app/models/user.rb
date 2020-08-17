@@ -3,7 +3,6 @@ class User < ApplicationRecord
   before_create :create_remember_token
   mount_uploader :cv_user, UserCvUploader
 
-
   has_many :favorite_jobs
   has_many :jobs, through: :favorite_jobs
   has_many :job_applieds
@@ -18,8 +17,7 @@ class User < ApplicationRecord
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
     uniqueness: { case_sensitive: false }
 
-  validates :password, length: { minimum: 6, too_short: "is blank or too short" }
-
+  validates :password, allow_nil: true, length: { minimum: 6, too_short: "is blank or too short" }
 
   def User.new_remember_token
     SecureRandom.urlsafe_base64
