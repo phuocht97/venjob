@@ -19,7 +19,7 @@ class User < ApplicationRecord
 
   validates :password, allow_nil: true, length: { minimum: 6, too_short: "is blank or too short" }
 
-  def User.new_remember_token
+  def self.new_remember_token
     SecureRandom.urlsafe_base64
   end
 

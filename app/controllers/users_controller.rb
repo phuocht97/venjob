@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user, only: [:update, :my_page, :my_info]
+  before_action :sign_in_validation, only: [:update, :my_page, :my_info]
   def my_page
   end
 
@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    user_params[:password] = current_user.password_digest if user_params[:password].nil?
+    user_params[:password] = current_user.password_digest if user_params[:password].blank?
     if BCrypt::Password.new(current_user.password_digest) != condition_update[:oldpassword]
       flash.now[:danger] = 'Old Password is mismatch'
     else
@@ -24,11 +24,14 @@ class UsersController < ApplicationController
 
   private
 
-  def signed_in_user
-    unless signed_in?
-      flash[:warning] = "Please Sign In..."
-      redirect_to login_path
-    end
+  def validate_oldpass
+
+  end
+
+  def sign_in_validation
+    return if signed_in?
+    flash[:warning] = "Please Sign In..."
+    redirect_to login_path
   end
 
   def user_params
