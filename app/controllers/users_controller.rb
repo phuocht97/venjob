@@ -7,18 +7,13 @@ class UsersController < ApplicationController
   end
 
   def update
-    user_params.delete(:password) if user_params[:password].blank?
-    if BCrypt::Password.new(current_user.password_digest) != condition_update[:oldpassword]
-      flash.now[:danger] = 'Old Password is mismatch'
+    if current_user.authenticate(params[:user][:password])
+      return respond_to { |format| format.js } unless current_user.update_attributes(user_params)
+
+      flash[:success] = 'Updated Successfully'
+      redirect_to my_page_path
     else
-      if current_user.update_attributes(user_params)
-        flash[:success] = 'Updated Successfully'
-        redirect_to my_page_path
-      else
-        respond_to do |format|
-          format.js
-        end
-      end
+      flash.now[:danger] = 'Password is mismatch'
     end
   end
 
@@ -31,10 +26,12 @@ class UsersController < ApplicationController
   end
 
   def user_params
+    params[:user][:password] = change_pass_param[:new_password] if change_pass_param[:new_password].present?
     params.require(:user).permit(:name, :email, :cv_user, :password)
   end
 
-  def condition_update
-    params.require(:user).permit(:oldpassword)
+  def change_pass_param
+    params.require(:user).permit(:new_password)
   end
 end
+

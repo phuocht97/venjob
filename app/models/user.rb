@@ -18,7 +18,7 @@ class User < ApplicationRecord
     uniqueness: { case_sensitive: false }
 
   PASSWORD_FORMAT = /\A(?=.{6,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/x
-  validates :password, allow_nil: true, format: { with: PASSWORD_FORMAT, message: "is too short or not strength" }
+  validates :password, format: { with: PASSWORD_FORMAT, message: "is too short or not strength" }
 
   def self.new_remember_token
     SecureRandom.urlsafe_base64
