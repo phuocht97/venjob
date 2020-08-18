@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    user_params[:password] = current_user.password_digest if user_params[:password].blank?
+    user_params.delete(:password) if user_params[:password].blank?
     if BCrypt::Password.new(current_user.password_digest) != condition_update[:oldpassword]
       flash.now[:danger] = 'Old Password is mismatch'
     else
@@ -23,10 +23,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def validate_oldpass
-
-  end
 
   def sign_in_validation
     return if signed_in?
