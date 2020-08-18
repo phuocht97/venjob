@@ -1,4 +1,6 @@
 class Job < ApplicationRecord
+  before_save :set_converted_name
+
   belongs_to :company
   has_many :city_jobs
   has_many :cities, through: :city_jobs
@@ -15,11 +17,22 @@ class Job < ApplicationRecord
   has_many :histories
   has_many :users, through: :histories
 
+  LIMIT_PAGE = 20
+
   scope :limit_job, -> { includes(:cities, :company).order(created_at: :desc).limit(5) }
-  scope :all_job, -> { limit(20).order(created_at: :desc) }
 
   def company_name
     company&.name
+  end
+
+  def format_desc
+    description.truncate_words(250)
+  end
+
+  private
+
+  def set_converted_name
+    self.converted_name = convert_attribute(title)
   end
 end
 

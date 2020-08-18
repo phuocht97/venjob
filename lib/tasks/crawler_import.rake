@@ -9,9 +9,9 @@ namespace :import do
   end
   desc 'Crontab'
   task auto: :environment do
-    crontab = JobParser.new(logger, url)
+    parser = JobParser.new(logger, url)
     csv_importer = CSVImporter.new(logger)
-    crontab.crawl_all
+    parser.crawl_all
     csv_importer.import
   end
 

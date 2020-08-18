@@ -34,4 +34,3 @@ class UsersController < ApplicationController
     params.require(:user).permit(:new_password)
   end
 end
-

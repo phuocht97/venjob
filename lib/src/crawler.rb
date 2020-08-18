@@ -3,6 +3,7 @@ class Crawler
 
   VIETNAM = 0
   FOREIGN = 1
+
   def initialize(logger, url)
     @logger = logger
     @url = url
@@ -22,13 +23,11 @@ class Crawler
 
     data_city.each do |name_city|
       if City.find_by(id: 70)
-        city = City.find_or_create_by!(name: name_city) do
-          city.update!(location: VIETNAM)
-        end
+        city = City.find_or_create_by!(name: name_city)
+        city.update(location: VIETNAM)
       else
-        city = City.find_or_create_by!(name: name_city) do
-          city.update!(location: FOREIGN)
-        end
+        city = City.find_or_create_by!(name: name_city)
+        city.update(location: FOREIGN)
       end
     end
   end
