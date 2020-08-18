@@ -1,43 +1,36 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user, only: [:update, :my_page, :my_info]
+  before_action :sign_in_validation, only: [:update, :my_page, :my_info]
   def my_page
-    @user = current_user
   end
 
   def my_info
-    @user = current_user
   end
 
   def update
-    @user = current_user
-    if BCrypt::Password.new(@user.password_digest) != change_password[:oldpassword]
-      flash.now[:danger] = 'Old Password is mismatch'
+    if current_user.authenticate(params[:user][:password])
+      return respond_to { |format| format.js } unless current_user.update_attributes(user_params)
+
+      flash[:success] = 'Updated Successfully'
+      redirect_to my_page_path
     else
-      if @user.update_attributes(user_params)
-        flash[:success] = 'Updated Successfully'
-        redirect_to my_page_path
-      else
-        respond_to do |format|
-          format.js
-        end
-      end
+      flash.now[:danger] = 'Password is mismatch'
     end
   end
 
   private
 
-  def signed_in_user
-    unless signed_in?
-      flash[:warning] = "Please Sign In..."
-      redirect_to login_path
-    end
+  def sign_in_validation
+    return if signed_in?
+    flash[:warning] = "Please Sign In..."
+    redirect_to login_path
   end
 
   def user_params
+    params[:user][:password] = change_pass_param[:new_password] if change_pass_param[:new_password].present?
     params.require(:user).permit(:name, :email, :cv_user, :password)
   end
 
-  def change_password
-    params.require(:user).permit(:oldpassword)
+  def change_pass_param
+    params.require(:user).permit(:new_password)
   end
 end

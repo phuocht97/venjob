@@ -1,0 +1,27 @@
+// Place all the styles related to the Jobs controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.email-field, .password-field, .name-field, .forgot-pass-field, .cv-field, .new-password-field, .old-password-field {
+  margin: 20px;
+  padding: 10px;
+}
+.input-email, .input-name, .input-cv, .input-new-password, .input-password {
+  width: 300px;
+}
+.login-btn, .regis-btn, .update-btn, .my-jobs-btn {
+  margin: 20px;
+  padding: 10px;
+}
+.login-label, .my-page-label {
+  margin: 30px;
+  padding: 20px;
+}
+#error_explanation ul li{
+  color: red;
+}
+.cv-none {
+  font-style: italic;
+  font-size: 16px;
+}
+
