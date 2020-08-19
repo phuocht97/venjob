@@ -17,6 +17,23 @@ class UsersController < ApplicationController
     end
   end
 
+  def new
+    @email = User.new
+  end
+
+  def create
+    @email = User.new(email: params[:user][:email])
+    if @email.save
+      UserMailer.register_email(params[:user][:email]).deliver_later
+      redirect_to mail_register_path
+    else
+      redirect_to register_begin_path
+    end
+  end
+
+  def mail_register
+  end
+
   private
 
   def sign_in_validation

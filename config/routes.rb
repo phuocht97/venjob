@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
 
+  get '/register/1', to: 'users#new', as: :register
+  get '/register/2', to: 'users#mail_register', as: :mail_register
+
   resources :jobs
   get 'detail/:id', to: 'jobs#show', as: :job_detail
 
