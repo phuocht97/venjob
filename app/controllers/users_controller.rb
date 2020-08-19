@@ -17,21 +17,18 @@ class UsersController < ApplicationController
     end
   end
 
-  def new
-    @email = User.new
+  def mail_register
+  end
+
+  def registation
+    @email = Confirmation.find_by(confirm_token: params[:confirm_token])
+    @user = User.new
   end
 
   def create
-    @email = User.new(email: params[:user][:email])
-    if @email.save
-      UserMailer.register_email(params[:user][:email]).deliver_later
-      redirect_to mail_register_path
-    else
-      redirect_to register_begin_path
-    end
-  end
-
-  def mail_register
+    @user = User.new(sign_up_params)
+    return respond_to { |format| format.js } unless @user.save
+    redirect_to my_page_path
   end
 
   private
@@ -49,5 +46,9 @@ class UsersController < ApplicationController
 
   def change_pass_param
     params.require(:user).permit(:new_password)
+  end
+
+  def sign_up_params
+    params.require(:user).permit(:name, :email, :cv_user, :password, :password_confirmation)
   end
 end

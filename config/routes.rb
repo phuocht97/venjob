@@ -8,8 +8,10 @@ Rails.application.routes.draw do
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
 
-  get '/register/1', to: 'users#new', as: :register
-  get '/register/2', to: 'users#mail_register', as: :mail_register
+  get '/register/1', to: 'confirmations#new', as: :register
+  get '/register/2', to: 'confirmations#mail_register', as: :mail_register
+
+  get '/registation/3code=:confirm_token', to: 'users#registation', as: :registation
 
   resources :jobs
   get 'detail/:id', to: 'jobs#show', as: :job_detail
@@ -18,9 +20,11 @@ Rails.application.routes.draw do
   get 'jobs/industry/:converted_name', to: 'jobs#industry_jobs', as: :industry_jobs
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
-
+  resources :confirmations
   resources :top_pages
   resources :industries
   resources :cities
   root to: "top_pages#index"
 end
+
+
