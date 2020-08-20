@@ -16,6 +16,7 @@ module SessionsHelper
   end
 
   def current_user
+    return if cookies[:remember_token].blank?
     remember_token = User.digest(cookies[:remember_token])
     @current_user ||= User.find_by(remember_token: remember_token)
   end
@@ -25,4 +26,5 @@ module SessionsHelper
     cookies.delete(:remember_token)
     self.current_user = nil
   end
+
 end

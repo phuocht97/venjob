@@ -1,19 +1,20 @@
 class ConfirmationsController < ApplicationController
 
   def new
-    @user = Confirmation.new
   end
 
-  def create
-    @user = Confirmation.new(email: params[:confirmation][:email].downcase)
-    user_email = User.find_by(email: params[:confirmation][:email].downcase)
-    if user_email.blank?
-      return respond_to { |format| format.js } unless @user.save
-      ConfirmationMailer.register_email(params[:confirmation][:email].downcase, @user.confirm_token).deliver_later
-      redirect_to mail_register_path
-    else
+  def mail_register
+    email = params[:confirmation][:email].downcase
+    if User.find_by(email: email)
       flash[:danger] = 'Email existed. Please change !!!'
-      redirect_to register_path
+      redirect_to register_step1_path
     end
+    @user = Confirmation.find_or_initialize_by(email: email)
+    unless @user.save
+      flash[:danger] = "Email formated invalid"
+      return redirect_to register_step1_path
+    end
+
+    ConfirmationMailer.register_email(@user).deliver_later
   end
 end

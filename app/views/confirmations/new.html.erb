@@ -4,7 +4,7 @@
     <strong>Register</strong>
   </div>
   <div class="form-register">
-    <%= form_for(@user, remote: true) do |f| %>
+    <%= form_for(:confirmation, url: register_step2_path) do |f| %>
 
       <div class="validation"></div>
       <div class="text-center email-input">

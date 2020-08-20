@@ -19,7 +19,6 @@ class User < ApplicationRecord
 
   PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/x
   validates :password, format: { with: PASSWORD_FORMAT, message: "is too short or not strength" }
-  validates :password_confirmation, presence: true
 
   def self.new_remember_token
     SecureRandom.urlsafe_base64

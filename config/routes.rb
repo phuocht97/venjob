@@ -8,8 +8,8 @@ Rails.application.routes.draw do
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
 
-  get '/register/1', to: 'confirmations#new', as: :register
-  get '/register/2', to: 'confirmations#mail_register', as: :mail_register
+  get '/register/1', to: 'confirmations#new', as: :register_step1
+  post '/register/2', to: 'confirmations#mail_register', as: :register_step2
 
   get '/registation/3code=:confirm_token', to: 'users#registation', as: :registation
 

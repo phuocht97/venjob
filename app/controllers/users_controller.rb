@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :sign_in_validation, only: [:update, :my_page, :my_info]
+
   def my_page
   end
 
@@ -17,17 +18,22 @@ class UsersController < ApplicationController
     end
   end
 
-  def mail_register
-  end
-
   def registation
     @email = Confirmation.find_by(confirm_token: params[:confirm_token])
-    @user = User.new
+    return register_step1_path unless @email
+    expiration_day = Time.zone.now - @email.updated_at
+    if expiration_day >= 86400
+      flash[:danger] = "Link Confirmation is expiration too 24 hours to confirm. Please update your Email again!"
+      redirect_to register_step1_path
+    else
+      @user = User.new
+    end
   end
 
   def create
     @user = User.new(sign_up_params)
     return respond_to { |format| format.js } unless @user.save
+    sign_in @user
     redirect_to my_page_path
   end
 
