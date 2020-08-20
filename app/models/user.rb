@@ -28,6 +28,10 @@ class User < ApplicationRecord
     Digest::SHA1.hexdigest(token.to_s)
   end
 
+  def token_expired?
+    updated_at <= 24.hours.ago
+  end
+
   private
 
   def create_remember_token

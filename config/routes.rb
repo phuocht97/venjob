@@ -11,7 +11,14 @@ Rails.application.routes.draw do
   get '/register/1', to: 'confirmations#new', as: :register_step1
   post '/register/2', to: 'confirmations#mail_register', as: :register_step2
 
-  get '/registation/3code=:confirm_token', to: 'users#registation', as: :registation
+  get '/forgot_password', to: 'reset_passwords#reset_password', as: :reset_password_step1
+  post '/forgot_password', to: 'reset_passwords#sending_email', as: :reset_password_step2
+
+  get '/reset_password', to: 'reset_passwords#edit', as: :reset_password_final
+  patch '/update', to: 'reset_passwords#update', as: :update_forgot_pass
+
+  get '/registation/3', to: 'users#registation', as: :registation
+
 
   resources :jobs
   get 'detail/:id', to: 'jobs#show', as: :job_detail
@@ -20,6 +27,7 @@ Rails.application.routes.draw do
   get 'jobs/industry/:converted_name', to: 'jobs#industry_jobs', as: :industry_jobs
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
+  resources :reset_passwords, only: [:edit, :update]
   resources :confirmations
   resources :top_pages
   resources :industries

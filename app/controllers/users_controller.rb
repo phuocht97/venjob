@@ -19,10 +19,9 @@ class UsersController < ApplicationController
   end
 
   def registation
-    @email = Confirmation.find_by(confirm_token: params[:confirm_token])
-    return register_step1_path unless @email
-    expiration_day = Time.zone.now - @email.updated_at
-    if expiration_day >= 86400
+    @email = Confirmation.find_by(confirm_token: params[:code])
+    return redirect_to register_step1_path unless @email
+    if @email.token_expired?
       flash[:danger] = "Link Confirmation is expiration too 24 hours to confirm. Please update your Email again!"
       redirect_to register_step1_path
     else
@@ -40,7 +39,7 @@ class UsersController < ApplicationController
   private
 
   def sign_in_validation
-    return if signed_in?
+    return if signed_in? || params[:remember_token].blank?
     flash[:warning] = "Please Sign In..."
     redirect_to login_path
   end
