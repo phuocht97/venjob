@@ -6,22 +6,22 @@ class ResetPasswordsController < ApplicationController
   def sending_email
     @user = User.find_by(email: params[:reset_password][:email].downcase)
     unless @user
-      flash[:danger] = "Your Email invalid or not register"
+      flash[:danger] = ENV['sending_email_failed']
       redirect_to reset_password_step1_path
     else
       forgot_token = Digest::SHA1.hexdigest(SecureRandom.urlsafe_base64)
       @user.update_attribute(:remember_token, forgot_token)
       ResetPasswordMailer.reset_password(@user).deliver_later
-      flash[:success] = "Please check your email to change your password"
+      flash[:success] = ENV['sending_email_success']
       redirect_to reset_password_step1_path
     end
   end
 
   def edit
     @user = User.find_by(remember_token: params[:token])
-    return redirect_to reset_password_step1_path unless @user
+    return redirect_to reset_password_step1_path unless @user && params[:token]
     if @user.token_expired?
-      flash[:danger] = "Link Confirmation is expiration too 24 hours to confirm. Please update your Email again!"
+      flash[:danger] = ENV['expiration']
       redirect_to register_step1_path
     end
   end
@@ -29,11 +29,11 @@ class ResetPasswordsController < ApplicationController
   def update
     @user = User.find_by(email: params[:user][:email])
     unless @user.update_attributes(forgot_pass_params)
-      flash[:danger] = "Password or Password Confirmation is mismatch"
+      flash[:danger] = ENV['update_reset_pass']
       redirect_to reset_password_final_path(token: @user.remember_token)
     else
       sign_in @user
-      flash[:success] = 'Updated Successfully'
+      flash[:success] = ENV['update_success']
       redirect_to my_page_path
     end
   end

@@ -1,0 +1,20 @@
+#GENERAL
+update_success: 'Updated Successfully'
+
+#TEXT OF USER
+expiration: 'Link Confirmation is expiration too 24 hours to confirm. Please update your Email again!'
+password_mismatch: 'Password is mismatch'
+warning_signin: 'Please Sign In...'
+
+#TEXT OF RESET PASSWORD
+sending_email_failed: 'Your Email invalid or not register'
+sending_email_success: 'Please check your email to change your password'
+update_reset_pass: 'Password or Password Confirmation is mismatch'
+
+#TEXT OF SIGN IN
+sign_in_failed: 'Invalid email or password'
+
+#TEXT OF SIGN UP
+email_existed: 'Email existed. Please change !!!'
+email_format_failed: 'Email formated invalid'
+

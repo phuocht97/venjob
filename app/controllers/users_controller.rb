@@ -11,10 +11,10 @@ class UsersController < ApplicationController
     if current_user.authenticate(params[:user][:password])
       return respond_to { |format| format.js } unless current_user.update_attributes(user_params)
 
-      flash[:success] = 'Updated Successfully'
+      flash[:success] = ENV['update_success']
       redirect_to my_page_path
     else
-      flash.now[:danger] = 'Password is mismatch'
+      flash.now[:danger] = ENV['password_mismatch']
     end
   end
 
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     @email = Confirmation.find_by(confirm_token: params[:code])
     return redirect_to register_step1_path unless @email
     if @email.token_expired?
-      flash[:danger] = "Link Confirmation is expiration too 24 hours to confirm. Please update your Email again!"
+      flash[:danger] = ENV['expiration']
       redirect_to register_step1_path
     else
       @user = User.new
@@ -39,8 +39,8 @@ class UsersController < ApplicationController
   private
 
   def sign_in_validation
-    return if signed_in? || params[:remember_token].blank?
-    flash[:warning] = "Please Sign In..."
+    return if signed_in?
+    flash[:warning] = ENV['warning_signin']
     redirect_to login_path
   end
 
