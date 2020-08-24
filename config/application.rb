@@ -15,11 +15,6 @@ module Venjob
       YAML.load(File.open(env_file)).each do |key, value|
         ENV[key.to_s] = value
       end if File.exists?(env_file)
-
-      text_file = File.join(Rails.root, 'config', 'text_flash.yml')
-      YAML.load(File.open(text_file)).each do |key, value|
-        ENV[key.to_s] = value
-      end if File.exists?(text_file)
     end
     # config.filter_parameter_logging << :oldpassword, :password
     # Settings in config/environments/* take precedence over those specified here.

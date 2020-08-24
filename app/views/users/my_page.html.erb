@@ -9,7 +9,7 @@
             <%= f.label :email %>
           </div>
           <div class="col-8-sm">
-            <%= f.text_field :email, class: 'input-email' %>
+            <strong><%= current_user.email %></strong>
           </div>
         </div>
         <div class="name-field">
@@ -17,7 +17,7 @@
             <%= f.label :name, 'Full Name' %>
           </div>
           <div class="col-8-sm">
-            <%= f.text_field :name, class: 'input-name' %>
+            <strong><%= current_user.name %></strong>
           </div>
         </div>
         <div class="cv-field">

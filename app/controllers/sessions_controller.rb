@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       sign_in user
       redirect_to my_page_path
     else
-      flash.now[:danger] = ENV['sign_in_failed']
+      flash.now[:danger] = Settings.sign_in.sign_in_failed
       render 'new'
     end
   end
