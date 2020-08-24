@@ -2,11 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.email-field, .password-field, .name-field, .forgot-pass-field, .cv-field, .new-password-field, .old-password-field {
+.email-field, .password-field, .name-field, .forgot-pass-field, .cv-field, .new-password-field, .old-password-field, .password-confirmation-field {
   margin: 20px;
   padding: 10px;
 }
-.input-email, .input-name, .input-cv, .input-new-password, .input-password {
+.input-email, .input-name, .input-cv, .input-new-password, .input-password, .input-password-confirmation {
   width: 300px;
 }
 .login-btn, .regis-btn, .update-btn, .my-jobs-btn {

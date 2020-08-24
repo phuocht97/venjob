@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       sign_in user
       redirect_to my_page_path
     else
-      flash.now[:danger] = 'Invalid email or password'
+      flash.now[:danger] = Settings.user.sign_in.failed
       render 'new'
     end
   end

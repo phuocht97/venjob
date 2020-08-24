@@ -9,7 +9,7 @@
             <li><%= link_to "Log Out", logout_path , class: "nav-item nav-link", method: "delete" %></li>
           <% else %>
             <li><%= link_to "Log In", login_path , class: "nav-item nav-link" %></li>
-            <li><%= link_to "Register",    '#', class: "nav-item nav-link" %></li>
+            <li><%= link_to "Register", register_step1_path, class: "nav-item nav-link" %></li>
           <% end %>
           <li><%= link_to "Favorite",    '#', class: "nav-item nav-link" %></li>
           <li><%= link_to "History", '#', class: "nav-item nav-link" %></li>

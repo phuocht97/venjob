@@ -1,6 +1,6 @@
 class CreateJobs < ActiveRecord::Migration[5.2]
   def change
-    create_table :jobs, :options => 'COLLATE=utf8_general_ci' do |t|
+    create_table :jobs, options: 'COLLATE=utf8_general_ci' do |t|
       t.string :title
       t.text :description
       t.string :level

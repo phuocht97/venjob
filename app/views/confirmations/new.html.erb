@@ -1,0 +1,20 @@
+<div class="container">
+  <%= render 'layouts/flash' %>
+  <div class="text-center label">
+    <strong>Register</strong>
+  </div>
+  <div class="form-register">
+    <%= form_for(:confirmation, url: register_step2_path) do |f| %>
+
+      <div class="validation"></div>
+      <div class="text-center email-input">
+        <strong>Email</strong>
+        <%= f.text_field :email %>
+      </div>
+
+      <div class="text-center confirm-email-btn">
+        <%= f.submit 'Confirm your email', class: 'btn btn-outline-danger confirm font-weight-bold' %>
+      </div>
+    <% end %>
+  </div>
+</div>

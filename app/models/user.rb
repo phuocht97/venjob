@@ -12,12 +12,12 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  validates :name,  presence: true, length: { maximum: 50 }
+  validates :name,  presence: true, length: { maximum: 200 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(?:\.[a-z\d\-]+)*\.[a-z]+\z/i
-  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
-    uniqueness: { case_sensitive: false }
+  validates :email, presence: true, length: { maximum: 200 },
+    format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
 
-  PASSWORD_FORMAT = /\A(?=.{6,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/x
+  PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/x
   validates :password, format: { with: PASSWORD_FORMAT, message: "is too short or not strength" }
 
   def self.new_remember_token
@@ -26,6 +26,10 @@ class User < ApplicationRecord
 
   def self.digest(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  def token_expired?
+    updated_at <= 24.hours.ago
   end
 
   private

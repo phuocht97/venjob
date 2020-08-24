@@ -22,11 +22,11 @@
           </div>
         </div>
         <div class="col-6-sm forgot-pass-field">
-          <%= link_to 'Forgot password?', '#' %>
+          <%= link_to 'Forgot password?', reset_password_step1_path %>
         </div>
 
         <%= f.submit 'Login', class: 'btn btn-outline-primary btn-lg login-btn' %>
-        <%= link_to 'Register', '#', class: 'btn btn-outline-info btn-lg regis-btn' %>
+        <%= link_to 'Register', register_step1_path, class: 'btn btn-outline-info btn-lg regis-btn' %>
       <% end %>
     </div>
   </div>

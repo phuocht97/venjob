@@ -1,0 +1,20 @@
+general_notify:
+  update_success: 'Updated Successfully'
+
+user:
+  expiration: 'Link Confirmation is expiration too 24 hours to confirm. Please update your Email again!'
+  password_mismatch: 'Password is mismatch'
+  warning_signin: 'Please Sign In...'
+
+  reset_password:
+    failed: 'Your Email invalid or not register'
+    success: 'Please check your email to change your password'
+    update_reset_pass: 'Password or Password Confirmation is mismatch'
+
+  sign_in:
+    failed: 'Invalid email or password'
+
+  sign_up:
+    existed: 'Email existed. Please change !!!'
+    format_failed: 'Email formated invalid'
+
