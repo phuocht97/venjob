@@ -28,10 +28,10 @@ Rails.application.routes.draw do
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
   resources :reset_passwords, only: [:edit, :update]
-  resources :confirmations
-  resources :top_pages
-  resources :industries
-  resources :cities
+  resources :confirmations, only: [:new]
+  resources :top_pages, only: [:index]
+  resources :industries, only: [:index]
+  resources :cities, only: [:index]
   root to: "top_pages#index"
 end
 
