@@ -19,6 +19,10 @@ Rails.application.routes.draw do
 
   get '/registation/3', to: 'users#registation', as: :registation
 
+  get 'apply', to: 'job_applieds#new', as: :apply_job
+
+  post 'confirm', to: 'job_applieds#confirmation', as: :confirm_job
+  post 'done', to: 'job_applieds#create', as: :finished_apply
 
   resources :jobs
   get 'detail/:id', to: 'jobs#show', as: :job_detail
@@ -27,6 +31,7 @@ Rails.application.routes.draw do
   get 'jobs/industry/:converted_name', to: 'jobs#industry_jobs', as: :industry_jobs
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
+  resources :job_applieds,only: [:new, :create]
   resources :reset_passwords, only: [:edit, :update]
   resources :confirmations, only: [:new]
   resources :top_pages, only: [:index]

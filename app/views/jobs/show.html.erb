@@ -18,7 +18,7 @@
           <% end %>/&ensp;
           <%= @job.title.truncate_words(5) %>
         </div>
-        <%= link_to '#' do %>
+        <%= link_to apply_job_path(job_id: @job.id) do %>
           <div class="apply-job">
             <strong>Apply Now</strong>
           </div>
@@ -68,7 +68,7 @@
   </div>
   <div class="row under-descrip">
     <div class="col-6">
-      <%= link_to '#' do %>
+      <%= link_to apply_job_path(job_id: @job.id) do %>
         <div class="btn btn-info btn-lg apply-btn">
           <strong>Apply Now</strong>
         </div>
