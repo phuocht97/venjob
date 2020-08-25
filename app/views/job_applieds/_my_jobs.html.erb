@@ -1,0 +1,28 @@
+<div class="border border-dark rounded">
+  <div class="job-details">
+    <div class="title">
+      <%= link_to job_detail_path(job.id) do %><strong>
+        <%= job.title %></strong>
+      <% end %>
+    </div>
+    <div class="introduction">
+      <%= strip_tags(job.format_desc) %><br>
+      <%= link_to 'Read more..', job_detail_path(job.id) %>
+    </div>
+    <div class="row">
+      <div class="col-4">▼
+        <%= job.cities.map(&:name).join(' | ') %>
+      </div>
+      <div class="salary col-4">
+        Salary: <%= job.salary %>
+      </div>
+      <div class="applied-at col-4">
+        <strong>Applied at:</strong>
+        <% job.job_applieds.each do |info| %>
+          <%= info.updated_at.strftime('%d/%m/%Y') %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<br>

@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   post 'confirm', to: 'job_applieds#confirmation', as: :confirm_job
   post 'done', to: 'job_applieds#create', as: :finished_apply
 
+  get '/my/jobs', to: 'job_applieds#show', as: :my_jobs
+
   resources :jobs
   get 'detail/:id', to: 'jobs#show', as: :job_detail
 
