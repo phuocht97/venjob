@@ -3,6 +3,8 @@ class JobAppliedsController < ApplicationController
   before_action :find_job_id, only: [:new]
 
   def new
+    founded_application = JobApplied.where(user_id: current_user.id, job_id: params[:job_id])
+    return redirect_to job_detail_path(params[:job_id]) if founded_application.present?
   end
 
   def show
@@ -35,7 +37,8 @@ class JobAppliedsController < ApplicationController
 
   def sign_in_validation
     return if signed_in?
-    flash[:warning] = "Please Sign In..."
+    store_location
+    flash[:warning] = Settings.user.warning_signin
     redirect_to login_path
   end
 

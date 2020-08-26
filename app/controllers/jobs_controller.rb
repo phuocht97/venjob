@@ -27,7 +27,8 @@ class JobsController < ApplicationController
   end
 
   def show
-    redirect_to jobs_path unless @job
+    return redirect_to jobs_path unless @job
+    @user = JobApplied.where(user_id: current_user.id, job_id: params[:id]) if signed_in?
   end
 
   private
