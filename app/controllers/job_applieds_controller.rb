@@ -1,16 +1,18 @@
 class JobAppliedsController < ApplicationController
-  before_action :sign_in_validation, only: [:new, :confirmation, :create]
+  before_action :sign_in_validation, only: [:new, :confirmation, :create, :show]
   before_action :find_job_id, only: [:new]
 
   def new
   end
 
   def show
-    arr_job_id = current_user.job_applieds.pluck(:job_id)
-    @jobs = Job.where(id: arr_job_id).order(updated_at: :asc)
+    @jobs = Job.applied_job(current_user.id).page(params[:page]).per(Job::LIMIT_PAGE)
   end
 
   def confirmation
+    @founded_job = JobApplied.where(user_id: current_user.id, job_id: apply_params[:job_id])
+    return redirect_to apply_job_path(job_id: apply_params[:job_id]), flash: {danger: Settings.user.applied_job.applied} if @founded_job.present?
+
     @user = current_user.job_applieds.new(apply_params)
     @user.cv_user = current_user.cv_user if apply_params[:cv_user].blank?
     if @user.invalid?

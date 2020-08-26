@@ -10,15 +10,15 @@
       <%= link_to 'Read more..', job_detail_path(job.id) %>
     </div>
     <div class="row">
-      <div class="col-4">▼
+      <div class="col-6">▼
         <%= job.cities.map(&:name).join(' | ') %>
       </div>
-      <div class="salary col-4">
+      <div class="salary col-3">
         Salary: <%= job.salary %>
       </div>
-      <div class="applied-at col-4">
+      <div class="applied-at col-3">
         <strong>Applied at:</strong>
-        <% job.job_applieds.each do |info| %>
+        <% job.job_applieds.where(user_id: current_user.id).each do |info| %>
           <%= info.updated_at.strftime('%d/%m/%Y') %>
         <% end %>
       </div>
