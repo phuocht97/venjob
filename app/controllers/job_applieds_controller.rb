@@ -17,6 +17,7 @@ class JobAppliedsController < ApplicationController
 
     @user = current_user.job_applieds.new(apply_params)
     @user.cv_user = current_user.cv_user if apply_params[:cv_user].blank?
+
     if @user.invalid?
       flash[:danger] = @user.errors.full_messages.join('<br>')
       redirect_to apply_job_path(job_id: apply_params[:job_id])
