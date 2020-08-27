@@ -3,16 +3,17 @@
     <%= render partial: 'ribbon_step', locals: { step1: 'active', step2: '', step3: '' } %>
   </div>
   <h1 class="text-center my-page-label">Apply Form</h1>
-  <%= render 'layouts/flash' %>
   <div class="form-login">
+    <%= render 'layouts/flash' %>
     <div class="row form d-flex justify-content-center">
-      <%= form_for(:job_applied, url: confirm_job_path) do |f|  %>
+      <%= form_for(@job_applied, url: confirm_job_path) do |f|  %>
+        <div class="validation"></div>
         <div class="email-field">
           <div class="col-4-sm">
             <%= f.label :email %>
           </div>
           <div class="col-8-sm">
-            <%= f.text_field :email, class: 'input-email', value: current_user.email %>
+            <%= f.text_field :email, class: 'input-email' %>
           </div>
         </div>
         <div class="name-field">
@@ -20,7 +21,7 @@
             <%= f.label :name, 'Full Name' %>
           </div>
           <div class="col-8-sm">
-            <%= f.text_field :name, class: 'input-name', value: current_user.name %>
+            <%= f.text_field :name, class: 'input-name' %>
           </div>
         </div>
         <div class="cv-field">
@@ -40,7 +41,6 @@
             <% end %>
           </div>
         </div>
-        <%= f.hidden_field :job_id, value: params[:job_id] %>
 
         <%= f.submit 'Confirm', class: 'btn btn-outline-primary btn-lg update-btn' %>
       <% end %>

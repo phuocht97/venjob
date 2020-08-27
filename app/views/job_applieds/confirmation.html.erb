@@ -5,14 +5,13 @@
   <h1 class="text-center my-page-label">Confirmation</h1>
   <div class="form-login">
     <div class="row form d-flex justify-content-center">
-      <%= form_for(@user, url: finished_apply_path) do |f|  %>
+      <%= form_for(@job_applied, url: finished_apply_path) do |f| %>
         <div class="email-field">
           <div class="col-4-sm">
             <%= f.label :email %>
           </div>
           <div class="col-8-sm">
-            <strong><%= @user.email %></strong>
-            <%= f.hidden_field :email, value: @user.email %>
+            <strong><%= f.text_field :email, value: @job_applied.email, readonly: true %></strong>
           </div>
         </div>
         <div class="name-field">
@@ -20,8 +19,7 @@
             <%= f.label :name, 'Full Name' %>
           </div>
           <div class="col-8-sm">
-            <strong><%= @user.name %></strong>
-            <%= f.hidden_field :name, value: @user.name %>
+            <strong><%= f.text_field :name, value: @job_applied.name, readonly: true %></strong>
           </div>
         </div>
         <div class="cv-field">
@@ -29,13 +27,12 @@
             <%= f.label :cv_user, 'CV Upload' %>
           </div>
           <div class="col-8-sm">
-            <%= link_to @user.cv_user.identifier, @user.cv_user.url, download: @user.cv_user.identifier %>
-            <%= f.hidden_field :cv_user, value: @user.cv_user.cache_name %>
+            <%= link_to @job_applied.cv_user.identifier, @job_applied.cv_user.url, download: @job_applied.cv_user.identifier %>
+            <%= f.hidden_field :cv_user, value: @job_applied.cv_user.cache_name %>
           </div>
         </div>
-        <%= f.hidden_field :job_id, value: params[:job_applied][:job_id] %>
 
-        <%= link_to 'Edit', apply_job_path(job_id: params[:job_applied][:job_id]), class: 'btn btn-outline-primary btn-lg update-btn' %>
+        <%= link_to 'Edit', apply_job_path(job_id: session[:get_job_id]), class: 'btn btn-outline-primary btn-lg update-btn' %>
         <%= f.submit 'Done', class: 'btn btn-outline-primary btn-lg update-btn' %>
       <% end %>
     </div>
