@@ -14,7 +14,7 @@ class JobAppliedsController < ApplicationController
     user_email ||= current_user.email
 
     founded_application = JobApplied.exists?(user_id: current_user.id, job_id: session[:job_id])
-    return redirect_to job_detail_path(session[:job_id]) if founded_application
+    return redirect_to job_detail_path(session[:job_id]), flash: {info: 'You applied for job'} if founded_application
 
     @job_applied = current_user.job_applieds.new(name: user_name,
                                                  email: user_email)
