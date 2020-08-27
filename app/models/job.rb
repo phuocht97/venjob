@@ -19,9 +19,6 @@ class Job < ApplicationRecord
 
   LIMIT_PAGE = 20
 
-  scope :applied_job, ->(user_id) { joins(:job_applieds)
-                                    .where("job_applieds.user_id = #{user_id}")
-                                    .order("job_applieds.updated_at DESC") }
   scope :limit_job, -> { includes(:cities, :company).order(created_at: :desc).limit(5) }
 
   def company_name

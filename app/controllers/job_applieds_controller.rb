@@ -21,7 +21,7 @@ class JobAppliedsController < ApplicationController
   end
 
   def show
-    @jobs = Job.applied_job(current_user.id).page(params[:page]).per(Job::LIMIT_PAGE)
+    @users = current_user.job_applieds.order("job_applieds.updated_at DESC").page(params[:page]).per(Job::LIMIT_PAGE)
   end
 
   def confirmation
