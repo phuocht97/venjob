@@ -3,7 +3,7 @@ class User < ApplicationRecord
   before_create :create_remember_token
   mount_uploader :cv_user, UserCvUploader
 
-  has_many :favorite_jobs
+  has_many :favorite_jobs, foreign_key: "job_id", dependent: :destroy
   has_many :jobs, through: :favorite_jobs
   has_many :job_applieds
   has_many :jobs, through: :job_applieds
@@ -19,6 +19,18 @@ class User < ApplicationRecord
 
   PASSWORD_FORMAT = /\A(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/x
   validates :password, format: { with: PASSWORD_FORMAT, message: "is too short or not strength" }
+
+  def following?(job_id)
+    favorite_jobs.find_by(job_id: job_id)
+  end
+
+  def follow!(job_id)
+    favorite_jobs.create!(job_id: job_id)
+  end
+
+  def unfollow!(job_id)
+    favorite_jobs.find_by(job_id: job_id).destroy
+  end
 
   def self.new_remember_token
     SecureRandom.urlsafe_base64
