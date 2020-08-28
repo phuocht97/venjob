@@ -1,53 +1,54 @@
 class JobAppliedsController < ApplicationController
   before_action :sign_in_validation, only: %i[new confirmation create show]
-  before_action :find_job_id, only: [:new]
+  before_action :validate_apply_job, only: [:new, :confirmation]
 
   def new
-    session[:job_id] = params[:job_id]
-    if session[:job_applied].present?
-      user_name = session[:job_applied]['name']
-      user_email = session[:job_applied]['email']
-    end
 
-    session[:job_id] ||= session[:get_job_id]
-    user_name ||= current_user.name
-    user_email ||= current_user.email
+    apply_info = session[:apply_job] || {}
+    apply_info[:job_id] = params[:job_id]
+    apply_info['name'] ||= current_user.name
+    apply_info['email'] ||= current_user.email
 
-    founded_application = JobApplied.exists?(user_id: current_user.id, job_id: session[:job_id])
-    return redirect_to job_detail_path(session[:job_id]), flash: {info: 'You applied for job'} if founded_application
+    session[:apply_job] = {:job_id => apply_info[:job_id]}
+    @job_applied = current_user.job_applieds.new(name: apply_info['name'],
+                                                 email: apply_info['email'])
 
-    @job_applied = current_user.job_applieds.new(name: user_name,
-                                                 email: user_email)
+
+    cache_cv = session[:cv] || {}
+    @job_applied.cv_user.retrieve_from_cache!(cache_cv['url'].gsub('/uploads/tmp/','')) if session[:cv].present?
+    @job_applied.cv_user = current_user.cv_user if @job_applied.cv_user.blank?
   end
 
   def show
-    @users = current_user.job_applieds.order("job_applieds.updated_at DESC").page(params[:page]).per(Job::LIMIT_PAGE)
+    @applied_jobs = current_user.job_applieds.order("job_applieds.updated_at DESC").page(params[:page]).per(Job::LIMIT_PAGE)
   end
 
   def confirmation
-    session[:get_job_id] = session[:job_id]
     @job_applied = current_user.job_applieds.new(apply_params)
-    session[:job_applied] = @job_applied
-
-    @job_applied.cv_user = current_user.cv_user if apply_params[:cv_user].blank?
-    @job_applied.job_id = session[:get_job_id] if @job_applied.job_id.blank?
+    @job_applied.job_id = session[:apply_job]['job_id'] if @job_applied.job_id.blank?
+    @job_applied.cv_user = current_user.cv_user if @job_applied.cv_user.blank?
 
     if @job_applied.invalid?
       flash.now[:danger] = @job_applied.errors.full_messages.join('<br>')
       render :new
     end
+    session[:apply_job] = @job_applied
+    session[:cv] = @job_applied.cv_user
   end
 
   def create
-    @job = Job.find_by(id: session[:get_job_id])
+    @job = Job.find_by(id: session[:apply_job]['job_id'])
     @job_applied = current_user.job_applieds.new(apply_params)
-    @job_applied.job_id = session[:get_job_id] if @job_applied.job_id.blank?
+    @job_applied.job_id = session[:apply_job]['job_id'] if @job_applied.job_id.blank?
     @job_applied.cv_user.retrieve_from_cache!(apply_params[:cv_user])
     if @job_applied.save
       JobAppliedMailer.apply_job(@job_applied, @job).deliver_later
       JobAppliedMailer.sending_admin(@job_applied, @job, ENV['GMAIL_USERNAME']).deliver_later
+    else
+      flash[:danger] = @job_applied.errors.full_messages.join('<br>')
+      redirect_to apply_job_path(job_id: session[:apply_job]['job_id'])
     end
-    session.delete(:job_applied)
+    session.delete(:apply_job)
   end
 
   private
@@ -63,7 +64,11 @@ class JobAppliedsController < ApplicationController
     params.require(:job_applied).permit(:name, :email, :cv_user)
   end
 
-  def find_job_id
-    return redirect_to jobs_path unless Job.find_by(id: params[:job_id])
+  def validate_apply_job
+    job_id = params[:job_id] || session[:apply_job].try(:[], 'job_id')
+    return redirect_to jobs_path, flash: { warning: 'Job not found!'} unless Job.find_by_id(job_id)
+
+    job_applied = JobApplied.exists?(user_id: current_user.id, job_id: job_id)
+    return redirect_to job_detail_path(job_id), flash: { info: 'You applied for job'} if job_applied
   end
 end

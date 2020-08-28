@@ -29,8 +29,8 @@
             <%= f.label :cv_user, 'My CV' %>
           </div>
           <div class="col-8-sm">
-            <% if current_user.cv_user.present? %>
-            <%= link_to current_user.cv_user.identifier, current_user.cv_user.url, download: current_user.cv_user.identifier %>
+            <% if @job_applied.cv_user.present? %>
+            <%= link_to @job_applied.cv_user.identifier, @job_applied.cv_user.url, download: @job_applied.cv_user.identifier %>
               <div class="cv-none">
                   <%= f.file_field :cv_user, accept: '.doc, .pdf, .xls, .xlsx, .zip',class: 'input-cv' %>
               </div>

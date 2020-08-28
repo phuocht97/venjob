@@ -1,24 +1,24 @@
 <div class="border border-dark rounded">
   <div class="job-details">
     <div class="title">
-      <%= link_to job_detail_path(user.job.id) do %><strong>
-        <%= user.job.title %></strong>
+      <%= link_to job_detail_path(applied_job.job.id) do %><strong>
+        <%= applied_job.job.title %></strong>
       <% end %>
     </div>
     <div class="introduction">
-      <%= strip_tags(user.job.format_desc) %><br>
-      <%= link_to 'Read more..', job_detail_path(user.job.id) %>
+      <%= strip_tags(applied_job.job.format_desc) %><br>
+      <%= link_to 'Read more..', job_detail_path(applied_job.job.id) %>
     </div>
     <div class="row">
       <div class="col-6">▼
-        <%= user.job.cities.map(&:name).join(' | ') %>
+        <%= applied_job.job.cities.map(&:name).join(' | ') %>
       </div>
       <div class="salary col-3">
-        Salary: <%= user.job.salary %>
+        Salary: <%= applied_job.job.salary %>
       </div>
       <div class="applied-at col-3">
         <strong>Applied at:</strong>
-        <%= user.updated_at.strftime('%d/%m/%Y') %>
+        <%= applied_job.updated_at.strftime('%d/%m/%Y') %>
       </div>
     </div>
   </div>

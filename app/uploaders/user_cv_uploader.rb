@@ -16,6 +16,10 @@ class UserCvUploader < CarrierWave::Uploader::Base
   def size_range
     0..5.megabytes
   end
+
+  def extension_whitelist
+    %w(doc pdf xls xlsx zip)
+  end
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url(*args)
   #   # For Rails 3.1+ asset pipeline compatibility:

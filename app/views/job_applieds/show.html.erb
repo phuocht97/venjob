@@ -1,9 +1,9 @@
 <div class="container">
-  <% if @users.count > 0 %>
+  <% if @applied_jobs.count > 0 %>
     <h1 class="text-center my-job-label">My Job</h1>
-    <%= paginate @users, outer_window: 2, window: 1 %>
-      <%= render partial: "job_applieds/my_jobs", collection: @users, as: :user %>
-    <%= paginate @users, outer_window: 2, window: 1 %>
+    <%= paginate @applied_jobs, outer_window: 2, window: 1 %>
+      <%= render partial: "job_applieds/my_jobs", collection: @applied_jobs, as: :applied_job %>
+    <%= paginate @applied_jobs, outer_window: 2, window: 1 %>
   <% else %>
     <h1 class="let-apply">Let's apply job</h1>
   <% end %>
