@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   get 'jobs/industry/:converted_name', to: 'jobs#industry_jobs', as: :industry_jobs
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
-  post 'follow_job', to: 'job_favorites#create', as: :follow_job
+  post 'follow_job/:id', to: 'job_favorites#create', as: :follow_job
 
   resources :job_favorites, only: [:create, :destroy]
   resources :job_applieds,only: [:new, :create]

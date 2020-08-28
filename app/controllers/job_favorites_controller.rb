@@ -1,9 +1,7 @@
 class JobFavoritesController < ApplicationController
   before_action :sign_in_validation, only: [:create, :destroy]
-  before_action :find_job_id, only: [:new]
 
   def create
-
   end
 
   def destroy
