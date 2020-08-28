@@ -1,4 +1,4 @@
-class JobAppliedsController < ApplicationController
+class AppliedJobsController < ApplicationController
   before_action :sign_in_validation, only: %i[new confirmation create show]
   before_action :validate_apply_job, only: [:new, :confirmation]
 
