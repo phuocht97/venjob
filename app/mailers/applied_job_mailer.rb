@@ -1,4 +1,4 @@
-class JobAppliedMailer < ActionMailer::Base
+class AppliedJobMailer < ActionMailer::Base
   def apply_job(user, job)
     @job = job
     @user = user
