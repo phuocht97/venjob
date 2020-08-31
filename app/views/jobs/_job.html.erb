@@ -16,7 +16,11 @@
           <%= link_to 'Read more..', job_detail_path(job.id) %>
         </div>
       </div>
-      <button type="button" class="btn btn-success" id="button-follow">♥ Favorite</button>
+      <% if signed_in? %>
+        <%= render partial: 'users/favorite_form', locals: { job: job } %>
+      <% else %>
+        <%= render 'users/favorite', job_id: job.id %>
+      <% end %>
     </div>
   </div>
   <br>

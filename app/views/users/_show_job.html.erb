@@ -17,8 +17,10 @@
           <%= link_to 'Read more..', job_detail_path(job.id) %>
         </div>
       </div>
-      <%= form_for(:job_favorite, url: follow_job_path(job.id), remote: true) do |f| %>
-         <%= f.submit "Follow", class: "btn btn-primary", id: "button-follow" %>
+      <% if signed_in? %>
+        <%= render partial: 'users/favorite_form', locals: { job: job } %>
+      <% else %>
+        <%= render 'users/favorite', job_id: job.id %>
       <% end %>
     </div>
   </div>
