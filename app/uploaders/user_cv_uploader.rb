@@ -21,9 +21,6 @@ class UserCvUploader < CarrierWave::Uploader::Base
     %w(doc pdf xls xlsx zip)
   end
 
-  def content_type_blacklist
-    %w(text/json application/json)
-  end
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url(*args)
   #   # For Rails 3.1+ asset pipeline compatibility:

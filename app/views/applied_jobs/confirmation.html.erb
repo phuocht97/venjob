@@ -28,7 +28,6 @@
           </div>
           <div class="col-8-sm">
             <%= link_to @job_applied.cv_user.identifier, @job_applied.cv_user.url, download: @job_applied.cv_user.identifier %>
-            <%= f.hidden_field :cv_user, value: @job_applied.cv_user.cache_name %>
           </div>
         </div>
 

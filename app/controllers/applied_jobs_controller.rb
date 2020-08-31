@@ -8,7 +8,7 @@ class AppliedJobsController < ApplicationController
     apply_info[:name] ||= current_user.name
     apply_info[:email] ||= current_user.email
 
-    session[:apply_job] = {:job_id => apply_info[:job_id]}
+    session[:apply_job] = {job_id: apply_info[:job_id]}
     @job_applied = current_user.job_applieds.new(name: apply_info[:name],
                                                  email: apply_info[:email])
 
@@ -23,8 +23,9 @@ class AppliedJobsController < ApplicationController
   def confirmation
     @job_applied = current_user.job_applieds.new(apply_params)
     @job_applied.job_id = session[:apply_job]['job_id'] if @job_applied.job_id.blank?
-    @job_applied.cv_user = current_user.cv_user if @job_applied.cv_user.blank?
 
+    @job_applied.cv_user.retrieve_from_cache!(session[:cv]) if @job_applied.cv_user.blank? && session[:cv].present?
+    @job_applied.cv_user = current_user.cv_user if @job_applied.cv_user.blank?
     if @job_applied.invalid?
       flash.now[:danger] = @job_applied.errors.full_messages.join('<br>')
       render :new
@@ -44,7 +45,7 @@ class AppliedJobsController < ApplicationController
       session.delete(:apply_job)
     else
       flash[:danger] = @job_applied.errors.full_messages.join('<br>')
-      redirect_to apply_job_path(job_id: session[:apply_job]['job_id'])
+      redirect_to apply_job_path(job_id: @job.id)
     end
   end
 
