@@ -4,13 +4,13 @@ class AppliedJobsController < ApplicationController
 
   def new
     apply_info = session[:apply_job] || {}
-    apply_info[:job_id] = params[:job_id]
-    apply_info[:name] ||= current_user.name
-    apply_info[:email] ||= current_user.email
+    apply_info['job_id'] = params[:job_id]
+    apply_info['name'] ||= current_user.name
+    apply_info['email'] ||= current_user.email
 
-    session[:apply_job] = {job_id: apply_info[:job_id]}
-    @job_applied = current_user.job_applieds.new(name: apply_info[:name],
-                                                 email: apply_info[:email])
+    session[:apply_job] = {job_id: apply_info['job_id']}
+    @job_applied = current_user.job_applieds.new(name: apply_info['name'],
+                                                 email: apply_info['email'])
 
     @job_applied.cv_user.retrieve_from_cache!(session[:cv]) if session[:cv].present?
     @job_applied.cv_user = current_user.cv_user if @job_applied.cv_user.blank?
