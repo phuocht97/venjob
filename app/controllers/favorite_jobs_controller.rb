@@ -20,15 +20,17 @@ class FavoriteJobsController < ApplicationController
 
     respond_to { |format| format.js }
 
-    @count = current_user.favorite_jobs.count
+    if request.referer.include?("favorite")
+      @count = current_user.favorite_jobs.count
 
-    count_on_page = @count % Job::LIMIT_PAGE
-    page_number = @count / Job::LIMIT_PAGE
-    link_url = request.referer.to_s.split("=")
+      count_on_page = @count % Job::LIMIT_PAGE
+      page_number = @count / Job::LIMIT_PAGE
+      link_url = request.referer.to_s.split("=")
 
-    return redirect_to link_url[0] + "=" + page_number.to_s if count_on_page == 0 && link_url[1].to_i == page_number + 1
+      return redirect_to link_url[0] + "=" + page_number.to_s if count_on_page == 0 && link_url[1].to_i == page_number + 1
 
-    return redirect_to request.referer if count_on_page == 0
+      return redirect_to request.referer if count_on_page == 0
+    end
   end
 
   private
