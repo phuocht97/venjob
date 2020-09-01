@@ -21,9 +21,7 @@
           <div class="salary col-3">
             Salary: <%= favorited_job.job.salary %>
           </div>
-          <%= form_for(:job_favorite, url: unfavorite_job_path(job_id: favorited_job.job.id), method: :delete, remote: true) do |f| %>
-            <%= f.submit "Remove", class: "btn btn-danger", id: "button-remove" %>
-          <% end %>
+          <%= link_to "Remove", unfavorite_job_path(job_id: favorited_job.job.id), method: :delete, remote: true, class: "btn btn-danger", id: "button-remove" %>
         </div>
       </div>
     </div>

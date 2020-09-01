@@ -1,5 +1,6 @@
-class JobFavoritesController < ApplicationController
-  before_action :sign_in_validation, only: %i[create destroy show]
+class FavoriteJobsController < ApplicationController
+  before_action :sign_in_favorite_validation, only: %i[create destroy]
+  before_action :sign_in_validation, only: [:show]
 
   def show
     @count = current_user.favorite_jobs.count
@@ -32,9 +33,16 @@ class JobFavoritesController < ApplicationController
 
   private
 
-  def sign_in_validation
+  def sign_in_favorite_validation
     return if signed_in?
     session[:return_to] = request.referer
+    flash[:warning] = Settings.user.warning_signin
+    redirect_to login_path
+  end
+
+  def sign_in_validation
+    return if signed_in?
+    store_location
     flash[:warning] = Settings.user.warning_signin
     redirect_to login_path
   end

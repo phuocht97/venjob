@@ -33,11 +33,11 @@ Rails.application.routes.draw do
   get 'jobs/industry/:converted_name', to: 'jobs#industry_jobs', as: :industry_jobs
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
-  post 'favorite_job', to: 'job_favorites#create', as: :favorite_job
-  delete 'unfavorite_job', to: 'job_favorites#destroy', as: :unfavorite_job
-  get 'favorite', to: 'job_favorites#show', as: :my_favorite_job
+  post 'favorite_job', to: 'favorite_jobs#create', as: :favorite_job
+  delete 'unfavorite_job', to: 'favorite_jobs#destroy', as: :unfavorite_job
+  get 'favorite', to: 'favorite_jobs#show', as: :my_favorite_job
 
-  resources :job_favorites, only: [:create, :destroy]
+  resources :favorite_jobs, only: [:create, :destroy, :show]
   resources :job_applieds,only: [:new, :create]
   resources :reset_passwords, only: [:edit, :update]
   resources :confirmations, only: [:new]
