@@ -38,7 +38,7 @@ class AppliedJobsController < ApplicationController
     @job = Job.find_by(id: session[:apply_job]['job_id'])
     @job_applied = current_user.job_applieds.new(apply_params)
     @job_applied.job_id = @job.id if @job_applied.job_id.blank?
-    @job_applied.cv_user.retrieve_from_cache!(apply_params[:cv_user])
+    @job_applied.cv_user.retrieve_from_cache!(session[:cv])
     if @job_applied.save
       AppliedJobMailer.apply_job(@job_applied, @job).deliver_later
       AppliedJobMailer.sending_admin(@job_applied, @job, ENV['GMAIL_USERNAME']).deliver_later
