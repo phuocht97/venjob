@@ -1,4 +1,5 @@
 <div class="container">
+  <%= render 'layouts/flash' %>
   <div class="details-banner">
     <div class="job-details-banner">
       <div class="job-info">
@@ -18,10 +19,16 @@
           <% end %>/&ensp;
           <%= @job.title.truncate_words(5) %>
         </div>
-        <%= link_to '#' do %>
+        <% if signed_in? && @user.present? %>
           <div class="apply-job">
-            <strong>Apply Now</strong>
+            <strong>Applied</strong>
           </div>
+        <% else %>
+          <%= link_to apply_job_path(job_id: @job.id) do %>
+            <div class="apply-job">
+              <strong>Apply Now</strong>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -68,10 +75,16 @@
   </div>
   <div class="row under-descrip">
     <div class="col-6">
-      <%= link_to '#' do %>
+      <% if signed_in? && @user.present? %>
         <div class="btn btn-info btn-lg apply-btn">
-          <strong>Apply Now</strong>
+          <strong>Applied</strong>
         </div>
+      <% else %>
+        <%= link_to apply_job_path(job_id: @job.id) do %>
+          <div class="btn btn-info btn-lg apply-btn">
+            <strong>Apply Now</strong>
+          </div>
+        <% end %>
       <% end %>
     </div>
     <div class="col-6">

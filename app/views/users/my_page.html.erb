@@ -25,9 +25,7 @@
             <%= f.label :cv_user, 'My CV' %>
           </div>
           <div class="col-8-sm">
-            <% if current_user.cv_user.present? %>
-              <%= link_to current_user.cv_user.identifier, current_user.cv_user.url, download: current_user.cv_user.identifier %>
-            <% else %>
+            <%= link_to_if current_user.cv_user.present? ,current_user.cv_user.identifier, current_user.cv_user.url, download: current_user.cv_user.identifier do %>
               <div class="cv-none">
                 CV hasn't found in your Profile. Upload now!
               </div>
@@ -36,7 +34,7 @@
         </div>
 
         <%= link_to 'Update', my_page_info_path, class: 'btn btn-outline-primary btn-lg update-btn' %>
-        <%= link_to 'My Jobs', '#', class: 'btn btn-outline-info btn-lg my-jobs-btn' %>
+        <%= link_to 'My Jobs', my_jobs_path, class: 'btn btn-outline-info btn-lg my-jobs-btn' %>
       <% end %>
     </div>
   </div>

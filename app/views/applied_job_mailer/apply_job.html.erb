@@ -1,0 +1,13 @@
+<h2>Dear <%= @user.name %></h2>
+<p>Thank you for applied with VenJOB. Your applied job's information is as follow:</p>
+
+<p><h3>Title: <%= @job.title %></h3></p>
+<p><h3>Cities: <%= @job.cities.map(&:name).join(' | ') %></h3></p>
+<p><h3>Company: <%= @job.company.name %></h3></p>
+
+<p>Your submitted information:</p>
+<p><h3>Name: <%= @user.name %></h3></p>
+<p><h3>Email: <%= @user.email %></h3></p>
+<p><h3>Your CV: <%= link_to @user.cv_user.identifier, (root_url.chop + @user.cv_user.url) %></h3></p>
+
+Best,

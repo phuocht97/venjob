@@ -18,3 +18,10 @@ user:
     existed: 'Email existed. Please change !!!'
     format_failed: 'Email formated invalid'
 
+  applied_job:
+    applied: 'You applied for this job'
+
+email:
+  confirmation: 'Welcome To VeNJOB! Confirm Your Email'
+  reset_password: 'VeNJOB Password Assistance'
+  job_applied: 'Thank your for apply with VeNJOB'

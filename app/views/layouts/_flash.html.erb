@@ -1,5 +1,5 @@
 <div class="flash rounded">
   <% flash.each do |key, value| %>
-    <div class="alert alert-<%= key %>"><%= value %></div>
+    <div class="text-center alert alert-<%= key %>"><strong><%= value.html_safe %></strong></div>
   <% end %>
 </div>

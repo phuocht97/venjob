@@ -1,0 +1,125 @@
+// Place all the styles related to the Top_pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.ribbon-mark {
+  margin: 40px;
+  position: relative;
+}
+.arrow-new.active {
+  width: 250px;
+  height: 50px;
+  background: #66c2ff;
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0; width: 0; height: 0;
+    border-left: 25px solid white;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    right: -25px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 25px solid #66c2ff;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+  }
+  .text-ribbon {
+    position: absolute;
+    top: 25%;
+    right: 55%;
+  }
+  .number-circle {
+    color: #66c2ff;
+    text-align: center;
+    background: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  .text-near-circle {
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    top: -25%;
+    left: 20px;
+  }
+}
+
+.arrow-confirm.active, .arrow-finish.active {
+  width: 250px;
+  height: 50px;
+  background: #66c2ff;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0; width: 0; height: 0;
+    border-left: 25px solid #66c2ff;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    right: -25px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 25px solid #66c2ff;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+  }
+  .text-ribbon {
+    position: absolute;
+    top: 25%;
+    right: 55%;
+  }
+  .number-circle {
+    color: #66c2ff;
+    text-align: center;
+    background: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  .text-near-circle {
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    top: -25%;
+    left: 20px;
+  }
+}
+
+.arrow-new, .arrow-confirm, .arrow-finish {
+  width: 250px;
+  height: 50px;
+  color: #666666;
+  position: relative;
+  .text-ribbon {
+    position: absolute;
+    top: 25%;
+    right: 55%;
+  }
+  .number-circle {
+    text-align: center;
+    background: #e6e6e6;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  .text-near-circle {
+    font-size: 20px;
+    position: absolute;
+    top: -25%;
+    left: 20px;
+  }
+}
