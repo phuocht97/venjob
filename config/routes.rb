@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
   post 'favorite_job', to: 'favorite_jobs#create', as: :favorite_job
   delete 'unfavorite_job', to: 'favorite_jobs#destroy', as: :unfavorite_job
-  get 'favorite', to: 'favorite_jobs#show', as: :my_favorite_job
+  get 'favorite', to: 'favorite_jobs#index', as: :favorite_jobs
 
   resources :favorite_jobs, only: [:create, :destroy, :show]
   resources :job_applieds,only: [:new, :create]

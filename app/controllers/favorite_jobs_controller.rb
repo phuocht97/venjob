@@ -2,7 +2,7 @@ class FavoriteJobsController < ApplicationController
   before_action :sign_in_favorite_validation, only: %i[create destroy]
   before_action :sign_in_validation, only: [:show]
 
-  def show
+  def index
     @count = current_user.favorite_jobs.count
     @favorited_jobs = current_user.favorite_jobs.order_favorite.page(params[:page]).per(Job::LIMIT_PAGE)
   end
