@@ -11,17 +11,16 @@
           <% end %>
         </div>
         <div class="row">
-          <div class="introduction col-10">
+          <div class="introduction col-12">
             <%= strip_tags(history_job.job.format_desc) %><br>
             <%= link_to 'Read more..', job_detail_path(history_job.job.id) %>
           </div>
           <div class="col-6">▼
             <%= history_job.job.cities.map(&:name).join(' | ') %>
           </div>
-          <div class="salary col-3">
+          <div class="salary col-6">
             Salary: <%= history_job.job.salary %>
           </div>
-          <%= link_to "Remove", remove_history_job_path(job_id: history_job.job.id), method: :delete, remote: true, class: "btn btn-danger", id: "button-remove" %>
         </div>
       </div>
     </div>

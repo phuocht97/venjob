@@ -32,9 +32,11 @@ class JobsController < ApplicationController
     if signed_in?
       @user = JobApplied.where(user_id: current_user.id, job_id: params[:id])
 
+      history_jobs = current_user.histories.order_history
+      history_jobs.last.destroy if history_jobs.count >= Job::LIMIT_HISTORY
+
       founded_history = current_user.histories.find_by(job_id: params[:id])
-      binding.pry
-      return founded_history.update(job_id: params[:id]) if founded_history.present?
+      return founded_history.update(updated_at: Time.current.utc) if founded_history.present?
 
       history = current_user.histories.create!(job_id: params[:id])
     end

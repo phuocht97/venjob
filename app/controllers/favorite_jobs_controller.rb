@@ -27,9 +27,9 @@ class FavoriteJobsController < ApplicationController
       page_number = @count / Job::LIMIT_PAGE
       link_url = request.referer.to_s.split("=")
 
-      return redirect_to link_url[0] + "=" + page_number.to_s if count_on_page == 0 && link_url[1].to_i == page_number + 1
+      return redirect_to link_url[0] + "=" + page_number.to_s if count_on_page == Job::DIVISIBLE && link_url[1].to_i == page_number + 1
 
-      return redirect_to request.referer if count_on_page == 0
+      return redirect_to request.referer if count_on_page == Job::DIVISIBLE
     end
   end
 

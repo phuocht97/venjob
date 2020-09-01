@@ -37,10 +37,9 @@ Rails.application.routes.draw do
   delete 'unfavorite_job', to: 'favorite_jobs#destroy', as: :unfavorite_job
   get 'favorite', to: 'favorite_jobs#index', as: :favorite_jobs
 
-  delete 'remove_history', to: 'history_jobs#destroy', as: :remove_history_job
   get 'history', to: 'history_jobs#index', as: :history_jobs
 
-  resources :history_jobs, only: [:destroy, :index]
+  resources :history_jobs, only: [:index]
   resources :favorite_jobs, only: [:create, :destroy, :index]
   resources :job_applieds,only: [:new, :create]
   resources :reset_passwords, only: [:edit, :update]

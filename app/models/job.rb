@@ -18,6 +18,8 @@ class Job < ApplicationRecord
   has_many :users, through: :histories
 
   LIMIT_PAGE = 20
+  LIMIT_HISTORY = 20
+  DIVISIBLE = 0
 
   scope :limit_job, -> { includes(:cities, :company).order(created_at: :desc).limit(5) }
 
