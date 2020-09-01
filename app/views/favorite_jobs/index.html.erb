@@ -1,6 +1,6 @@
 <div class="container">
   <% if @favorited_jobs.count > 0 %>
-    <h1 class="text-center my-job-label">My Favorite Job (<span class="count-favorite-jobs"><%= @count %></span> jobs)</h1>
+    <h1 class="text-center my-job-label">Favorite Job (<span class="count-favorite-jobs"><%= @count %></span> jobs)</h1>
     <%= paginate @favorited_jobs, outer_window: 2, window: 1 %>
       <div class="favorite-page">
         <%= form_tag apply_job_path(job_id: params[:job_id]), method: :get, enforce_utf8: false do %>

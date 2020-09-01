@@ -29,7 +29,15 @@ class JobsController < ApplicationController
   def show
     session.delete(:job_applied)
     return redirect_to jobs_path unless @job
-    @user = JobApplied.where(user_id: current_user.id, job_id: params[:id]) if signed_in?
+    if signed_in?
+      @user = JobApplied.where(user_id: current_user.id, job_id: params[:id])
+
+      founded_history = current_user.histories.find_by(job_id: params[:id])
+      binding.pry
+      return founded_history.update(job_id: params[:id]) if founded_history.present?
+
+      history = current_user.histories.create!(job_id: params[:id])
+    end
   end
 
   private

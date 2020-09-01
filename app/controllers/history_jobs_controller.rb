@@ -1,27 +1,20 @@
-class FavoriteJobsController < ApplicationController
-  before_action :sign_in_favorite_validation, only: %i[create destroy]
+class HistoryJobsController < ApplicationController
+  before_action :sign_in_favorite_validation, only: [:destroy]
   before_action :sign_in_validation, only: [:index]
 
   def index
-    @count = current_user.favorite_jobs.count
-    @favorited_jobs = current_user.favorite_jobs.order_favorite.page(params[:page]).per(Job::LIMIT_PAGE)
-  end
-
-  def create
-    @job = Job.find_by_id(params[:job_id])
-    return if current_user.favorite_jobs.exists?(job_id: params[:job_id])
-    @follow = current_user.favorite!(params[:job_id])
-    respond_to { |format| format.js }
+    @count = current_user.histories.count
+    @history_jobs = current_user.histories.order_history.page(params[:page]).per(Job::LIMIT_PAGE)
   end
 
   def destroy
     @job = Job.find_by_id(params[:job_id])
-    @unfollow = current_user.unfavorite!(params[:job_id])
+    @unfollow = current_user.remove_history!(params[:job_id])
 
     respond_to { |format| format.js }
 
-    if request.referer.include?("favorite")
-      @count = current_user.favorite_jobs.count
+    if request.referer.include?("history")
+      @count = current_user.histories.count
 
       count_on_page = @count % Job::LIMIT_PAGE
       page_number = @count / Job::LIMIT_PAGE

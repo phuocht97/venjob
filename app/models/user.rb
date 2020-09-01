@@ -32,6 +32,10 @@ class User < ApplicationRecord
     favorite_jobs.find_by(job_id: job_id).destroy
   end
 
+  def remove_history!(job_id)
+    histories.find_by(job_id: job_id).destroy
+  end
+
   def self.new_remember_token
     SecureRandom.urlsafe_base64
   end
