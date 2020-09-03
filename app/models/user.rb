@@ -29,11 +29,11 @@ class User < ApplicationRecord
   end
 
   def unfavorite!(job_id)
-    favorite_jobs.find_by(job_id: job_id).destroy
+    favorite_jobs.find_by(job_id: job_id)&.destroy
   end
 
   def remove_history!(job_id)
-    histories.find_by(job_id: job_id).destroy
+    histories.find_by(job_id: job_id)&.destroy
   end
 
   def self.new_remember_token

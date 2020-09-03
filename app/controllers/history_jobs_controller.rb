@@ -1,5 +1,4 @@
 class HistoryJobsController < ApplicationController
-  before_action :sign_in_favorite_validation, only: [:destroy]
   before_action :sign_in_validation, only: [:index]
 
   def index
@@ -8,13 +7,6 @@ class HistoryJobsController < ApplicationController
   end
 
   private
-
-  def sign_in_favorite_validation
-    return if signed_in?
-    session[:return_to] = request.referer
-    flash[:warning] = Settings.user.warning_signin
-    redirect_to login_path
-  end
 
   def sign_in_validation
     return if signed_in?

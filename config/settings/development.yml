@@ -21,6 +21,9 @@ user:
   applied_job:
     applied: 'You applied for this job'
 
+  favorite_job:
+    validate_page: 'Params Page format failed'
+
 email:
   confirmation: 'Welcome To VeNJOB! Confirm Your Email'
   reset_password: 'VeNJOB Password Assistance'

@@ -1,24 +1,22 @@
 class FavoriteJobsController < ApplicationController
-  before_action :sign_in_favorite_validation, only: %i[create destroy]
-  before_action :sign_in_validation, only: [:index]
+  before_action :sign_in_validation, only: %i[create destroy index]
 
   def index
+    if params[:page].present? || params[:page] == ""
+      return redirect_to favorite_jobs_path, flash: {warning: Settings.user.favorite_job.validate_page } if params[:page].to_i <= 0 || params[:page].scan(/\D+/).present?
+    end
     @count = current_user.favorite_jobs.count
     @favorited_jobs = current_user.favorite_jobs.order_favorite.page(params[:page]).per(Job::LIMIT_PAGE)
   end
 
   def create
-    @job = Job.find_by_id(params[:job_id])
     return if current_user.favorite_jobs.exists?(job_id: params[:job_id])
     @follow = current_user.favorite!(params[:job_id])
     respond_to { |format| format.js }
   end
 
   def destroy
-    @job = Job.find_by_id(params[:job_id])
     @unfollow = current_user.unfavorite!(params[:job_id])
-
-    respond_to { |format| format.js }
 
     if request.referer.include?("favorite")
       @count = current_user.favorite_jobs.count
@@ -31,16 +29,11 @@ class FavoriteJobsController < ApplicationController
 
       return redirect_to request.referer if count_on_page == Job::DIVISIBLE
     end
+
+    respond_to { |format| format.js }
   end
 
   private
-
-  def sign_in_favorite_validation
-    return if signed_in?
-    session[:return_to] = request.referer
-    flash[:warning] = Settings.user.warning_signin
-    redirect_to login_path
-  end
 
   def sign_in_validation
     return if signed_in?

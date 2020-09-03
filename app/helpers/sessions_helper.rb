@@ -33,6 +33,7 @@ module SessionsHelper
   end
 
   def store_location
+    return session[:return_to] = request.referer if request.url.include?("favorite_job")
     session[:return_to] = request.url if request.get?
   end
 end

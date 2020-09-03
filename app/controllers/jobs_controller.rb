@@ -30,15 +30,15 @@ class JobsController < ApplicationController
     session.delete(:job_applied)
     return redirect_to jobs_path unless @job
     if signed_in?
-      @user = JobApplied.where(user_id: current_user.id, job_id: params[:id])
-
-      history_jobs = current_user.histories.order_history
-      history_jobs.last.destroy if history_jobs.count >= Job::LIMIT_HISTORY
+      @is_job_applied = current_user.job_applieds.pluck(:job_id).include?@job.id
 
       founded_history = current_user.histories.find_by(job_id: params[:id])
       return founded_history.update(updated_at: Time.current.utc) if founded_history.present?
 
       history = current_user.histories.create!(job_id: params[:id])
+
+      history_jobs = current_user.histories.order_history
+      history_jobs.last.destroy if history_jobs.count >= Job::LIMIT_HISTORY
     end
   end
 

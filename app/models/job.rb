@@ -27,6 +27,10 @@ class Job < ApplicationRecord
     company&.name
   end
 
+  def converted_company_name
+    company&.converted_name
+  end
+
   def format_desc
     description.truncate_words(250)
   end

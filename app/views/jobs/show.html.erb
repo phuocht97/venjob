@@ -4,7 +4,7 @@
       <div class="job-info">
         <div><strong><%= @job.title %></strong></div>
         <div>
-          <%= link_to @job.company_name, company_jobs_path(converted_name: @job.company.converted_name), class: 'company' %>
+          <%= link_to @job.company_name, company_jobs_path(converted_name: @job.converted_company_name), class: 'company' %>
         </div>
         <div class="breadcrumb">
           <%= link_to "TOP", root_path  %>&ensp;/&ensp;
@@ -18,7 +18,7 @@
           <% end %>/&ensp;
           <%= @job.title.truncate_words(5) %>
         </div>
-        <% if signed_in? && @user.present? %>
+        <% if @is_job_applied %>
           <div class="apply-job">
             <strong>Applied</strong>
           </div>
