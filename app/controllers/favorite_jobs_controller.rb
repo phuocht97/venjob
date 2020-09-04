@@ -32,13 +32,4 @@ class FavoriteJobsController < ApplicationController
 
     respond_to { |format| format.js }
   end
-
-  private
-
-  def sign_in_validation
-    return if signed_in?
-    store_location
-    flash[:warning] = Settings.user.warning_signin
-    redirect_to login_path
-  end
 end

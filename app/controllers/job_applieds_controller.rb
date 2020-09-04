@@ -52,13 +52,6 @@ class JobAppliedsController < ApplicationController
 
   private
 
-  def sign_in_validation
-    return if signed_in?
-    store_location
-    flash[:warning] = Settings.user.warning_signin
-    redirect_to login_path
-  end
-
   def apply_params
     params.require(:job_applied).permit(:name, :email, :cv_user)
   end
