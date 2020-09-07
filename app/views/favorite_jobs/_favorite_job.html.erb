@@ -21,7 +21,7 @@
           <div class="salary col-3">
             Salary: <%= favorite_job.job.salary %>
           </div>
-          <%= link_to "Remove", unfavorite_job_path(job_id: favorite_job.job.id), method: :delete, remote: true, class: "btn btn-danger", id: "button-remove" %>
+          <%= link_to "Remove", unfavorite_job_path(job_id: favorite_job.job.id, page: params[:page]), method: :delete, remote: true, class: "btn btn-danger", id: "button-remove" %>
         </div>
       </div>
     </div>

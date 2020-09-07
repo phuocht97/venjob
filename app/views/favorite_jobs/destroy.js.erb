@@ -1,3 +1,3 @@
-$("#favorite-form-<%= @unfollow.job_id %>").html("<%= j render 'users/favorite', job_id: @unfollow.job_id %>");
-$(".job-id-<%= @unfollow.job_id %>").remove();
+$("#favorite-form-<%= @unfavorite.job_id %>").html("<%= j render 'users/favorite', job_id: @unfavorite.job_id %>");
+$(".job-id-<%= @unfavorite.job_id %>").remove();
 $(".count-favorite-jobs").html("<%= @count %>");

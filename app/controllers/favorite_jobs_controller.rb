@@ -2,32 +2,30 @@ class FavoriteJobsController < ApplicationController
   before_action :sign_in_validation, only: %i[create destroy index]
 
   def index
-    if params[:page].present? || params[:page] == ""
-      return redirect_to favorite_jobs_path, flash: {warning: Settings.user.favorite_job.validate_page } if params[:page].to_i <= 0 || params[:page].scan(/\D+/).present?
-    end
+    page = Integer(params[:page] || "1") rescue 0
+
+    return redirect_to favorite_jobs_path unless page.positive?
+
     @count = current_user.favorite_jobs.count
-    @favorited_jobs = current_user.favorite_jobs.order_favorite.page(params[:page]).per(Job::LIMIT_PAGE)
+    @favorited_jobs = current_user.favorite_jobs.order_favorite.page(page).per(Job::LIMIT_PAGE)
   end
 
   def create
     return if current_user.favorite_jobs.exists?(job_id: params[:job_id])
-    @follow = current_user.favorite!(params[:job_id])
+    @favorite = current_user.favorite!(params[:job_id])
     respond_to { |format| format.js }
   end
 
   def destroy
-    @unfollow = current_user.unfavorite!(params[:job_id])
+    @unfavorite = current_user.unfavorite!(params[:job_id])
 
     if request.referer.include?("favorite")
       @count = current_user.favorite_jobs.count
+      current_page_count = @count % Job::LIMIT_PAGE
+      remain_page = @count / Job::LIMIT_PAGE
 
-      count_on_page = @count % Job::LIMIT_PAGE
-      page_number = @count / Job::LIMIT_PAGE
-      link_url = request.referer.to_s.split("=")
-
-      return redirect_to link_url[0] + "=" + page_number.to_s if count_on_page == Job::DIVISIBLE && link_url[1].to_i == page_number + 1
-
-      return redirect_to request.referer if count_on_page == Job::DIVISIBLE
+      return redirect_to favorite_jobs_path(page: remain_page) if current_page_count == Job::DIVISIBLE && params[:page] == remain_page + 1
+      return redirect_to favorite_jobs_path(page: remain_page) if current_page_count == Job::DIVISIBLE
     end
 
     respond_to { |format| format.js }
