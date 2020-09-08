@@ -33,6 +33,11 @@ Rails.application.routes.draw do
   get 'jobs/industry/:converted_name', to: 'jobs#industry_jobs', as: :industry_jobs
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
+  resources :admins, only: [:new, :create, :destroy, :index]
+  get 'admin/login', to: 'admins#new', as: :admin_login
+  delete 'admin/logout', to: 'admins#destroy', as: :admin_logout
+  get 'admin/applies', to: 'admins#index', as: :admin_page
+
   resources :applied_jobs, only: [:new, :create]
   resources :reset_passwords, only: [:edit, :update]
   resources :confirmations, only: [:new]
