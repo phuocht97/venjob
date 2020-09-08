@@ -1,6 +1,5 @@
 <div class="container">
-  <%= render 'layouts/flash' %>
-  <% if @favorited_jobs.count > 0 %>
+  <% if @count > 0 %>
     <h1 class="text-center my-job-label">Favorite Job (<span class="count-favorite-jobs"><%= @count %></span> jobs)</h1>
     <%= paginate @favorited_jobs, outer_window: 2, window: 1 %>
       <div class="favorite-page">

@@ -8,6 +8,7 @@ class FavoriteJobsController < ApplicationController
 
     @count = current_user.favorite_jobs.count
     @favorited_jobs = current_user.favorite_jobs.order_favorite.page(page).per(Job::LIMIT_PAGE)
+    return redirect_to error_404_path if @favorited_jobs.blank?
   end
 
   def create
@@ -24,8 +25,10 @@ class FavoriteJobsController < ApplicationController
       current_page_count = @count % Job::LIMIT_PAGE
       remain_page = @count / Job::LIMIT_PAGE
 
-      return redirect_to favorite_jobs_path(page: remain_page) if current_page_count == Job::DIVISIBLE && params[:page] == remain_page + 1
-      return redirect_to favorite_jobs_path(page: remain_page) if current_page_count == Job::DIVISIBLE
+      if current_page_count == Job::DIVISIBLE
+        return redirect_to favorite_jobs_path(page: remain_page) if params[:page].to_i == remain_page + 1
+        redirect_to favorite_jobs_path(page: params[:page])
+      end
     end
 
     respond_to { |format| format.js }

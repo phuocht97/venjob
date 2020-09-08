@@ -48,6 +48,12 @@ Rails.application.routes.draw do
   resources :industries, only: [:index]
   resources :cities, only: [:index]
   root to: "top_pages#index"
+
+  get 'error_404', to: 'errors#error_404', as: :error_404
+  get 'error_500', to: 'errors#error_500', as: :error_500
+
+  match '/404', via: :all, to: 'errors#error_404'
+  match '/500', via: :all, to: 'errors#error_500'
 end
 
 

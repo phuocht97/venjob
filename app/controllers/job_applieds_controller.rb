@@ -22,6 +22,7 @@ class JobAppliedsController < ApplicationController
 
   def show
     @users = current_user.job_applieds.order("job_applieds.updated_at DESC").page(params[:page]).per(Job::LIMIT_PAGE)
+    redirect_to error_404_path if @users.blank?
   end
 
   def confirmation
