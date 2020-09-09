@@ -18,8 +18,9 @@ class JobApplied < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << attributes
       all.each do |info_application|
-        csv << info_application.job.attributes.values_at(attributes[0])
-        csv << attributes[(1..4)].map{ |attr| info_application.send(attr) }
+        info_applied = info_application.attributes.values_at(*attributes)
+        info_applied[0] = info_application.job.title
+        csv << info_applied
       end
     end
   end
