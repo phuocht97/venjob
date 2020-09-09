@@ -19,12 +19,12 @@ Rails.application.routes.draw do
 
   get '/registation/3', to: 'users#registation', as: :registation
 
-  get 'apply', to: 'job_applieds#new', as: :apply_job
+  get 'apply', to: 'applied_jobs#new', as: :apply_job
 
-  post 'confirm', to: 'job_applieds#confirmation', as: :confirm_job
-  post 'done', to: 'job_applieds#create', as: :finished_apply
+  post 'confirm', to: 'applied_jobs#confirmation', as: :confirm_job
+  post 'done', to: 'applied_jobs#create', as: :finished_apply
 
-  get '/my/jobs', to: 'job_applieds#show', as: :my_jobs
+  get '/my/jobs', to: 'applied_jobs#show', as: :my_jobs
 
   resources :jobs
   get 'detail/:id', to: 'jobs#show', as: :job_detail
@@ -41,7 +41,7 @@ Rails.application.routes.draw do
 
   resources :history_jobs, only: [:index]
   resources :favorite_jobs, only: [:create, :destroy, :index]
-  resources :job_applieds,only: [:new, :create]
+  resources :applied_jobs, only: [:new, :create]
   resources :reset_passwords, only: [:edit, :update]
   resources :confirmations, only: [:new]
   resources :top_pages, only: [:index]
