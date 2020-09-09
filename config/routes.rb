@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   get 'admin/login', to: 'admins#new', as: :admin_login
   delete 'admin/logout', to: 'admins#destroy', as: :admin_logout
   get 'admin/applies', to: 'admins#index', as: :admin_page
+  get 'download-csv', to: 'admins#download_csv', as: :download_csv
 
   resources :applied_jobs, only: [:new, :create]
   resources :reset_passwords, only: [:edit, :update]

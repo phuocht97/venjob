@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :sign_out_admin
   before_action :sign_in_validation, only: [:update, :my_page, :my_info]
 
   def my_page
@@ -37,6 +38,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def sign_out_admin
+    sign_out if signed_in? && current_user.admin?
+  end
 
   def sign_in_validation
     return if signed_in?

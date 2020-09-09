@@ -20,15 +20,16 @@
         <% end %>
     </select>
   </div>
-  <div class="row">
-    <div class="text col-2">Date</div>
-    <select class="form-control" id="exampleFormControlSelect1">
-      <%= @months.each do |month| %>
-        <option><%= month %></option>
-      <% end %>
-    </select>
+  <div class="datetime">
+    <%= render "datetime" %>
   </div>
-  <div class="search-btn">
-    <button class="btn btn-primary" type="submit">Search</button>
+  <div class="row">
+    <div class="col-3"></div>
+    <div class="search-btn col-4">
+      <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+    <div class="download-csv-btn col-4">
+      <%= link_to('Download CSV', download_csv_path(format: :csv), class: 'btn btn-info')%>
+    </div>
   </div>
 </div>
