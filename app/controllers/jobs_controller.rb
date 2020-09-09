@@ -3,28 +3,36 @@ class JobsController < ApplicationController
   before_action :general_variables
 
   def index
+    @count = Job.count
+    return if @count.zero?
     @jobs_list = Job.all.page(params[:page]).per(Job::LIMIT_PAGE)
-    return redirect_to error_404_path if @jobs_list.blank?
+    return render_error_404 if @jobs_list.blank?
   end
 
   def city_jobs
+    @count = City.count
+    return if @count.zero?
     @city = City.find_by(converted_name: params[:converted_name])
     @jobs_list = @city.jobs.page(params[:page]).per(Job::LIMIT_PAGE)
-    return redirect_to error_404_path if @jobs_list.blank?
+    return render_error_404 if @jobs_list.blank?
     @result_for_job = @city.jobs.count
   end
 
   def industry_jobs
+    @count = Industry.count
+    return if @count.zero?
     @industry = Industry.find_by(converted_name: params[:converted_name])
     @jobs_list = @industry.jobs.page(params[:page]).per(Job::LIMIT_PAGE)
-    return redirect_to error_404_path if @jobs_list.blank?
+    return render_error_404 if @jobs_list.blank?
     @result_for_job = @industry.jobs.count
   end
 
   def company_jobs
+    @count = Company.count
+    return if @count.zero?
     @company = Company.find_by(converted_name: params[:converted_name])
     @jobs_list = @company.jobs.page(params[:page]).per(Job::LIMIT_PAGE)
-    return redirect_to error_404_path if @jobs_list.blank?
+    return render_error_404 if @jobs_list.blank?
     @result_for_job = @company.jobs.count
 
     redirect_to jobs_path unless @company

@@ -2,13 +2,14 @@ class FavoriteJobsController < ApplicationController
   before_action :sign_in_validation, only: %i[create destroy index]
 
   def index
-    page = Integer(params[:page] || "1") rescue 0
+    @count = current_user.favorite_jobs.count
+    return if @count.zero?
 
+    page = Integer(params[:page] || "1") rescue 0
     return redirect_to favorite_jobs_path unless page.positive?
 
-    @count = current_user.favorite_jobs.count
-    @favorited_jobs = current_user.favorite_jobs.order_favorite.page(page).per(Job::LIMIT_PAGE)
-    return redirect_to error_404_path if @favorited_jobs.blank?
+    @favorited_jobs = current_user.favorite_jobs.includes(job: :cities).order_favorite.page(page).per(Job::LIMIT_PAGE)
+    return render_error_404 if @favorited_jobs.blank?
   end
 
   def create

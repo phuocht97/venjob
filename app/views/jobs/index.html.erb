@@ -1,15 +1,19 @@
 <% provide(:title, 'Jobs') %>
 <div class="container">
-  <%= render 'layouts/flash' %>
-  <div class="search-bar">
-    <%= render 'layouts/search_bar' %>
-  </div>
-  <div class="row total-jobs">
-    <div class="col-4"><strong>Total: <%= @total_job %> jobs</strong></div>
-  </div>
-  <%= render "jobs/pagination" %>
-  <div class="job-list">
-    <%= render partial: "job", collection: @jobs_list, as: :job %>
-  </div>
-  <%= render "jobs/pagination" %>
+  <% if @count > 0 %>
+    <%= render 'layouts/flash' %>
+    <div class="search-bar">
+      <%= render 'layouts/search_bar' %>
+    </div>
+    <div class="row total-jobs">
+      <div class="col-4"><strong>Total: <%= @total_job %> jobs</strong></div>
+    </div>
+    <%= render "jobs/pagination" %>
+    <div class="job-list">
+      <%= render partial: "job", collection: @jobs_list, as: :job %>
+    </div>
+    <%= render "jobs/pagination" %>
+  <% else %>
+    <h1>Don't have job</h1>
+  <% end %>
 </div>
