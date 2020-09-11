@@ -1,0 +1,28 @@
+<% provide(:title, "Admin Sign In") %>
+<div class="container">
+  <%= render 'layouts/flash' %>
+  <h1 class="text-center login-label">Admin Login</h1>
+  <div class="form-login">
+    <div class="row form d-flex justify-content-center">
+      <%= form_for(:admin, url: admins_path) do |f|  %>
+        <div class="email-field">
+          <div class="col-4-sm">
+            <%= f.label :email %>
+          </div>
+          <div class="col-8-sm">
+            <%= f.text_field :email %>
+          </div>
+        </div>
+        <div class="password-field">
+          <div class="col-4-sm">
+            <%= f.label :password %>
+          </div>
+          <div class="col-8-sm">
+            <%= f.password_field :password %>
+          </div>
+        </div>
+        <%= f.submit 'Login', class: 'btn btn-outline-primary btn-lg login-btn' %>
+      <% end %>
+    </div>
+  </div>
+</div>

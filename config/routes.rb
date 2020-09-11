@@ -39,8 +39,16 @@ Rails.application.routes.draw do
 
   get 'history', to: 'history_jobs#index', as: :history_jobs
 
+  get 'admin/login', to: 'admins#new', as: :admin_login
+  delete 'admin/logout', to: 'admins#destroy', as: :admin_logout
+  get 'admin/applies', to: 'admins#index', as: :admin_page
+  match 'admin/search', to: 'admins#search', via: [:get, :post], as: :admin_search
+
+  get 'download-csv', to: 'admins#download_csv', as: :download_csv
+
   resources :history_jobs, only: [:index]
   resources :favorite_jobs, only: [:create, :destroy, :index]
+  resources :admins, only: [:new, :create, :destroy, :index]
   resources :applied_jobs, only: [:new, :create]
   resources :reset_passwords, only: [:edit, :update]
   resources :confirmations, only: [:new]

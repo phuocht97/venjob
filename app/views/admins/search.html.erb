@@ -1,0 +1,13 @@
+<% provide(:title, 'Search Page') %>
+<div class="container">
+  <div><h1>Applied Jobs</h1></div>
+  <%= render "search_condition" %>
+  <div class="row total-apply-jobs">
+    <div class="col-4"><strong>Total: <%= @apply_job.count %> applications</strong></div>
+  </div>
+  <%= render "pagination" %>
+  <div class="apply-job-list">
+    <%= render partial: "information", collection: @user_apply_job, as: :info_application %>
+  </div>
+  <%= render "pagination" %>
+</div>

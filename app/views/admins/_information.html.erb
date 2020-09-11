@@ -1,0 +1,22 @@
+<div class="border border-dark rounded">
+  <div class="job-details">
+    <div class="title">Job title:
+      <%= link_to job_detail_path(info_application.job.id) do %>
+        <strong><%= info_application.job.title %></strong>
+      <% end %>
+    </div>
+    <div class="name">Name:
+      <%= info_application.name %>
+    </div>
+    <div class="cv">CV:
+      <%= link_to info_application.cv_user.identifier, info_application.cv_user.url, download: info_application.cv_user.identifier %>
+    </div>
+    <div class="row">
+      <div class="col-6">Email:
+        <%= info_application.email %>
+      </div>
+      <div class="col-6 salary">Applied at: <%= info_application.updated_at.strftime('%d/%m/%Y') %></div>
+    </div>
+  </div>
+</div>
+<br>
