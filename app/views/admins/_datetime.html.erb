@@ -1,9 +1,9 @@
 <div class="row">
-  <div class="text col-2">Date:</div>
+  <div class="text col-3">Date:</div>
   <div class="form-group mb-2"><%= f.select :from_year, options_for_select(@years.collect{ |year| year }), {}, {class: 'form-control'} %></div>
   <div class="form-group mb-2"><%= f.select :from_month, options_for_select(@months.collect{ |month| month }), {}, {class: 'form-control'}%></div>
   <div class="form-group mb-2"><%= f.select :from_day, options_for_select(@days.collect{ |day| day }), {}, {class: 'form-control'}%></div>
-  <h4 class="col-1 tilde">~</h4>
+  <h2 class="col-1 tilde">~</h2>
   <div class="form-group mb-2"><%= f.select :to_year, options_for_select(@years.collect{ |year| year }), {prompt: 'None'},{class: 'form-control'}%></div>
   <div class="form-group mb-2"><%= f.select :to_month, options_for_select(@months.collect{ |month| month }), {prompt: 'None'},{class: 'form-control'}%></div>
   <div class="form-group mb-2"><%= f.select :to_day, options_for_select(@days.collect{ |day| day }), {prompt: 'None'},{class: 'form-control'}%></div>
