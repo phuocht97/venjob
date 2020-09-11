@@ -19,7 +19,7 @@ class AppliedJobsController < ApplicationController
   def show
     @count = current_user.job_applieds.count
     return if @count.zero?
-    @applied_jobs = current_user.job_applieds.order("job_applieds.updated_at DESC").page(params[:page]).per(Job::LIMIT_PAGE)
+    @applied_jobs = current_user.job_applieds.includes(job: :cities).order("updated_at DESC").page(params[:page]).per(Job::LIMIT_PAGE)
     return render_error_404 if @applied_jobs.blank?
   end
 

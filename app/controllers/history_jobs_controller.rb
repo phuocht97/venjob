@@ -3,6 +3,6 @@ class HistoryJobsController < ApplicationController
 
   def index
     @count = current_user.histories.count
-    @history_jobs = current_user.histories.order_history
+    @history_jobs = current_user.histories.includes(job: :cities).order_history
   end
 end
