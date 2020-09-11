@@ -26,13 +26,21 @@ Rails.application.routes.draw do
 
   get '/my/jobs', to: 'applied_jobs#show', as: :my_jobs
 
-  resources :jobs
+  resources :jobsgits
   get 'detail/:id', to: 'jobs#show', as: :job_detail
 
   get 'jobs/city/:converted_name', to: 'jobs#city_jobs', as: :city_jobs
   get 'jobs/industry/:converted_name', to: 'jobs#industry_jobs', as: :industry_jobs
   get 'jobs/company/:converted_name', to: 'jobs#company_jobs', as: :company_jobs
 
+  post 'favorite_job', to: 'favorite_jobs#create', as: :favorite_job
+  delete 'unfavorite_job', to: 'favorite_jobs#destroy', as: :unfavorite_job
+  get 'favorite', to: 'favorite_jobs#index', as: :favorite_jobs
+
+  get 'history', to: 'history_jobs#index', as: :history_jobs
+
+  resources :history_jobs, only: [:index]
+  resources :favorite_jobs, only: [:create, :destroy, :index]
   resources :applied_jobs, only: [:new, :create]
   resources :reset_passwords, only: [:edit, :update]
   resources :confirmations, only: [:new]
@@ -40,6 +48,9 @@ Rails.application.routes.draw do
   resources :industries, only: [:index]
   resources :cities, only: [:index]
   root to: "top_pages#index"
+
+  match '/404', via: :all, to: 'errors#error_404'
+  match '/500', via: :all, to: 'errors#error_500'
 end
 
 

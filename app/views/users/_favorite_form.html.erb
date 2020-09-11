@@ -1,0 +1,7 @@
+<div id="favorite-form-<%= job.id %>">
+	<% if current_user.favoriting?(job.id) %>
+		<%= render 'users/unfavorite', job_id: job.id %>
+	<% else %>
+		<%= render 'users/favorite', job_id: job.id %>
+	<% end %>
+</div>

@@ -1,0 +1,3 @@
+<%= form_for(:job_favorite, url: favorite_job_path(job_id: job_id), method: :post, remote: true) do |f| %>
+  <%= f.submit "Favorite", class: "btn btn-danger", id: "button-favorite" %>
+<% end %>

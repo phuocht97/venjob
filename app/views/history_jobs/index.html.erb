@@ -1,0 +1,15 @@
+<div class="container">
+  <% if @count > 0 %>
+    <h1 class="text-center my-job-label">History(<span class="count-histories-jobs"><%= @count %></span> jobs)</h1>
+    <div class="history-page">
+      <%= form_tag apply_job_path(job_id: params[:job_id]), method: :get, enforce_utf8: false do %>
+        <%= render partial: "history_jobs/history_job", collection: @history_jobs %>
+        <div class="row justify-content-center apply-btn">
+          <%= submit_tag 'Apply Job', name: nil, class: 'btn btn-lg btn-danger' %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <h1 class="let-favorite">Your History doesn't have jobs</h1>
+  <% end %>
+</div>

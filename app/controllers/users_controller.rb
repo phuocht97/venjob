@@ -38,13 +38,6 @@ class UsersController < ApplicationController
 
   private
 
-  def sign_in_validation
-    return if signed_in?
-    store_location
-    flash[:warning] = Settings.user.warning_signin
-    redirect_to login_path
-  end
-
   def user_params
     params[:user][:password] = change_pass_param[:new_password] if change_pass_param[:new_password].present?
     params.require(:user).permit(:name, :email, :cv_user, :password)

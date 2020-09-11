@@ -42,7 +42,7 @@
   margin: 10px;
 }
 
-#button-follow{
+#button-favorite, #button-unfavorite, #button-remove{
   position: absolute;
   top: 20%;
   right: 5%;
@@ -132,4 +132,9 @@
   color: #e6b800;
   transition: 1s;
   text-decoration: none;
+}
+.radio-btn {
+  position: relative;
+  top: 150px;
+  left: 40px;
 }
