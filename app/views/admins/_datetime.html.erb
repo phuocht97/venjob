@@ -1,34 +1,10 @@
-<div class="row justify-content-lg-center">
-  <div class="text col-1">Date:</div>
-  <select class="form-control col-1">
-    <%= @years.each do |year| %>
-      <option><%= year %></option>
-    <% end %>
-  </select>
-  <select class="form-control col-1">
-    <%= @months.each do |month| %>
-      <option><%= month %></option>
-    <% end %>
-  </select>
-  <select class="form-control col-1">
-    <%= @days.each do |day| %>
-      <option><%= day %></option>
-    <% end %>
-  </select>
-  <h2 class="col-1 tilde">~</h2>
-  <select class="form-control col-1">
-    <%= @years.each do |year| %>
-      <option><%= year %></option>
-    <% end %>
-  </select>
-  <select class="form-control col-1">
-    <%= @months.each do |month| %>
-      <option><%= month %></option>
-    <% end %>
-  </select>
-  <select class="form-control col-1">
-    <%= @days.each do |day| %>
-      <option><%= day %></option>
-    <% end %>
-  </select>
+<div class="row">
+  <div class="text col-2">Date:</div>
+  <div class="col-1"><%= f.select :from_year, options_for_select(@years.collect{ |year| year }) %></div>
+  <div class="col-1"><%= f.select :from_month, options_for_select(@months.collect{ |month| month })%></div>
+  <div class="col-1"><%= f.select :from_day, options_for_select(@days.collect{ |day| day })%></div>
+  <h4 class="col-1 tilde">~</h4>
+  <div class="col-1"><%= f.select :to_year, options_for_select(@years.collect{ |year| year }), include_blank: 'None'%></div>
+  <div class="col-1"><%= f.select :to_month, options_for_select(@months.collect{ |month| month }), include_blank: 'None'%></div>
+  <div class="col-1"><%= f.select :to_day, options_for_select(@days.collect{ |day| day }), include_blank: 'None'%></div>
 </div>

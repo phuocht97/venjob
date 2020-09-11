@@ -1,35 +1,35 @@
 <div class="search-bar">
-  <div class="search">
-    Email: <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-  </div>
-  <div class="city-options">
-    City:
-    <select class="form-control" id="exampleFormControlSelect1">
-        <option>All</option>
-        <%= @cities.each do |city| %>
-          <option><%= city.name %></option>
-        <% end %>
-    </select>
-  </div>
-  <div class="industry-options">
-    Industry:
-    <select class="form-control" id="exampleFormControlSelect1">
-        <option>All</option>
-        <%= @industries.each do |industry| %>
-          <option><%= industry.name %></option>
-        <% end %>
-    </select>
-  </div>
-  <div class="datetime">
-    <%= render "datetime" %>
-  </div>
-  <div class="row">
-    <div class="col-3"></div>
-    <div class="search-btn col-4">
-      <button class="btn btn-primary" type="submit">Search</button>
+  <%= form_for(:admin, url: admin_search_path) do |f| %>
+    <div class="search">
+      Email: <%= f.text_field :email, placeholder: 'Input Email...', class: 'form-control mr-sm-2' %>
     </div>
-    <div class="download-csv-btn col-4">
-      <%= link_to('Download CSV', download_csv_path(format: :csv), class: 'btn btn-info')%>
+    <div class="city-options">
+      <div class="row">
+        <div class="col-2">City:</div>
+        <div class="col-6"><%= f.select :city_opt, options_for_select(@cities.collect{ |city| [ city.name, city.id] }), include_blank: 'All'%></div>
+      </div>
     </div>
-  </div>
+    <div class="industry-options">
+      <div class="row">
+        <div class="col-2">Industry:</div>
+        <div class="col-6"><%= f.select :industry_opt, options_for_select(@industries.collect{ |industry| [ industry.name, industry.id] }), include_blank: 'All' %></div>
+      </div>
+    </div>
+    <div class="datetime">
+      <%= render "datetime", f: f %>
+    </div>
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="search-btn col-4">
+        <%= f.submit 'Search', class: 'btn btn-primary' %>
+      </div>
+      <div class="download-csv-btn col-4">
+        <% if @apply_job.count > 0 %>
+          <%= link_to('Download CSV', download_csv_path(format: :csv), class: 'btn btn-info')%>
+        <% else %>
+          <strong><i>Can't download CSV because can't find applications</i></strong>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

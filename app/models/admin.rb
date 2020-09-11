@@ -6,5 +6,5 @@ class Admin < ApplicationRecord
   LAST_MONTH = 12
 
   FIRST_YEAR = 2015
-  LAST_YEAR = 2020
+  LAST_YEAR = Time.current.year
 end
