@@ -16,7 +16,7 @@ gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 gem 'bcrypt-ruby', '3.1.2'
-gem 'carrierwave', '2.1.0'
+gem 'carrierwave', '2.1.1'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 gem 'mechanize', '~> 2.7.6'
